@@ -14,6 +14,7 @@
 
 #include <cpp-httplib/httplib.h>
 
+#include <algorithm>
 #include <atomic>
 #include <chrono>
 #include <csignal>
@@ -55,8 +56,8 @@ void usage() {
         "  --pack DIR      the prepared pack for that model\n"
         "  --mtp DIR       the prepared draft head\n"
         "  --ctx N         context length in tokens (default 32768)\n"
-        "  --threads N     CPU threads for the experts the GPU does not hold (default: every physical core;\n"
-        "                  set it inside a container, where the host's core count is not yours)\n"
+        "  --threads N     CPU threads for the experts the GPU does not hold (default: every physical core,\n"
+        "                  or half the CPU quota inside a container that has one)\n"
         "  --host ADDR     address to listen on (default 127.0.0.1)\n"
         "  --port N        port to listen on (default 8080)\n\n"
         "Serves POST /v1/chat/completions (OpenAI style, with streaming), GET /v1/models and GET /health.\n");
@@ -516,6 +517,35 @@ void quiet_log(ggml_log_level level, const char* text, void*) {
     if (level == GGML_LOG_LEVEL_ERROR || level == GGML_LOG_LEVEL_WARN) std::fputs(text, stderr);
 }
 
+// The CPU expert workers to ask the engine for when --threads is not given: 0 lets the engine use every physical
+// core it sees.  Inside a container it sees the host's cores, not its own share, and that many workers on a small
+// quota throttle one another; so with a cgroup CPU quota below the visible CPUs the quota decides.  The quota
+// counts hardware threads and the engine wants cores, hence the halving when SMT is on.
+int default_threads() {
+    long long quota = 0, period = 0;
+    char q[32] = "";
+    if (FILE* f = std::fopen("/sys/fs/cgroup/cpu.max", "r")) {                       // cgroup v2
+        if (std::fscanf(f, "%31s %lld", q, &period) == 2 && std::strcmp(q, "max") != 0) quota = std::atoll(q);
+        std::fclose(f);
+    } else if (FILE* f1 = std::fopen("/sys/fs/cgroup/cpu/cpu.cfs_quota_us", "r")) {  // cgroup v1
+        if (std::fscanf(f1, "%lld", &quota) != 1) quota = 0;
+        std::fclose(f1);
+        if (FILE* f2 = std::fopen("/sys/fs/cgroup/cpu/cpu.cfs_period_us", "r")) {
+            if (std::fscanf(f2, "%lld", &period) != 1) period = 0;
+            std::fclose(f2);
+        }
+    }
+    if (quota <= 0 || period <= 0) return 0;
+    const long long cpus = (quota + period / 2) / period;
+    if (cpus < 1 || cpus >= sysconf(_SC_NPROCESSORS_ONLN)) return 0;
+    int smt = 0;
+    if (FILE* f = std::fopen("/sys/devices/system/cpu/smt/active", "r")) {
+        if (std::fscanf(f, "%d", &smt) != 1) smt = 0;
+        std::fclose(f);
+    }
+    return (int) std::max<long long>(smt ? cpus / 2 : cpus, 1);
+}
+
 bool parse_args(int argc, char** argv, Options& o) {
     for (int i = 1; i < argc; ++i) {
         const std::string a = argv[i];
@@ -578,6 +608,12 @@ int main(int argc, char** argv) {
         "--expert-profile", profile, "--expert-cache", "auto", "--prefill", "auto", "--spec", "4", "--spec-min-p", "0.5",
         "--mtp", o.mtp, "--max-context", std::to_string(o.ctx), "--ple-io", "ram"};
     if (o.ctx > 8192) { eargs.push_back("--kv"); eargs.push_back("int8"); }
+    if (o.threads <= 0) {
+        o.threads = default_threads();
+        if (o.threads > 0)
+            std::fprintf(stderr, "unbiased-strata: this container's CPU quota gives %d expert threads (--threads N overrides)\n",
+                         o.threads);
+    }
     if (o.threads > 0) { eargs.push_back("--pool-workers"); eargs.push_back(std::to_string(o.threads)); }
     for (const std::string& e : o.extra) eargs.push_back(e);
     std::signal(SIGPIPE, SIG_IGN);

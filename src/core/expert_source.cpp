@@ -7,6 +7,7 @@
 
 #include "strata/core/pinned.hpp"
 #include "strata/platform/memory.hpp"
+#include "strata/platform/robust_read.hpp"
 #include "strata/kernels/elementwise.hpp"
 #include "strata/kernels/quantize_act.hpp"
 #include "strata/kernels/s2_expert_grouped.hpp"
@@ -2627,13 +2628,22 @@ LoadStats load_experts_gguf(const std::string& gguf, uint8_t* dst, const strata:
 #else
     (void) unbuffered;
 #endif
+    // UnbiasedStrata: positional reads through strata/platform/robust_read.hpp, so a network store that refuses a
+    // read for a moment (too many readers at once, a slow link) is waited for and retried instead of failing the
+    // start, and a failure names the file, the offset and the error.
+    strata::platform::ReadGate gate(threads);
+    std::mutex err_mu;
+    std::string err;
+    std::atomic<uint64_t> loaded{0};
+    auto fail = [&](const std::string& m) {
+        std::lock_guard<std::mutex> lk(err_mu);
+        if (!bad.exchange(true)) err = m;
+    };
     auto worker = [&]() {
-        // #230: `fread` on a `FILE*`, as load_experts_ranges (#89): MSVC's `std::ifstream::read` splits a request
-        // into 4095-byte freads, which took this path to 0.02 GiB/s on a Windows install without experts.bin.
         // The guard closes the handle on every return.
         struct Closer {
-            FILE* f = nullptr;
-            ~Closer() { if (f != nullptr) std::fclose(f); }
+            int fd = -1;
+            ~Closer() { if (fd >= 0) ::close(fd); }
         } file;
         std::string open_name;
         std::vector<uint8_t> buf;
@@ -2648,24 +2658,30 @@ LoadStats load_experts_gguf(const std::string& gguf, uint8_t* dst, const strata:
                 // the handle is kept while consecutive roles share a file (every layer of a v3 pack)
                 const std::string name = expert_gguf_file(gguf, lay, l, r);
                 if (name != open_name) {
-                    if (file.f != nullptr) std::fclose(file.f);
-                    file.f = std::fopen(name.c_str(), "rb");
-                    if (file.f == nullptr) { bad = true; return; }
+                    if (file.fd >= 0) ::close(file.fd);
+                    file.fd = ::open(name.c_str(), O_RDONLY | O_CLOEXEC);
+                    if (file.fd < 0) { fail("cannot open " + name + ": " + std::strerror(errno)); return; }
                     open_name = name;
                 }
-                FILE* const f = file.f;
                 const uint64_t src = lay.gguf_off[(size_t) (3 * l + r)];
                 const uint64_t total = per[r] * (uint64_t) lay.n_expert;
                 const uint64_t chunk = per[r] * 16;           // 16 experts per read
                 buf.resize((size_t) chunk);
                 for (uint64_t done = 0; done < total; done += chunk) {
+                    if (bad) return;
                     const uint64_t n = std::min<uint64_t>(chunk, total - done);
-                    // 64-bit seek: a shard is tens of GB
-                    if (STRATA_FSEEK64(f, src + done) != 0) { bad = true; return; }
-                    if (std::fread(buf.data(), 1, (size_t) n, f) != (size_t) n) { bad = true; return; }
+                    const int rc = strata::platform::read_at(file.fd, buf.data(), (size_t) n, src + done, gate);
+                    if (rc != 0) { fail(strata::platform::read_error(name, src + done, rc)); return; }
                     for (uint64_t k = 0; k < n / per[r]; ++k) {
                         const uint64_t e = done / per[r] + k;
                         std::memcpy(dst + lay.blob_offset(l, (int64_t) e) + at[r], buf.data() + k * per[r], (size_t) per[r]);
+                    }
+                    const uint64_t was = loaded.fetch_add(n);
+                    if ((was + n) >> 32 != was >> 32) {
+                        const double s = std::chrono::duration<double>(std::chrono::steady_clock::now() - t0).count();
+                        std::fprintf(stderr, "strata generate: experts: %.0f of %.1f GiB read (%.0f MB/s)\n",
+                                     (double) (was + n) / 1073741824.0, (double) lay.total / 1073741824.0,
+                                     s > 0 ? (double) (was + n) / 1e6 / s : 0.0);
                     }
                 }
             }
@@ -2678,7 +2694,7 @@ LoadStats load_experts_gguf(const std::string& gguf, uint8_t* dst, const strata:
     if (bad) {
         st.seconds = -1.0;
         st.ok = false;
-        st.error = "short read or unreadable shard while reading the experts from the GGUF";
+        st.error = err.empty() ? "unreadable shard while reading the experts from the GGUF" : err;
         return st;
     }
     st.bytes = lay.total;

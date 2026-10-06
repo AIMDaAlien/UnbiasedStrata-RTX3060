@@ -6,6 +6,7 @@
 #include "strata/artifact/dequant.hpp"
 #include "strata/kernels/f16_bits.hpp"
 #include "strata/ngram/ple_reader.hpp"
+#include "strata/platform/robust_read.hpp"
 
 #include <cerrno>
 #include <cmath>
@@ -138,6 +139,8 @@ void fp8_e4m3_dequant_row(const uint8_t* row, float scale, float* out160) {
 struct PleTable::Impl {
     GgufFile* file = nullptr;
     const uint8_t* data = nullptr;
+    void* own = nullptr;              // `--ple-io ram`: the table in memory of its own (`data` points into it)
+    uint64_t own_bytes = 0;
     uint64_t n_rows = 0;
     bool q5_0 = false;                // #296: Q5_0 rows (110 B), the mapped reader only
     mutable uint64_t bytes_read = 0;
@@ -261,19 +264,26 @@ bool PleTable::open(const std::string& gguf_path, std::string& err, const PleIoO
     }
     if (io.mode == PleIo::Mmap && io.lock && impl_->data != nullptr) {
 #if !defined(_WIN32)
-        const uint64_t page = 4096;
-        const uintptr_t a0 = (uintptr_t) impl_->data & ~(uintptr_t) (page - 1);
-        const uintptr_t a1 = (uintptr_t) impl_->data + (uintptr_t) need;
-        madvise((void*) a0, a1 - a0, MADV_WILLNEED);
-        if (mlock((const void*) a0, a1 - a0) == 0) {
-            impl_->locked = true;
-        } else {
-            std::fprintf(stderr, "strata: PLE table mlock failed (%s; raise `ulimit -l`): touching its pages instead\n",
-                         std::strerror(errno));
-            volatile uint8_t sink = 0;
-            for (uintptr_t p = a0; p < a1; p += page) sink = sink + *(const volatile uint8_t*) p;
-            (void) sink;
+        // UnbiasedStrata: the table is read into memory of its own, not locked inside the file mapping.  Several
+        // readers load it (a network store's speed is per stream, and a refused read is retried), no later page
+        // fault can go back to the file, and it does not depend on `ulimit -l` (8 MB in a container).
+        const uint64_t table_offset = impl_->file->data_start() + t->offset;
+        void* mem = mmap(nullptr, (size_t) need, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+        if (mem == MAP_FAILED) {
+            err = "cannot allocate " + std::to_string(need >> 20) + " MiB of RAM for the n-gram table: " + std::strerror(errno);
+            close();
+            return false;
         }
+        impl_->own = mem;
+        impl_->own_bytes = need;
+        if (!strata::platform::read_range(gguf_path, table_offset, (uint8_t*) mem, need, 16, err, "n-gram table")) {
+            close();
+            return false;
+        }
+        delete impl_->file;
+        impl_->file = nullptr;
+        impl_->data = (const uint8_t*) mem;
+        impl_->locked = mlock(mem, (size_t) need) == 0;   // extra: the memory is already resident either way
 #endif
     }
     impl_->mode = io.mode;
@@ -321,6 +331,11 @@ void PleTable::close() {
     delete impl_->file;
     impl_->file = nullptr;
     impl_->data = nullptr;
+#if !defined(_WIN32)
+    if (impl_->own != nullptr) munmap(impl_->own, (size_t) impl_->own_bytes);
+#endif
+    impl_->own = nullptr;
+    impl_->own_bytes = 0;
     impl_->n_rows = 0;
     impl_->rb = PLE_ROW_BYTES;
     impl_->q5_0 = false;
