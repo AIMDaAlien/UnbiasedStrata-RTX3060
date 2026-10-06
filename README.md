@@ -1,71 +1,30 @@
 # UnbiasedStrata
 
-A cut-down fork of [Strata](https://github.com/Niko1221/Strata), an inference engine for the
-Qwen3.8-Flash-Next model. The engine source is unchanged from upstream. Everything around it has been
-removed or is being replaced, so that building and running work the way they do for llama.cpp: clone,
-build, copy one binary, run. Nothing is downloaded during the build or at start-up.
+[Strata](https://github.com/Niko1221/Strata)'s inference engine and llama.cpp's tokenizer, chat-template and
+HTTP code, built into one binary that serves Qwen3.8-Flash-Next over an OpenAI-style API. No network is
+needed to build or run it: rsync the source, run `make build`, start the binary. No Python, no installer.
 
-## Status
+## Requirements
 
-Work in progress. What works today, checked on RTX 3090 pods:
+| | Build | Run |
+| --- | --- | --- |
+| Network access | no | no |
+| CMake 3.24+, C++20 compiler (tested: g++ 13.3) | yes | no |
+| CUDA | toolkit 12.8+ (tested: 12.8; 13.0+ advised for RTX 50) | `libcudart.so.12`, `libcublas.so.12`, `libcublasLt.so.12` and the NVIDIA driver |
 
-- Clone, `git submodule update --init`, `make build`, with no network access during the build.
-- One binary, `build/unbiased-strata`, that loads the model and serves an OpenAI-style chat API: streaming
-  and non-streaming replies, the model's reasoning separated from its answer, and tool calls.
-- A coding agent (pi) completed a multi-step task against it: it wrote a program, ran it through its tools
-  and reported the result.
-
-Not done yet:
-
-- **No speed is claimed.** The only end-to-end runs so far were on a pod whose network volume the engine
-  could not load experts from in its normal way (see Known problems), so it ran in a fallback mode. In that
-  mode it generated at 21 to 61 tokens per second. A run in the normal mode on a machine with a local disk
-  is still to do.
-- The prepared model files (below) are not published yet.
-- The engine source is still upstream's in full. 85 of its 272 source files are not compiled into the binary
-  at all; removing those, and then the multi-GPU, AMD, Windows and other-model code, is the next piece of work.
-- Image input is not supported.
-
-## Known problems
-
-- **RunPod network volumes.** With the model on a RunPod network volume (`/workspace`), the engine fails at
-  start with "short read or unreadable shard": once it has pinned its expert arena, reads from the volume
-  return "cannot allocate memory". The cause is not known. Keeping the model on local disk avoids it. On a
-  pod without enough local disk, a working fallback was shard 1 in `/dev/shm`, shard 2 on local disk, and
-  `-- --mmap-experts` at the end of the command line.
-
-## What it supports
-
-One configuration, on purpose:
-
-| | |
-| --- | --- |
-| Model | Qwen3.8-Flash-Next, GSQ-RCO IQ3_XXS, with the draft (MTP) head |
-| GPU | One NVIDIA card with 24 GB or more, RTX 30 series or newer |
-| RAM | 128 GB |
-| CPU | x86-64 with AVX2 |
-| OS | Linux |
-
-Tested so far:
-
-| Machine | What was checked |
-| --- | --- |
-| RTX 3090 pods, CUDA 12.8, g++ 13.3 | `git submodule update --init` and `make build` complete with network access blocked for the build. The model loads and answers chat requests, in the fallback mode described under Known problems. |
+Hardware, one configuration only: Linux, x86-64 with AVX2, one NVIDIA card with 24 GB or more (RTX 30, 40
+or 50), 128 GB RAM. The model can be on a local disk or on a network volume; everything is read into RAM
+and VRAM at start, so a slow store costs start-up time only.
 
 ## Build
 
-Needs CMake 3.24 or newer, a C++20 compiler and the CUDA toolkit (12.8 or newer; 13.0 or newer for RTX 50
-cards).
-
 ```
-git clone <this repo>
-cd UnbiasedStrata
-git submodule update --init
-make build
+rsync -a UnbiasedStrata/ host:UnbiasedStrata/   # or: git clone, then git submodule update --init
+ssh host 'cd UnbiasedStrata && make build'      # produces build/unbiased-strata
 ```
 
-The result is `build/unbiased-strata`, a single file you can copy to another machine. It needs the NVIDIA
-driver and the CUDA runtime libraries there, as llama.cpp does.
+The tree is 6 MB plus the pinned llama.cpp submodule in `third_party/` (about 170 MB checked out). The
+build fetches nothing. `make build JOBS=N` sets the job count; `CUDA_ARCHS` defaults to `86;89;120`.
 
 ## Run
 
@@ -74,28 +33,80 @@ driver and the CUDA runtime libraries there, as llama.cpp does.
                   --pack /models/pack-iq3-xxs --mtp /models/mtp
 ```
 
-It listens on `127.0.0.1:8080` and serves `POST /v1/chat/completions` (with streaming), `GET /v1/models` and
-`GET /health`. Loading takes a few minutes. Options: `--ctx N` (default 32768), `--threads N`, `--host`,
-`--port`. Inside a container set `--threads` yourself: the default is every physical core of the host.
+| | |
+| --- | --- |
+| Endpoints | `POST /v1/chat/completions` (streaming or not), `GET /v1/models`, `GET /health`, on `127.0.0.1:8080` |
+| Options | `--ctx N` (32768), `--threads N` (default: physical cores, or half the CPU quota in a container), `--host`, `--port`; engine flags after `--` |
+| Sampling | greedy unless `temperature` > 0 |
+| Reasoning | returned as `reasoning_content`; `"reasoning_effort": "none"` turns it off |
+| Tools | OpenAI format (`tools`, `tool_calls`) |
+| Not supported | image input, more than one GPU, batch requests |
 
-Requests are greedy unless they set a `temperature` above zero. The model thinks before it answers; send
-`"reasoning_effort": "none"` to turn that off. Tool calling follows the OpenAI format (`tools`, `tool_calls`).
+## The one supported model
 
-## Model files
+Qwen3.8-Flash-Next (125B parameters, mixture of experts), the full model at IQ3_XXS quantization, from
+[ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF](https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF),
+directory `IQ3_XXS`, revision `ed59f920`. No other model, quantization or pruned variant is supported. The
+draft (MTP) head is required.
 
-The engine needs three things on disk before it starts. It never fetches them.
+Everything below must be on disk before start. Nothing is fetched.
 
-1. The two IQ3_XXS GGUF shards from
-   [ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF](https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF),
-   side by side in one directory.
-2. The prepared "pack" for those shards (about 1.5 GB): `index.txt`, `dense.bin`, `native_experts.txt`,
-   `conversions.json`, `expert-profile.bin`.
-3. The prepared draft head (about 0.8 GB): `experts.bin`, `dense.bin`, `dense.txt`, `draft_vocab.bin`.
+| What | Size | SHA-256 or source |
+| --- | --- | --- |
+| `Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf` (weights) | 47.04 GB | `219ea929900dfa9ef091f3aa473fdba6874b65fcb36526d7d851ac9e95856d15` |
+| `Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf` (n-gram table), beside shard 1 | 28.80 GB | `316b46f3a2dbd68c900f43136ab9449f9dcc3725dfd8c794847c204bc161e113` |
+| Pack: `index.txt`, `dense.bin`, `native_experts.txt`, `conversions.json`, `expert-profile.bin` | 1.5 GB | made once with upstream's tools; not published yet |
+| Draft head: `experts.bin`, `dense.bin`, `dense.txt`, `draft_vocab.bin` | 0.8 GB | made once with upstream's tools; not published yet |
 
-Items 2 and 3 are made once with upstream Strata's tools and will be published; see [UPSTREAM.md](UPSTREAM.md).
+About 78 GB in total. The commands that make the pack and draft head, and the SHA-256 of every file they
+produce, are in [UPSTREAM.md](UPSTREAM.md).
+
+## Status
+
+Checked on one machine: RTX 3090, 32 vCPUs of an EPYC 7763, 125 GB RAM, CUDA 12.8, in a container.
+
+| | |
+| --- | --- |
+| Build | from an rsynced tree with no git metadata; the binary holds no download code |
+| Serving | chat, streaming, reasoning, tool calls; a coding agent (pi) wrote and ran a program through it |
+| Start from local disk | 19 s with the files in the OS file cache |
+| Start from a network volume | 12 min for 76 GB (S3-backed RunPod volume, 120 to 330 MB/s). The volume refused reads twice with "cannot allocate memory"; the loader retried and went on |
+| Not tested | RTX 40 and RTX 50 cards; a cold start from local disk |
+
+Speed, one run of each, same machine and model files, greedy sampling, reasoning off. Generation is the mean
+of 8 different prompts of 400 tokens; prompt speed is the mean of 2 different prompts of about 20,000 tokens.
+
+| | Generation, tokens/s | Prompt, tokens/s |
+| --- | --- | --- |
+| This fork | 107 (87 to 116) | 2,483 |
+| Upstream, with `--pool-workers 15 --ple-io ram` | 78 (61 to 93) | 2,439 |
+| Upstream, arguments as its installer writes them | 20 (16 to 21) | 2,368 |
+
+Upstream as installed started 127 CPU workers on the container's 32 vCPUs and read the n-gram table from
+disk per token; the middle row removes both. The remaining gap to the fork is not explained yet: the two
+builds differ in compile flags and in how the n-gram table is held in RAM, and each row is a single run.
+
+## Known problems
+
+- Text in a message that looks like a control token (`<think>`, `<tool_call>`) is tokenized as that control
+  token. Upstream's tokenizer keeps it as plain text.
+- Replies are not reproducible token for token between runs or between this fork and upstream, even with
+  greedy sampling, so "same output" cannot be checked by comparing text.
+
+## Compared with upstream Strata (6f32ec0)
+
+| | Upstream | This fork |
+| --- | --- | --- |
+| Engine source (`src/`, `include/`) | 272 files | two files changed, one added (retrying reads from slow stores); cutting it down is the next work |
+| Build | clones llama.cpp during CMake | pinned submodule, fetches nothing |
+| Setup | Python installer downloads the model and builds the pack and draft head | none; files must already exist |
+| Server | Python | C++, in the same binary (`frontend/`) |
+| Python | 33,745 lines | 0 |
+| C, C++ and CUDA | 208,254 lines (with tests and the Intel port) | 84,086 lines |
+| Tracked files | 851, 27 MB | 292, 6 MB |
+| Configurations | several models, NVIDIA, AMD and Intel, Linux and Windows, multi-GPU | one |
 
 ## Credits and licence
 
-MIT, as upstream. The engine is the work of Niko1221 and the Strata contributors; see [LICENSE](LICENSE)
-and [UPSTREAM.md](UPSTREAM.md). llama.cpp and ggml (MIT) are used as a pinned submodule. The model files
-have their own licences.
+MIT, as upstream. The engine is the work of Niko1221 and the Strata contributors; see [LICENSE](LICENSE) and
+[UPSTREAM.md](UPSTREAM.md). llama.cpp and ggml are MIT. The model files have their own licences.
