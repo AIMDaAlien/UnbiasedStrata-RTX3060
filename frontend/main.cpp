@@ -398,6 +398,13 @@ struct Server {
         update(false);
         final_msg = msg;
         if (final_msg.role.empty()) final_msg.role = "assistant";
+        if (final_msg.tool_calls.empty() && text.find("<tool_call>") != std::string::npos) {
+            // The parser accepts a message with no tool call even when the text holds one it could not
+            // match (see third_party/llama.cpp/common/parsers/qwen3-coder.cpp); say so, with the text.
+            std::fprintf(stderr, "unbiased-strata: the output contains <tool_call> but no tool call was parsed; "
+                                 "the client sees finish=stop. raw-output-begin\n%s\nunbiased-strata: raw-output-end\n",
+                         text.c_str());
+        }
         return r;
     }
 

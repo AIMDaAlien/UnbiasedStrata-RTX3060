@@ -19,6 +19,12 @@ The first commit of this repository is the upstream snapshot as published. One f
   `docs/upstream/DETAILS.md` and the paper.
 - **Added:** `frontend/`, the C++ front end (tokenizer, chat template, output parser and HTTP API, using
   llama.cpp's code from the submodule), and a build target that links it with the engine into one binary.
+- **ggml / llama.cpp common (`third_party/llama.cpp`):** one change, kept as
+  `patches/llama.cpp-qwen3-coder-any-argument-order.patch` and applied in the submodule's working tree:
+  the Qwen3-Coder tool-call grammar accepts a call's arguments in any order. Upstream requires the
+  required arguments first; Qwen3.8 Flash-Next often writes the optional ones first (`limit`, `offset`,
+  `path`), and because the grammar's tool-call group is optional and has no end anchor, such a call was
+  dropped silently: the client got `finish_reason=stop` and an empty answer (2026-10-08).
 - **Engine source (`src/`, `include/`):** three changes, all for loading from a slow or remote store. The
   engine's own program is compiled into the binary with its entry point renamed; the front end starts it
   as a child process.
