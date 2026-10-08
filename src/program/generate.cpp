@@ -923,6 +923,18 @@ int on_rotational_disk(const std::string& path, std::string& dev) {
     return -1;
 }
 
+void thread_wait_channels(std::FILE* f) {
+    std::error_code ec;
+    for (const auto& e : std::filesystem::directory_iterator("/proc/self/task", ec)) {
+        std::ifstream wc(e.path() / "wchan");
+        std::string where;
+        std::getline(wc, where);
+        std::fprintf(f, "  thread %s%s wait channel: %s\n", e.path().filename().string().c_str(),
+                     e.path().filename().string() == std::to_string((long long) ::getpid()) ? " (main)" : "",
+                     where.empty() ? "unavailable" : where.c_str());
+    }
+}
+
 // #605: the engine's threads in uninterruptible sleep (state D - almost always waiting for the disk), and where
 // (wchan): 16 threads in blk_io_schedule is a disk that cannot keep up, not a deadlock in the engine
 void disk_wait_threads(std::FILE* f) {
@@ -967,6 +979,7 @@ void stall_report(std::FILE* f, uint64_t layers_during) {
         if (auto fn = strata::core::diag_verify_fn().load()) fn(f);
 #if !defined(_WIN32)
         disk_wait_threads(f);
+        thread_wait_channels(f);
 #endif
         const MemSample m = mem_sample();
         std::fprintf(f, "  memory: %llu MiB resident, %llu MiB %s, %llu MiB RAM available; %llu %s\n", m.rss_mib,
@@ -7140,6 +7153,7 @@ int main(int argc, char** argv) {
                 bool adapt_ok = true;
                 if (!drive.d.usage.empty() && ((rounds + 1) % o.adapt_every) == 0)
                     adapt_thr = std::thread([&] { adapt_ok = adapt(); });
+                strata::core::progress_at("commit", p);
                 if (!ver.commit(a + 1, err)) {
                     if (adapt_thr.joinable()) adapt_thr.join();
                     std::printf("ERR %s\n", err.c_str());
@@ -7151,6 +7165,7 @@ int main(int argc, char** argv) {
                 draft_accepted += a;
                 first_window = false;
                 bool eos = false;
+                strata::core::progress_at("emit tokens", p);
                 for (int i = 0; i <= a && produced_n < max_new && !eos; ++i) {
                     std::printf("T %d\n", (int) outv[(size_t) i]);
                     strata::core::progress_beat();
@@ -7165,6 +7180,7 @@ int main(int argc, char** argv) {
                 // commit, outv[a] is its row 0) - the drafts extend it on the device as the verify rows will
                 if (hist_n > 0 && mtp.coupled() && !eos && produced_n < max_new)
                     mtp.set_draft_history(consumed.data(), (int64_t) consumed.size(), outv[(size_t) a]);
+                strata::core::progress_at("MTP draft", p);
                 const bool drafted = eos || produced_n >= max_new ||
                                      mtp.draft(T, outv.data(), p, a, drafts.data(), err, dprob.data(), (float) req_spec_min_p);
                 {
@@ -7173,6 +7189,7 @@ int main(int argc, char** argv) {
                     dt_run += msd(tw0, tw1); dt_commit += msd(tw1, tw2); dt_draft += msd(tw2, tw3);
                     ++dec_windows; dec_T += T;
                 }
+                strata::core::progress_at("adaptive refill join", p);
                 if (adapt_thr.joinable()) adapt_thr.join();
                 if (!adapt_ok) {
                     std::printf("ERR an adaptive refill failed\n");

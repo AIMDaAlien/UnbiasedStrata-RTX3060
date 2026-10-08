@@ -36,11 +36,25 @@ build fetches nothing. `make build JOBS=N` sets the job count; `CUDA_ARCHS` defa
 | | |
 | --- | --- |
 | Endpoints | `POST /v1/chat/completions` (streaming or not), `GET /v1/models`, `GET /health`, on `127.0.0.1:8080` |
-| Options | `--ctx N` (32768), `--threads N` (default: physical cores, or half the CPU quota in a container), `--host`, `--port`; engine flags after `--` |
+| Options | `--ctx N` (32768), `--threads N` (default: physical cores, or half the CPU quota in a container), `--host`, `--port`, `--mmproj PATH`, `--vision-tokens N` (1024); engine flags after `--` |
 | Sampling | greedy unless `temperature` > 0 |
 | Reasoning | returned as `reasoning_content`; `"reasoning_effort": "none"` turns it off |
 | Tools | OpenAI format (`tools`, `tool_calls`) |
-| Not supported | image input, more than one GPU, batch requests |
+| Images | with `--mmproj`, OpenAI `image_url` parts holding a base64 `data:image/...` URL (PNG, JPEG, BMP or GIF), several per message |
+| Not supported | more than one GPU, batch requests |
+
+Images: `--mmproj /models/mmproj-Qwen3.8-Flash-Next-BF16.gguf` loads the model's own vision encoder (from the same
+Hugging Face repository as the GGUF; 0.9 GB). The encoder runs on the CPU, so the card keeps its expert cache:
+about 25 s and 1,000 prompt tokens for a 1-megapixel screenshot on 8 threads, 0.2 s for a small image; a repeated
+image is served from a cache. `GET /v1/models` then lists `image` under `input_modalities`. Without `--mmproj` an
+image request is refused with a 400.
+
+The engine runs as a child process. When it exits or its stall watchdog fires, the front end exits with a failure
+status, for a supervisor such as systemd (`Restart=on-failure`) to restart; `/health` and `/v1/models` answer 503
+while the engine is down. Reasoning streams as it is generated; content and tool calls are sent once the whole
+message is parsed, so a partial tool-call JSON never changes arguments already sent. `make test-frontend` checks
+the child handling and the protocol without a model; `make test-chat-parser MODEL=<shard 1>` checks the chat
+template and tool-call parsing against the real GGUF.
 
 ## The one supported model
 
@@ -69,9 +83,10 @@ Checked on one machine: RTX 3090, 32 vCPUs of an EPYC 7763, 125 GB RAM, CUDA 12.
 | --- | --- |
 | Build | from an rsynced tree with no git metadata; the binary holds no download code |
 | Serving | chat, streaming, reasoning, tool calls; a coding agent (pi) wrote and ran a program through it |
+| RTX 4090 (24 GB), 82 GB RAM, Debian, bare metal | serving with tool calls and images, through pi (file attachments and clipboard paste) and curl, over several days of use |
 | Start from local disk | 19 s with the files in the OS file cache |
 | Start from a network volume | 12 min for 76 GB (S3-backed RunPod volume, 120 to 330 MB/s). The volume refused reads twice with "cannot allocate memory"; the loader retried and went on |
-| Not tested | RTX 40 and RTX 50 cards; a cold start from local disk |
+| Not tested | RTX 50 cards; a cold start from local disk |
 
 Speed, one run of each, same machine and model files, greedy sampling, reasoning off. Generation is the mean
 of 8 different prompts of 400 tokens; prompt speed is the mean of 2 different prompts of about 20,000 tokens.
@@ -98,9 +113,9 @@ builds differ in compile flags and in how the n-gram table is held in RAM, and e
 | | Upstream | This fork |
 | --- | --- | --- |
 | Engine source (`src/`, `include/`) | 272 files | two files changed, one added (retrying reads from slow stores); cutting it down is the next work |
-| Build | clones llama.cpp during CMake | pinned submodule, fetches nothing |
+| Build | clones llama.cpp during CMake | pinned submodule, fetches nothing; one patch, applied by `make build`: tool-call arguments in any order (see UPSTREAM.md) |
 | Setup | Python installer downloads the model and builds the pack and draft head | none; files must already exist |
-| Server | Python | C++, in the same binary (`frontend/`) |
+| Server | Python | C++, in the same binary (`frontend/`), with the image encoder from llama.cpp's `mtmd` |
 | Python | 33,745 lines | 0 |
 | C, C++ and CUDA | 208,254 lines (with tests and the Intel port) | 84,086 lines |
 | Tracked files | 851, 27 MB | 292, 6 MB |

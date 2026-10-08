@@ -19,3 +19,29 @@ build:
 
 clean:
 	rm -rf $(BUILD_DIR)
+
+# Protocol and child supervision regressions; no CUDA/model required.
+.PHONY: test-frontend
+test-frontend:
+	mkdir -p $(BUILD_DIR)/frontend-tests
+	$(CXX) -std=c++20 -Wall -Wextra -Werror frontend/child_watch_test.cpp -o $(BUILD_DIR)/frontend-tests/child-watch-test
+	$(BUILD_DIR)/frontend-tests/child-watch-test
+	$(CXX) -std=c++20 -Wall -Wextra -Werror frontend/engine_test.cpp -o $(BUILD_DIR)/frontend-tests/engine-test
+	$(BUILD_DIR)/frontend-tests/engine-test
+	$(CXX) -std=c++20 -Wall -Wextra -Werror -pthread frontend/engine_backpressure_test.cpp -o $(BUILD_DIR)/frontend-tests/engine-backpressure-test
+	$(BUILD_DIR)/frontend-tests/engine-backpressure-test
+
+# Model-template compatibility; CPU only, after the regular build produced llama libraries.
+.PHONY: test-chat-parser
+test-chat-parser:
+	@test -n "$(MODEL)" || { echo 'set MODEL to the first GGUF shard'; exit 2; }
+	mkdir -p $(BUILD_DIR)/frontend-tests
+	$(CXX) -std=c++20 -O0 -Ifrontend -Ithird_party/llama.cpp/include -Ithird_party/llama.cpp/common \
+	  -Ithird_party/llama.cpp/ggml/include -Ithird_party/llama.cpp/vendor -Ithird_party/llama.cpp/tools/mtmd \
+	  frontend/chat_parser_test.cpp \
+	  -o $(BUILD_DIR)/frontend-tests/chat-parser-test $(BUILD_DIR)/llama.cpp/tools/mtmd/libmtmd.a \
+	  $(BUILD_DIR)/llama.cpp/vendor/hash/libvendor-hash.a $(BUILD_DIR)/llama.cpp/common/libllama-common.a \
+	  $(BUILD_DIR)/llama.cpp/src/libllama.a $(BUILD_DIR)/llama.cpp/vendor/cpp-httplib/libcpp-httplib.a \
+	  $(BUILD_DIR)/ggml/src/libggml.a $(BUILD_DIR)/ggml/src/libggml-cpu.a $(BUILD_DIR)/ggml/src/libggml-base.a \
+	  $(BUILD_DIR)/llama.cpp/common/libllama-common-base.a -lpthread -ldl -lm
+	$(BUILD_DIR)/frontend-tests/chat-parser-test "$(MODEL)"

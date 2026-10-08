@@ -8,6 +8,8 @@
 //
 // The tokenizer and the chat template come from llama.cpp (the pinned submodule): the GGUF's own vocabulary and
 // its own Jinja template.  Nothing here opens an outgoing connection.
+#include "engine.hpp"
+#include "vision.hpp"
 #include "chat.h"
 #include "common.h"
 #include "llama.h"
@@ -25,6 +27,7 @@
 #include <mutex>
 #include <random>
 #include <string>
+#include <thread>
 #include <vector>
 
 #include <fcntl.h>
@@ -42,6 +45,8 @@ struct Options {
     std::string model;                  // shard 1 of the GGUF
     std::string pack;                   // the prepared pack directory
     std::string mtp;                    // the prepared draft-head directory
+    std::string mmproj;
+    int vision_tokens = 1024;
     std::string host = "127.0.0.1";
     int port = 8080;
     long long ctx = 32768;
@@ -55,6 +60,8 @@ void usage() {
         "  --model PATH    the model's first GGUF shard (...-00001-of-00002.gguf); the second must be beside it\n"
         "  --pack DIR      the prepared pack for that model\n"
         "  --mtp DIR       the prepared draft head\n"
+        "  --mmproj PATH   enable image input using this vision encoder (CPU)\n"
+        "  --vision-tokens N  maximum tokens per image (default 1024)\n"
         "  --ctx N         context length in tokens (default 32768)\n"
         "  --threads N     CPU threads for the experts the GPU does not hold (default: every physical core,\n"
         "                  or half the CPU quota inside a container that has one)\n"
@@ -70,130 +77,8 @@ bool file_exists(const std::string& p) {
 
 // ---------------------------------------------------------------------------------------------------- the engine
 
-struct GenResult {
-    bool ok = false;
-    std::string error;
-    std::string finish = "length";
-    long long produced = 0, prompt_n = 0, draft_accepted = 0, draft_offered = 0;
-    double prompt_ms = 0, decode_ms = 0;
-};
-
-class Engine {
-public:
-    bool start(const std::vector<std::string>& args, std::string& err) {
-        int to_child[2], from_child[2];
-        if (::pipe(to_child) != 0 || ::pipe(from_child) != 0) { err = "pipe failed"; return false; }
-        pid_ = ::fork();
-        if (pid_ < 0) { err = "fork failed"; return false; }
-        if (pid_ == 0) {
-            ::dup2(to_child[0], STDIN_FILENO);
-            ::dup2(from_child[1], STDOUT_FILENO);
-            ::close(to_child[0]); ::close(to_child[1]); ::close(from_child[0]); ::close(from_child[1]);
-            std::vector<char*> argv;
-            for (const std::string& a : args) argv.push_back(const_cast<char*>(a.c_str()));
-            argv.push_back(nullptr);
-            ::execv("/proc/self/exe", argv.data());
-            std::fprintf(stderr, "unbiased-strata: could not start the engine: %s\n", std::strerror(errno));
-            ::_exit(127);
-        }
-        ::close(to_child[0]);
-        ::close(from_child[1]);
-        in_fd_ = to_child[1];
-        out_ = ::fdopen(from_child[0], "r");
-        return out_ != nullptr;
-    }
-
-    /// Reads the engine's start-up lines until it says READY.  Loading the model takes minutes.
-    bool wait_ready(std::string& err) {
-        std::string line;
-        while (read_line(line)) {
-            if (line.rfind("READY", 0) == 0) return true;
-            if (line.rfind("ERR", 0) == 0) { err = line; return false; }
-        }
-        err = "the engine exited before it was ready (its messages are above)";
-        return false;
-    }
-
-    /// One request.  `on_token` returns false when the client has gone: the engine is told to stop and the rest of
-    /// its output for this request is read and dropped, so the next request starts clean.
-    GenResult generate(const std::string& header, const std::vector<llama_token>& ids,
-                       const std::function<bool(llama_token)>& on_token) {
-        GenResult r;
-        std::string req = header;
-        req.reserve(header.size() + ids.size() * 7 + 2);
-        for (size_t i = 0; i < ids.size(); ++i) {
-            if (i) req += ',';
-            req += std::to_string(ids[i]);
-        }
-        req += '\n';
-        if (!send(req)) { r.error = "the engine is not running"; return r; }
-        bool stopped = false;
-        std::string line;
-        while (read_line(line)) {
-            if (line.size() > 2 && line[0] == 'T' && line[1] == ' ') {
-                if (!stopped && !on_token((llama_token) std::atoi(line.c_str() + 2))) {
-                    stopped = true;
-                    send("STOP\n");
-                }
-            } else if (line.rfind("DONE ", 0) == 0) {
-                char finish[32] = {0};
-                std::sscanf(line.c_str(), "DONE %lld %lld %lf %lf %31s %lld %lld", &r.produced, &r.prompt_n, &r.prompt_ms,
-                            &r.decode_ms, finish, &r.draft_accepted, &r.draft_offered);
-                r.finish = finish;
-                r.ok = true;
-                return r;
-            } else if (line.rfind("ERR", 0) == 0) {
-                r.error = line.size() > 4 ? line.substr(4) : "the engine reported an error";
-                return r;
-            }
-            // PP (prompt progress), RESUME, REUSED and INFO lines need no action here
-        }
-        alive_ = false;
-        r.error = "the engine exited during the request";
-        return r;
-    }
-
-    void quit() {
-        if (pid_ > 0) {
-            send("QUIT\n");
-            int status = 0;
-            for (int i = 0; i < 100 && ::waitpid(pid_, &status, WNOHANG) == 0; ++i) ::usleep(100 * 1000);
-            ::kill(pid_, SIGKILL);
-            ::waitpid(pid_, &status, 0);
-            pid_ = -1;
-        }
-    }
-
-    bool alive() const { return alive_; }
-    std::mutex mu;   // one request at a time: the engine holds one conversation
-
-private:
-    bool send(const std::string& s) {
-        size_t off = 0;
-        while (off < s.size()) {
-            const ssize_t n = ::write(in_fd_, s.data() + off, s.size() - off);
-            if (n <= 0) { alive_ = false; return false; }
-            off += (size_t) n;
-        }
-        return true;
-    }
-
-    bool read_line(std::string& line) {
-        char* buf = nullptr;
-        size_t cap = 0;
-        const ssize_t n = ::getline(&buf, &cap, out_);
-        if (n < 0) { std::free(buf); alive_ = false; return false; }
-        line.assign(buf, (size_t) n);
-        std::free(buf);
-        while (!line.empty() && (line.back() == '\n' || line.back() == '\r')) line.pop_back();
-        return true;
-    }
-
-    pid_t pid_ = -1;
-    int in_fd_ = -1;
-    FILE* out_ = nullptr;
-    std::atomic<bool> alive_{true};
-};
+using strata_frontend::Engine;
+using strata_frontend::GenResult;
 
 // ------------------------------------------------------------------------------------------------ text handling
 
@@ -237,8 +122,10 @@ void json_error(httplib::Response& res, int status, const std::string& message, 
 // ------------------------------------------------------------------------------------------------- the request
 
 struct Prepared {
+    std::shared_ptr<strata_frontend::ImageFile> images;
     std::vector<llama_token> ids;
     std::string header;        // "GEN <max_new> key=value ... " - the ids follow
+    std::string request_id;
     common_chat_parser_params parser;   // how to split the output into reasoning, answer and tool calls
     bool stream = false;
     long long max_new = 0;
@@ -247,6 +134,7 @@ struct Prepared {
 struct Server {
     Options opt;
     Engine engine;
+    strata_frontend::Vision vision;
     llama_model* model = nullptr;
     const llama_vocab* vocab = nullptr;
     common_chat_templates_ptr tmpls;
@@ -255,12 +143,31 @@ struct Server {
     bool prepare(const common_json& body, Prepared& p, std::string& err) {
         if (!body.is_object() || !body.contains("messages")) { err = "the request needs a \"messages\" array"; return false; }
         common_chat_templates_inputs in;
-        in.messages = common_chat_msgs_parse_oaicompat(body.at("messages"));
+        common_json messages = body.at("messages");
+        std::vector<std::string> markers;
+        std::vector<std::shared_ptr<strata_frontend::EncodedImage>> images;
+        {
+            std::lock_guard<std::mutex> lock(engine.mu);
+            for (auto& message : messages) {
+                if (!message.contains("content") || !message.at("content").is_array()) continue;
+                for (auto& part : message["content"]) {
+                    if (part.value("type", "") != "image_url") continue;
+                    if (images.size() >= 32) throw std::invalid_argument("at most 32 images per request");
+                    const std::string url = part.at("image_url").at("url").get<std::string>();
+                    images.push_back(vision.encode(url));
+                    markers.push_back("UNBIASED_IMAGE_" + make_id() + "_" + std::to_string(markers.size()));
+                    part = common_json::object();
+                    part["type"] = "media_marker"; part["text"] = markers.back();
+                }
+            }
+        }
+        in.messages = common_chat_msgs_parse_oaicompat(messages);
         if (body.contains("tools") && body.at("tools").is_array() && body.at("tools").size() > 0) {
             in.tools = common_chat_tools_parse_oaicompat(body.at("tools"));
             if (body.contains("tool_choice") && body.at("tool_choice").is_string())
                 in.tool_choice = common_chat_tool_choice_parse_oaicompat(body.at("tool_choice").get<std::string>());
-            in.parallel_tool_calls = body.value("parallel_tool_calls", false);
+            const auto caps = common_chat_templates_get_caps(tmpls.get());
+            in.parallel_tool_calls = body.value("parallel_tool_calls", caps.at("supports_parallel_tool_calls"));
         }
         in.add_generation_prompt = true;
         in.use_jinja = true;
@@ -280,7 +187,39 @@ struct Server {
                 in.chat_template_kwargs["reasoning_effort"] = kw.at("reasoning_effort").dump();
         }
         const common_chat_params cp = common_chat_templates_apply(tmpls.get(), in);
-        p.ids = common_tokenize(vocab, cp.prompt, /*add_special=*/false, /*parse_special=*/true);
+        std::string rendered = cp.prompt;
+        if (images.empty()) {
+            p.ids = common_tokenize(vocab, rendered, false, true);
+        } else {
+            const auto pad = common_tokenize(vocab, "<|image_pad|>", false, true);
+            const auto literal_pad = common_tokenize(vocab, "<|image_pad|>", false, false);
+            const auto start = common_tokenize(vocab, "<|vision_start|>", false, true);
+            const auto end = common_tokenize(vocab, "<|vision_end|>", false, true);
+            if (pad.size() != 1 || start.size() != 1 || end.size() != 1)
+                throw std::runtime_error("model does not have the expected image special tokens");
+            auto text_ids = [&](const std::string& text) {
+                for (auto id : common_tokenize(vocab, text, false, true)) {
+                    if (id == pad[0]) p.ids.insert(p.ids.end(), literal_pad.begin(), literal_pad.end());
+                    else p.ids.push_back(id);
+                }
+            };
+            size_t offset = 0; rendered.clear();
+            for (size_t i = 0; i < images.size(); ++i) {
+                auto at = cp.prompt.find(markers[i], offset);
+                if (at == std::string::npos || cp.prompt.find(markers[i], at+markers[i].size()) != std::string::npos)
+                    throw std::invalid_argument("chat template did not preserve each image exactly once");
+                auto text = cp.prompt.substr(offset, at-offset);
+                text_ids(text); rendered += text + "<|vision_start|>";
+                p.ids.push_back(start[0]);
+                p.ids.insert(p.ids.end(), images[i]->tokens, pad[0]);
+                for (int j = 0; j < images[i]->tokens; ++j) rendered += "<|image_pad|>";
+                p.ids.push_back(end[0]); rendered += "<|vision_end|>";
+                offset = at + markers[i].size();
+            }
+            auto tail = cp.prompt.substr(offset); text_ids(tail); rendered += tail;
+            p.images = std::make_shared<strata_frontend::ImageFile>();
+            strata_frontend::write_images(*p.images, images);
+        }
         if (p.ids.empty()) { err = "the prompt is empty"; return false; }
 
         p.parser = common_chat_parser_params(cp);
@@ -332,7 +271,23 @@ struct Server {
                 keys += b;
                 if (keys.find("penalty_last_n") == std::string::npos) keys += " penalty_last_n=64";
             }
-        p.header = "GEN " + std::to_string(max_new) + keys + " ";
+        p.header = (p.images ? "GENI " : "GEN ") + std::to_string(max_new) + keys + " " +
+                   (p.images ? p.images->path + " " : "");
+        // Opt-in provenance capture: the exact first rendered request this
+        // process serves, including token IDs and the engine sampling header.
+        if (const char* path = std::getenv("SUGMEOFF_CAPTURE_FIRST_PROMPT")) {
+            if (FILE* f = std::fopen(path, "wx")) {
+                common_json capture = common_json::object();
+                capture["request"] = body;
+                capture["rendered_prompt"] = rendered;
+                capture["token_ids"] = p.ids;
+                capture["engine_header"] = p.header;
+                const std::string text = capture.dump_safe();
+                if (std::fwrite(text.data(), 1, text.size(), f) != text.size())
+                    std::fprintf(stderr, "unbiased-strata: prompt capture write failed: %s\n", path);
+                std::fclose(f);
+            }
+        }
         return true;
     }
 
@@ -363,6 +318,8 @@ struct Server {
     GenResult run(const Prepared& p, common_chat_msg& final_msg,
                   const std::function<bool(const std::vector<common_chat_msg_diff>&)>& emit) {
         std::lock_guard<std::mutex> lk(engine.mu);
+        std::fprintf(stderr, "unbiased-strata: request %s start: prompt=%zu header=%s\n",
+                     p.request_id.c_str(), p.ids.size(), p.header.c_str());
         std::string text, pending;
         common_chat_msg msg;
         std::vector<std::string> call_ids;
@@ -376,6 +333,16 @@ struct Server {
                 now = common_chat_msg();
                 now.role = "assistant";
                 now.content = text;
+            }
+            // Partial tool JSON is reparsed and normalized as tokens arrive.
+            // Escapes and incomplete arguments can change already-parsed text,
+            // which cannot be retracted from an OpenAI stream. Publish content
+            // and tool calls once, after the full message is parsed; reasoning
+            // can still stream. This changes delivery, never generated tokens.
+            if (partial) {
+                now.content.clear();
+                now.content_parts.clear();
+                now.tool_calls.clear();
             }
             if (now.empty()) return;
             now.set_tool_call_ids(call_ids, [] { return "call_" + make_id().substr(9); });
@@ -395,16 +362,30 @@ struct Server {
             return client_ok;
         });
         text += pending;
-        update(false);
+        try {
+            update(false);
+        } catch (const std::exception& ex) {
+            r.ok = false;
+            r.error = std::string("response formatter failed: ") + ex.what();
+            std::fprintf(stderr, "unbiased-strata: final response formatter failed: %s\n", ex.what());
+        }
         final_msg = msg;
         if (final_msg.role.empty()) final_msg.role = "assistant";
         if (final_msg.tool_calls.empty() && text.find("<tool_call>") != std::string::npos) {
             // The parser accepts a message with no tool call even when the text holds one it could not
             // match (see third_party/llama.cpp/common/parsers/qwen3-coder.cpp); say so, with the text.
-            std::fprintf(stderr, "unbiased-strata: the output contains <tool_call> but no tool call was parsed; "
-                                 "the client sees finish=stop. raw-output-begin\n%s\nunbiased-strata: raw-output-end\n",
-                         text.c_str());
+            std::fprintf(stderr, "unbiased-strata: request %s: the output contains <tool_call> but no tool call was "
+                                 "parsed; the client sees finish=stop. raw-output-begin\n%s\n"
+                                 "unbiased-strata: request %s raw-output-end\n",
+                         p.request_id.c_str(), text.c_str(), p.request_id.c_str());
         }
+        if (r.error.find("response formatter failed") == 0) {
+            std::fprintf(stderr, "unbiased-strata: request %s formatter-input-begin\n%s\n"
+                                 "unbiased-strata: request %s formatter-input-end\n",
+                         p.request_id.c_str(), text.c_str(), p.request_id.c_str());
+        }
+        std::fprintf(stderr, "unbiased-strata: request %s end: ok=%d prompt=%lld generated=%lld finish=%s error=%s\n",
+                     p.request_id.c_str(), r.ok ? 1 : 0, r.prompt_n, r.produced, r.finish.c_str(), r.error.c_str());
         return r;
     }
 
@@ -425,6 +406,7 @@ struct Server {
             return json_error(res, 400, ex.what(), "invalid_request_error");
         }
         const std::string id = make_id();
+        prep->request_id = id;
         const long long created = now_s();
 
         if (!prep->stream) {
@@ -561,6 +543,8 @@ bool parse_args(int argc, char** argv, Options& o) {
             return argv[++i];
         };
         if (a == "--model") o.model = next("--model");
+        else if (a == "--mmproj") o.mmproj = next("--mmproj");
+        else if (a == "--vision-tokens") o.vision_tokens = std::atoi(next("--vision-tokens").c_str());
         else if (a == "--pack") o.pack = next("--pack");
         else if (a == "--mtp") o.mtp = next("--mtp");
         else if (a == "--host") o.host = next("--host");
@@ -574,7 +558,7 @@ bool parse_args(int argc, char** argv, Options& o) {
                 for (const char* no : {"--gpus", "--layer-split", "--split-device", "--peer-device", "--peer-slots",
                                        "--remote-expert", "--vision", "--batch"})
                     if (e.rfind(no, 0) == 0) {
-                        std::fprintf(stderr, "unbiased-strata: %s is not supported (single GPU, text only)\n", e.c_str());
+                        std::fprintf(stderr, "unbiased-strata: %s is not supported here (use --mmproj for image input)\n", e.c_str());
                         std::exit(2);
                     }
                 o.extra.push_back(e);
@@ -609,11 +593,15 @@ int main(int argc, char** argv) {
         if (!file_exists(f)) { std::fprintf(stderr, "unbiased-strata: missing file: %s\n", f.c_str()); return 2; }
     if (o.ctx < 1024) { std::fprintf(stderr, "unbiased-strata: --ctx must be at least 1024\n"); return 2; }
 
+    if (!o.mmproj.empty() && (!file_exists(o.mmproj) || o.vision_tokens < 16 || o.vision_tokens > 4096)) {
+        std::fprintf(stderr, "unbiased-strata: --mmproj must exist and --vision-tokens must be 16..4096\n"); return 2;
+    }
     // the engine, started first: loading takes minutes, and it must be forked before any thread exists
     std::vector<std::string> eargs = {
         "unbiased-strata", "--engine", "--serve", "--pack", o.pack, "--native", o.model, "--ple-gguf", shard2,
         "--expert-profile", profile, "--expert-cache", "auto", "--prefill", "auto", "--spec", "4", "--spec-min-p", "0.5",
         "--mtp", o.mtp, "--max-context", std::to_string(o.ctx), "--ple-io", "ram"};
+    if (!o.mmproj.empty()) eargs.push_back("--vision");
     if (o.ctx > 8192) { eargs.push_back("--kv"); eargs.push_back("int8"); }
     if (o.threads <= 0) {
         o.threads = default_threads();
@@ -640,6 +628,12 @@ int main(int argc, char** argv) {
     }
     srv.vocab = llama_model_get_vocab(srv.model);
     srv.tmpls = common_chat_templates_init(srv.model, "");
+    if (!o.mmproj.empty()) {
+        try { srv.vision.init(o.mmproj, srv.model, o.threads, o.vision_tokens); }
+        catch (const std::exception& ex) {
+            std::fprintf(stderr, "unbiased-strata: %s\n", ex.what()); srv.engine.quit(); return 1;
+        }
+    }
 
     std::fprintf(stderr, "unbiased-strata: loading the model (this takes a few minutes)...\n");
     if (!srv.engine.wait_ready(err)) {
@@ -656,11 +650,15 @@ int main(int argc, char** argv) {
         res.set_content(srv.engine.alive() ? "{\"status\":\"ok\"}" : "{\"status\":\"error\"}", "application/json");
     });
     http.Get("/v1/models", [&](const httplib::Request&, httplib::Response& res) {
+        if (!srv.engine.alive()) return json_error(res, 503, "the engine is not running", "server_error");
         common_json m = common_json::object();
         m["id"] = kModelName;
         m["object"] = "model";
         m["owned_by"] = "local";
         m["context_length"] = srv.opt.ctx;
+        m["input_modalities"] = common_json::array();
+        m["input_modalities"].push_back("text");
+        if (srv.vision.enabled()) m["input_modalities"].push_back("image");
         common_json out = common_json::object();
         out["object"] = "list";
         out["data"] = common_json::array();
@@ -670,6 +668,7 @@ int main(int argc, char** argv) {
     http.Post("/v1/chat/completions", [&](const httplib::Request& req, httplib::Response& res) {
         srv.handle_chat(req, res);
     });
+    http.set_payload_max_length(64 * 1024 * 1024);
     http.set_read_timeout(600, 0);
     http.set_write_timeout(600, 0);
     std::signal(SIGINT, on_signal);
@@ -681,7 +680,29 @@ int main(int argc, char** argv) {
         return 1;
     }
     std::fprintf(stderr, "unbiased-strata: ready on http://%s:%d (context %lld tokens)\n", o.host.c_str(), o.port, o.ctx);
+    // The engine watchdog intentionally aborts a stuck child. Exit the HTTP
+    // parent too so systemd's Restart=on-failure reloads the complete service.
+    // Do not fork a replacement from this multithreaded HTTP process.
+    std::atomic<bool> shutting_down{false};
+    std::thread supervisor([&] {
+        while (!shutting_down.load()) {
+            std::string why;
+            if (srv.engine.reap_exit(why)) {
+                std::fprintf(stderr, "unbiased-strata: %s; exiting frontend for service restart\n", why.c_str());
+                std::fflush(stderr);
+                std::_Exit(1);
+            }
+            if (!srv.engine.alive()) {
+                std::fprintf(stderr, "unbiased-strata: engine protocol failed; exiting frontend for service restart\n");
+                std::fflush(stderr);
+                std::_Exit(1);
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+    });
     http.listen_after_bind();
+    shutting_down.store(true);
+    supervisor.join();
 
     std::fprintf(stderr, "unbiased-strata: stopping\n");
     srv.engine.quit();

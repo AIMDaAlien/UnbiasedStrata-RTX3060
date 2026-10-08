@@ -1251,6 +1251,7 @@ endif()
 # The front end takes its tokenizer, its Jinja chat-template engine and its HTTP library from the same pinned
 # llama.cpp checkout that ggml comes from.  ggml is already configured above, so llama.cpp's own build reuses it.
 if(STRATA_ENABLE_CUDA AND STRATA_NATIVE_EXPERTS)
+  set(LLAMA_BUILD_MTMD ON CACHE BOOL "" FORCE)
   set(LLAMA_BUILD_COMMON ON CACHE BOOL "" FORCE)
   foreach(_o LLAMA_BUILD_TESTS LLAMA_BUILD_TOOLS LLAMA_BUILD_EXAMPLES LLAMA_BUILD_SERVER LLAMA_BUILD_APP
              LLAMA_BUILD_UI LLAMA_USE_PREBUILT_UI LLAMA_OPENSSL LLAMA_LLGUIDANCE LLAMA_ALL_WARNINGS)
@@ -1261,5 +1262,5 @@ if(STRATA_ENABLE_CUDA AND STRATA_NATIVE_EXPERTS)
   add_executable(unbiased-strata frontend/main.cpp frontend/engine_entry.cpp)
   target_include_directories(unbiased-strata PRIVATE ${_strata_gpu_include_directories} ${STRATA_GGML_DIR}/vendor)
   target_link_libraries(unbiased-strata PRIVATE strata_engine strata_prefill strata_spec ${_strata_gpu_runtime_target}
-                        llama-common llama cpp-httplib Threads::Threads)
+                        llama-common llama mtmd cpp-httplib Threads::Threads)
 endif()
