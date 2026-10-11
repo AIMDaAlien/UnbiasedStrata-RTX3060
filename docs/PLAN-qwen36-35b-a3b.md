@@ -36,8 +36,14 @@ models' `config.json`:
 
 Everything Qwen3.6 has, the engine has a kernel for; what it lacks, the engine treats as optional (PLE) or
 needs a bypass for (hyper-connections, the QSA indexer). Maya's port study (`docs/GLM5-FLASH.md` in that
-repo) crossed a much larger gap for GLM-5.3-Flash in about a week: study 2026-09-29, verified streaming
-runner 2026-10-01, v1.0.0 on 2026-10-07. The Qwen3.6 gap is strictly smaller.
+repo) crossed a larger *kernel* gap for GLM-5.3-Flash in about a week: study 2026-09-29, verified
+streaming runner 2026-10-01, v1.0.0 on 2026-10-07. The Qwen3.6 kernel gap is smaller (no MLA, no sparse
+indexer to write, no manifold hyper-connections, a SiLU-for-sigmoid change in the GDN gate). The
+*plumbing* gap is not small: `docs/qwen36-port/geometry-inventory.md` (154 rows, 2026-10-11) shows the
+hc = 4 gated residual and the QSA indexer assumed structurally in every block, the output head, the
+verify window, the MTP drafter and prefill; prefill refusing any geometry but 2560/4/320/top-10; native
+packs decoding only through the verify window; and `ModelGeometry` reading only the expert counts and
+rope keys from the file. Expect Maya-scale work, with the risk in plumbing rather than kernels.
 
 **The deliverable:** this tree's engine running Qwen3.6-35B-A3B natively, by Maya's method, behind the
 existing front end (`frontend/`: OpenAI API, tokenizer, chat template, tool-call parser, vision), which is
@@ -267,26 +273,48 @@ beyond seconds of parity runs, so they proceed while the Phase 0 sweeps hold the
    test. `make_profile.py` hardcodes 48 layers and 512 experts; the MTP tools hardcode Flash-Next tensor
    names; `iq_pack.py`'s `FORM` table has no `qwen35moe` entry. Dependencies: numpy, regex, gguf-py; no
    torch, no GPU.
-2. **Geometry, metadata, sizing (default model).** `ModelGeometry` already parameterizes everything except
-   `hc`; add `hc = 1` as "no gated residual" with a plain-residual read/write path; read the `qwen35moe.*`
-   keys; the draft geometry follows the target (Maya found it hardcoded in `generate.cpp`); the draft
-   vocab size comes from the pack. **The VRAM planner:** free VRAM minus the fixed set for the requested
+2. **Geometry, metadata, sizing (default model).** Per the inventory: `ModelGeometry` is a set of
+   Flash-Next defaults; only `qwen4exp.expert_count`, `expert_used_count` and the rope keys are read, and
+   `check_architecture` rejects anything but `qwen4exp`. So: read every field of `ModelGeometry` from
+   the `qwen35moe.*` keys (hidden, layers, head counts, `ssm.*`, `n_ff`, interval); add `hc = 1` as "no
+   gated residual" with a plain-residual path and the `attn_norm` / `post_attention_norm` /
+   `output_norm` tensors the engine never references today; fix the one leak in the native expert path
+   (`expert_layout.cpp:284` passes compile-time 2560/640 to `native_fmt`); make `--ple-gguf` optional at
+   the command line (the kernels already allow no PLE); accept llama.cpp's fused `ffn_gate_up_exps` and
+   `attn_qkv` forms or split them at pack time; the draft geometry follows the target; the draft vocab
+   size comes from the pack. **The VRAM planner:** free VRAM minus the fixed set for the requested
    context; KV streaming engaged when the fixed set does not fit (`--kv-resident`); the context lowered
    toward 131,072 only after that; a refusal with numbers below it; the remainder becomes expert slots;
    then the RAM tier from free RAM minus headroom, the rest mapped from disk (the existing
    `--mmap-experts` source, with per-layer prefetch hints as Maya's section 7 added); `--vram-cap` and
    `--ram-cap` for emulation. This step is what makes "6 GB to 32 GB" one binary, and it is where the
    engine's tier counters (VRAM, RAM, disk reads per token) are exposed in the log and on `/health`.
-3. **Kernels (default model).** In order of risk: the GDN mixer at 32 v-heads (parity against the oracle);
-   the full-attention layer as *dense* attention, the QSA path with indexer and cell selection bypassed
-   or `native_flash_attn.cu` (already specialized from llama.cpp's `fattn-vec`) over the existing KV
-   formats and streaming; the router at top-8 over 256 (parity at the selection boundary, since a flipped
-   expert is a different expert); the shared expert at 512. Then the layer composition test: one GDN+MoE
-   and one attention+MoE layer against the oracle's dumps. The canonical Q2_0 CPU expert kernel bakes
-   Flash-Next's shapes at compile time and refuses others; Qwen3.6 rides the native pack path (per-layer
-   runtime geometry from the GGUF, ggml dot products), as the Coder with its 256 experts per layer does.
-4. **Pack and runner.** `iq_pack.py` taught `qwen35moe` and its BF16-preserve list; the MTP head from the
-   MTP GGUF's `nextn` tensors (Maya's `mtp_gguf.py` is the model); `make_profile.py` from the E0 trace;
+3. **Kernels and the block (default model).** In order of risk, each with a parity harness:
+   - the GDN mixer: head pairing `h % h_k` already handles 32 v-heads against 16 k-heads; the gate
+     changes from sigmoid(z) to SiLU(z) in four kernels (`gdn.cu`, `fused_gdn.cu`,
+     `native_gdn_preprocess.cu`, the prefill GDN kernels), with the sigmoid reading as the negative test;
+   - the full-attention layer as *dense* attention: the decode kernel reads KV through an index list and
+     does not care how the list was built, so a "select every cell" producer replaces the indexer; the
+     kernels fixed at 12 query heads per KV head (Qwen3.6 has 8) and the short-context kernel fixed at
+     24 heads become parameters; `native_flash_attn.cu` (specialized from llama.cpp's `fattn-vec`) is
+     the fallback for prompts;
+   - the router at top-8 over 256 (generic already; parity at the selection boundary) and the shared
+     expert at 512 (its Q8_K rule needs a multiple of 256, which 512 satisfies);
+   - the block without hyper-connections: `layer.cpp` *and* `verify.cpp`, because native packs decode
+     only through the verify window, and that window requires the fused hc kernels (fixed at
+     2560/4/320), top-10 and the native indexer today;
+   - prefill: `Prefill::init` refuses anything but 2560/4/320/10 and its GDN, split-q, route and MoE
+     kernels carry literals (48 v-heads, 24 heads, 1280, 640, top-10); parameterize or fork them.
+   Then the layer composition test: one GDN+MoE and one attention+MoE layer against the oracle's dumps.
+   The canonical Q2_0 CPU expert kernel bakes Flash-Next's shapes; Qwen3.6 rides the native pack path
+   (per-layer runtime geometry, ggml dot products, Unsloth's Q4_K/Q5_K types already included), as the
+   Coder with its 256 experts per layer does.
+4. **Pack and runner.** `iq_pack.py` taught `qwen35moe` and its BF16-preserve list; the MTP head: the
+   engine's drafter reads its own Q8_0 directory with vLLM-style names, canonical Q2_0 experts at
+   2560/640 and the default geometry, and Qwen3.6's single `nextn.eh_proj` over the concatenated
+   embedding and hidden state does not match the two separate projections it expects, so the drafter
+   needs a Qwen3.6 pack format and a small graph change (Maya's `mtp_gguf.py` is the model);
+   `make_profile.py` (hardcoded 48 × 512 today) from the E0 trace;
    the streaming runner held to the oracle at every position of a short sequence; then the real Q4 file
    end to end, greedy, compared with llama.cpp's output distribution (not token-for-token; the README's
    known-problems entry says why).
