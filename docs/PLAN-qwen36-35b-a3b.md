@@ -72,13 +72,19 @@ Real cards in the homelab cover the range, with Pascal at three sizes:
 | --- | --- | --- | --- | --- |
 | 6 GB | GTX 1060 | g7 (192.168.50.185), laptop | sm_61 | the floor; regina's `g7/README.md` has llama.cpp numbers here already |
 | 8 GB | GTX 1070 Ti | host .4 (`llama-qwen36-35b-mtp.service`, live) | sm_61 | second Pascal point |
-| 11 GB | GTX 1080 Ti | .57 at PCI `2a:00`, bound to VFIO, **unassigned**; needs a VM | sm_61 | the primary measurement card |
-| 24 GB | RTX 4090 | VM 221 (192.168.50.151) on pve2 | sm_89 | the top of the consumer range |
-| 12, 16, 32 GB | RTX A6000 (48 GB) **capped** | VM 220 (192.168.50.8) on .57 | sm_86 | emulated budgets through the engine's own VRAM cap, and the **development card** |
+| 11 GB | GTX 1080 Ti | .57 at PCI `2a:00`, in **VM 211 `gpu-qwen36`** (cloned from 210 on 2026-10-11: 8 vCPU, 12 GiB, 100 GB on `local-lvm`) | sm_61 | the primary measurement card **and the development card**: no other GPU is available |
+| 24 GB | RTX 4090 | VM 221 (192.168.50.151) on pve2 | sm_89 | **in use by another agent's benchmark**; the 24 GB rung waits for it |
+| 12, 16, 32 GB | RTX A6000 (48 GB) **capped** | VM 220 (192.168.50.8) on .57 | sm_86 | **in use by another agent**; the emulated rungs wait for it |
 
 The cap is Maya's `STRATA_GLM_VRAM_GB` idea: the engine limits its own total VRAM so the expert pool gets
-what a card of that size would leave it. It is built in Phase 2 step 2 and emulates 12, 16 and 32 GB on
-the A6000; the real Pascal cards check what emulation cannot: launch failures, FP16 paths, PCIe.
+what a card of that size would leave it. It is built in Phase 2 step 2; the 1080 Ti emulates the 6 and 8 GB
+rungs with it (the real 1060 and 1070 Ti then check launch failures, FP16 paths and PCIe), and the A6000
+emulates 12, 16 and 32 GB whenever it is free.
+
+Consequence of having only the 1080 Ti: **the Pascal build comes first, not last.** Every parity harness
+and the streaming runner are brought up under `STRATA_EXPERIMENTAL_SM60=ON` on sm_61 from the start, so
+Pascal surprises surface in the first week instead of the last. Compile times on 8 vCPU of a Zen 1 are
+the cost; `make build JOBS=8` and incremental builds.
 
 Constraints across the ladder:
 
@@ -88,7 +94,7 @@ Constraints across the ladder:
 | Pascal specifics | dp4a exists on sm_61 (not sm_60, which gets the shim); no tensor cores; no `__nanosleep`; FP16 math at 1/64 rate on GP102/GP104/GP106, so every kernel path on these cards must be FP32 or dp4a int8. Strata refuses sm < 75 unless `STRATA_EXPERIMENTAL_SM60=ON`; that flag becomes the default build (Phase 2, step 6). Nobody has run this engine on Pascal; Maya requires Volta or newer |
 | Build verification | `cuobjdump --list-elf \| grep sm_` after every build; two past incidents here were wrong-arch binaries |
 | Profilers | current Nsight Systems: Turing and newer only. Nsight Compute: no Pascal since 2019.5. On Pascal use the `nsys` bundled with CUDA 12.x (2023.x) or `nvprof`; on Turing and newer current `nsys`. Same analysis script either way |
-| .57 host | Ryzen 7 1700 (Zen 1, AVX2, no AVX-512), 64 GB DDR4-2133, GPU slots Gen3 x8 at best and trained at Gen1 x8 in June (reseated 2026-07-02; re-verify `LnkSta`). VM 220 (DwarfStar) **stays up**; the user freed host RAM so the 1080 Ti VM gets about 12 GiB. VM 220 shares the memory bandwidth and the 8 cores, so each run's metadata records DwarfStar's state (idle or serving, from its log) and measurement windows prefer its idle hours |
+| .57 host | Ryzen 7 1700 (Zen 1, AVX2, no AVX-512), 62 GiB usable DDR4-2133. Checked 2026-10-11: VM 220 shrunk to 36 GiB by another agent, host 18 GiB available before VM 211, about 6 GiB after. The 1080 Ti's link is **Gen3 x8** (`LnkSta: 8GT/s, Width x8`), so the June Gen1 problem is gone. VM 220 shares the memory bandwidth and the 8 physical cores (VM 220 has 12 vCPU, VM 211 has 8: oversubscribed when both are busy), so each run's metadata records VM 220's load and measurement windows prefer its idle hours |
 | Stale pointer | `docs/NEW-GPU-VM.md` says "both GTX 1080 Ti"; slot 29:00 now holds the A6000 |
 
 ## 2. Models, the memory hierarchy, and the budget table the engine must reproduce at start
@@ -155,9 +161,11 @@ prefill, all llama.cpp.
 Human steps (Proxmox state is the user's):
 
 1. (Decided: VM 220 stays up; host RAM already freed for a 12 GiB VM.)
-2. A VM for the 1080 Ti: reuse stopped VM 210 or clone 9000. **8 vCPU, 12 GiB RAM, balloon 0, 120 GB
-   disk on `local-lvm` (NVMe)**, `--hostpci0 0000:2a:00,pcie=1`. VM 220 keeps running. The disk is the
-   third tier, so `fio` its read throughput and 4K random latency once, into `phase0-notes.md`.
+2. (Done 2026-10-11.) VM 211 `gpu-qwen36`, a full clone of VM 210: **8 vCPU, 12 GiB RAM, balloon 0,
+   100 GB on `local-lvm` (NVMe)**, `--hostpci0 0000:2a:00,pcie=1`. No `rombar=0`: that was needed only
+   for the boot-VGA card at 29:00 (homelab ticket 002); the 1080 Ti at 2a:00 never needed it. VM 220
+   keeps running. The disk is the third tier, so `fio` its read throughput and 4K random latency once,
+   into `phase0-notes.md`.
 3. Inside the VM: pin the kernel/driver pair, install `build-essential cmake nvtop linux-perf`, CUDA 12.8
    (the template has 12.4; 12.8 needs a 570-series driver, still a Pascal-capable branch), confirm
    `nvidia-smi`, check `LnkSta`, set `perf_event_paranoid` to 1.
@@ -239,8 +247,8 @@ the conclusion. This write-up is what the engine must beat; it does not decide w
 
 ## 5. Phase 2: the engine port, Maya's recipe on a smaller gap
 
-Where: the A6000 in VM 220 (sm_86, 48 GB) with the VRAM cap, or the 4090. The Pascal cards are reached
-at step 6. Each step has a parity harness in Strata's negative-test discipline (every wrong reading must
+Where: VM 211, the 1080 Ti, under the Pascal build from the first step (see Section 1). The A6000 and
+the 4090 are taken; if either frees up it becomes the fast-compile card, but nothing waits for it. Each step has a parity harness in Strata's negative-test discipline (every wrong reading must
 differ materially before the right one is judged), as Maya's section 6 did. Steps 1 to 4 need no GPU time
 beyond seconds of parity runs, so they proceed while the Phase 0 sweeps hold the cards.
 
@@ -272,18 +280,17 @@ beyond seconds of parity runs, so they proceed while the Phase 0 sweeps hold the
    the streaming runner held to the oracle at every position of a short sequence; then the real Q4 file
    end to end, greedy, compared with llama.cpp's output distribution (not token-for-token; the README's
    known-problems entry says why).
-5. **Serve and measure on the A6000 at the 11 GB cap, then 6, 8, 12, 16, 24, 32.** CPU lane and PCIe
+5. **Serve and measure on the 1080 Ti at 11 GB, then capped to 8 and 6; the 12, 16, 24 and 32 rungs when a card frees up.** CPU lane and PCIe
    share calibrated as Maya's `--calibrate` does, against this engine's own session; the Phase 0
    harness and instruments; the engine's points onto `ladder-baseline.png`. The H5 measurement. The
    front end's `make test-chat-parser MODEL=<gguf>` against Qwen3.6's template (the homelab services
    use a patched `qwen3.6-enhanced.jinja`); the Qwen3-Coder any-argument-order patch checked for
    misfires on this model's tool-call grammar.
-6. **The Pascal build.** `STRATA_EXPERIMENTAL_SM60=ON` becomes the default for the fat binary
-   (`CUDA_ARCHS=61;70;75;86;89;120`, CUDA 12.8); every kernel path checked for FP16 math and sm_75+
-   intrinsics on sm_61 (the Volta prompt-attention kernel from PR #600 is not a Pascal kernel; the dp4a
-   MMQ path is); first on the 1080 Ti against B1, then the 1070 Ti and the 1060 against B1b. Budget a
-   week of fixing. This step is on the critical path: without it the deliverable does not reach the
-   bottom of the ladder.
+6. **The other Pascal cards and the fat binary.** The sm_61 build has been the working build since step
+   1; this step makes `STRATA_EXPERIMENTAL_SM60=ON` the default for the fat binary
+   (`CUDA_ARCHS=61;70;75;86;89;120`, CUDA 12.8) and runs the 1070 Ti and the 1060 against B1b. The
+   sm_75+ paths (tensor-core prompt attention, thread-block clusters) stay compiled in for the cards that
+   have them and are checked on the 4090 or A6000 when one is free.
 7. **README/UPSTREAM.** The supported model and its checksums, the ladder table with the engine against
    the baseline, the sizing rule in words, the Pascal caveats (CUDA 12.x, FP32 paths, no Nsight Compute).
 
