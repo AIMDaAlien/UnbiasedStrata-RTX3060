@@ -57,8 +57,9 @@ Hypotheses:
 - **H1.** Under llama.cpp `--n-cpu-moe N` the GPU is idle most of each decode step, and the idle share
   grows with N, so it is worst on the smallest cards. (The baseline sweep measures it.)
 - **H2.** The idle is CPU expert matmul, not PCIe transfer.
-- **H3.** 256K context fits at Q4 on every card of 11 GB or more; 128K fits on 8 GB; 6 GB needs the KV
-  streamed to RAM or the Q3 arm, and the engine must say which it chose.
+- **H3.** 256K context fits at Q4 on every card of 11 GB or more; 128K fits on 8 GB; 6 GB at Q4 holds
+  the 256K fixed set only when prefill borrows cache slots, else it takes 131K or the IQ3 file, and the
+  engine must say which it chose.
 - **H4.** Qwen3.6's routing is skewed enough that a VRAM expert cache serves well above its slot fraction
   of routes at every budget from 6 GB up. The replay measures the whole curve before any CUDA.
 - **H5.** The ported engine's decode scales as `1 / max(cpu, gpu)` rather than `1 / (cpu + gpu)`, and beats
@@ -98,7 +99,7 @@ Constraints across the ladder:
 | | |
 | --- | --- |
 | CUDA | one toolkit that compiles sm_61 and sm_120 both: **CUDA 12.8** (12.x is the last with Pascal; 13 dropped it). Upstream saw RTX 50 crashes with 12.8-built engines (issues #220, #224), so RTX 50 is "built, not measured" until a card exists here. Fat binary `CUDA_ARCHS=61;70;75;86;89;120` |
-| Pascal specifics | dp4a exists on sm_61 (not sm_60, which gets the shim); no tensor cores; no `__nanosleep`; FP16 math at 1/64 rate on GP102/GP104/GP106, so every kernel path on these cards must be FP32 or dp4a int8. Strata refuses sm < 75 unless `STRATA_EXPERIMENTAL_SM60=ON`; that flag becomes the default build (Phase 2, step 6). Nobody has run this engine on Pascal; Maya requires Volta or newer |
+| Pascal specifics | dp4a exists on sm_61 (not sm_60, which gets the shim); no tensor cores; no `__nanosleep`; FP16 math at 1/64 rate on GP102/GP104/GP106, so every kernel's *arithmetic* on these cards must be FP32 or dp4a int8 (fp16 *storage* with conversion, as in the KV pools and prefill's stores, is full rate and stays); the prompt MoE's dp4a MMQ path must be enabled on sm_61. Strata refuses sm < 75 unless `STRATA_EXPERIMENTAL_SM60=ON`; that flag becomes the default build (Phase 2, step 6). Nobody has run this engine on Pascal; Maya requires Volta or newer |
 | Build verification | `cuobjdump --list-elf \| grep sm_` after every build; two past incidents here were wrong-arch binaries |
 | Profilers | current Nsight Systems: Turing and newer only. Nsight Compute: no Pascal since 2019.5. On Pascal use the `nsys` bundled with CUDA 12.x (2023.x) or `nvprof`; on Turing and newer current `nsys`. Same analysis script either way |
 | .57 host | Ryzen 7 1700 (Zen 1, AVX2, no AVX-512), 62 GiB usable DDR4-2133. Checked 2026-10-11: VM 220 shrunk to 36 GiB by another agent, host 18 GiB available before VM 211, about 6 GiB after. The 1080 Ti's link is **Gen3 x8** (`LnkSta: 8GT/s, Width x8`), so the June Gen1 problem is gone. VM 220 shares the memory bandwidth and the 8 physical cores (VM 220 has 12 vCPU, VM 211 has 8: oversubscribed when both are busy), so each run's metadata records VM 220's load and measurement windows prefer its idle hours |
@@ -122,39 +123,42 @@ reads per token reach the disk.
 | Q3 | `Qwen3.6-35B-A3B-UD-IQ3_XXS.gguf` | 13.21 GB | `.4`, `.151:/models`, g7 `/home/rk/models` |
 
 K-quants for the default because most experts run on the CPU on most of the ladder, and K-quant dot
-products are the fast AVX2 path. The MTP file is required for the engine: Strata's draft protocol is built
-around the model's own MTP layer, and the draft head's tensors ride in that GGUF. So the shipped default is
-the Q4 MTP file (or Q4_K_XL plus a separately packed head, if unsloth publishes the head on its own);
-Phase 0 settles which.
+products are the fast AVX2 path. The engine needs the MTP block: Strata's draft protocol is built around
+the model's own MTP layer. Settled on 2026-10-11: the `Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf` from unsloth's MTP
+repository (rev 5bc3e238) already carries the draft block as `blk.40` (753 tensors), so it is the default
+file, and its `blk.40` serves as the draft pack for the IQ3 arm too (the plain IQ3 file has no draft block).
 
-Fixed VRAM before any expert slot (estimates from regina's measurements, replaced by Phase 0 numbers):
+Fixed VRAM before any expert slot. Measured and censused on 2026-10-11; the authoritative table is
+`docs/QWEN36-35B-A3B.md` section 4.1, summarized:
 
-| Item | Q4 | IQ3_XXS |
+| Item | Q4_K_XL | IQ3_XXS |
 | --- | --- | --- |
-| Non-expert weights on the GPU (token embedding stays in RAM) | ~3.1 GB | ~1.9 GB |
-| CUDA context and hidden overhead | ~0.5 GB | ~0.5 GB |
-| KV, q4_0, 10 attention layers: 131K / 262K | 0.72 / 1.44 GB | 0.72 / 1.44 GB |
-| Compute and prompt buffers at 262K | ~0.8 GB | ~0.8 GB |
-| **Fixed total at 262K** | **~5.8 GB** | **~4.6 GB** |
-| Expert weight, total / per expert | ~17.4 GB / ~1.7 MiB | ~10.5 GB / ~1.0 MiB |
+| Non-expert weights on the GPU | 2,038 MiB | 1,597 MiB |
+| Draft block (dense 40 MiB + its experts + ring KV + logits) | ~520 MiB | ~520 MiB (the Q4 file's) |
+| KV, q4_0, 10 attention layers, 262K | 1,440 MiB | 1,440 MiB |
+| Session, CUDA context, reserve | ~0.7 to 1.2 GB | same |
+| Prompt buffers | 0 when prefill borrows cache slots (a profile exists); 1,904 MiB at chunk 2048 otherwise | 0 / 1,878 MiB |
+| **Decode-time fixed set at 262K** | **~4.8 GB borrowing, ~6.7 without** | **~4.3 / ~6.2** |
+| Trunk experts, total / per expert (mean, max) | 18,726 MiB / 1.83 MiB, 2.20 max | 10,594 MiB / 1.04 MiB, 1.17 max |
 
 What each budget leaves for experts at Q4, 262K (the llama.cpp layer cut on the right is the baseline's
 equivalent, for the comparison only):
 
-| Budget | Expert slots (of 10,240) | Share | `--n-cpu-moe` equivalent |
+| Budget | Q4 expert slots in VRAM, prefill borrowing (of 10,240) | IQ3 slots | `--n-cpu-moe` equivalent |
 | --- | --- | --- | --- |
-| 6 GB | 0 at 262K; ~700 (7%) at 131K with KV streamed; Q3 arm: ~1,300 (13%) | | 40 (all) |
-| 8 GB | ~1,300 (13%) | | ~37 |
-| 11 GB, 12 GiB RAM, NVMe | ~3,100 (30%) in VRAM; ~5,500 (54%) pinned in RAM; ~1,600 (16%) on disk at Q4. At IQ3: all off-VRAM experts in RAM, no disk tier | | ~32 (llama.cpp's CPU experts at Q4 exceed 12 GiB: its baseline on this rung is page-cache bound too) |
-| 12 GB | ~3,700 (36%) | | ~31 |
-| 16 GB | ~6,100 (60%) | | ~26 |
-| 24 GB | all, with ~0.8 GB to spare | | 0 |
-| 32 GB | all; the spare VRAM goes to f16 KV or a bigger prompt chunk | | 0 |
+| 6 GB | ~525 (5%); without borrowing the fixed set does not fit at 262K, so 131K or the IQ3 file | ~1,350 (13%) | 40 (all) |
+| 8 GB | ~1,570 (15%) | ~3,200 (31%) | ~37 |
+| 11 GB (the 1080 Ti, 11,264 MiB), 12 GiB RAM, NVMe | ~3,550 (35%) in VRAM; ~4,950 (48%) pinned in RAM; ~1,740 (17%) on disk | ~6,700 (66%) in VRAM, the rest in RAM, no disk tier | ~32 (llama.cpp's CPU experts at Q4 exceed 12 GiB, so its baseline on this rung is page-cache bound too) |
+| 12 GB | ~3,650 (36%) | ~6,880 (67%) | ~31 |
+| 16 GB | ~5,740 (56%) | all | ~26 |
+| 24 GB | all, ~1 GB spare | all | 0 |
+| 32 GB | all; the spare VRAM goes to f16 KV or a bigger prompt chunk | all | 0 |
 
 The sizing rule the engine implements (Phase 2, step 2): take the fixed total for the requested context;
-if it does not fit, first stream the KV to RAM above a resident window (Strata's `--kv-resident`), then
-drop the context toward 131,072, then refuse with the exact numbers and the suggestion of the Q3 file.
-Never silently pick a shorter context. Then the RAM tier: free RAM minus a headroom for the OS and the KV
+if it does not fit, lower the context toward 131,072, then refuse with the exact numbers and the IQ3 file's
+name. **KV streaming is not a lever for this model**: Strata streams by resolving the *selected* cells, and
+dense attention selects every cell (study, 3.3 item 6), so the KV stays in VRAM. Never silently pick a
+shorter context. Then the RAM tier: free RAM minus a headroom for the OS and the KV
 stream, filled with the next experts by profile rank; whatever remains stays mapped from the GGUF on disk
 and is read on a miss. The start-up log states all three counts.
 
@@ -254,6 +258,12 @@ the conclusion. This write-up is what the engine must beat; it does not decide w
 
 ## 5. Phase 2: the engine port, Maya's recipe on a smaller gap
 
+The design document for this phase is `docs/QWEN36-35B-A3B.md` (2026-10-11): the model exactly from the
+real GGUF's metadata, the component-by-component gap analysis with file:line citations, the memory plan
+with the censused fixed set, the ladder, the envelope, the execution plan with effort weights (step 2
+15%, step 3 45%, step 4 20%, step 5 10%, step 6 5%, step 7 5%) and the risks. Where it and this plan
+differed, the plan was corrected to the study on 2026-10-11 (its section 8 lists the eight points).
+
 Where: VM 211, the 1080 Ti, under the Pascal build from the first step (see Section 1). The A6000 and
 the 4090 are taken; if either frees up it becomes the fast-compile card, but nothing waits for it. Each step has a parity harness in Strata's negative-test discipline (every wrong reading must
 differ materially before the right one is judged), as Maya's section 6 did. Steps 1 to 4 need no GPU time
@@ -290,13 +300,15 @@ beyond seconds of parity runs, so they proceed while the Phase 0 sweeps hold the
    gated residual" with a plain-residual path and the `attn_norm` / `post_attention_norm` /
    `output_norm` tensors the engine never references today; fix the one leak in the native expert path
    (`expert_layout.cpp:284` passes compile-time 2560/640 to `native_fmt`); make `--ple-gguf` optional at
-   the command line (the kernels already allow no PLE); accept llama.cpp's fused `ffn_gate_up_exps` and
-   `attn_qkv` forms or split them at pack time; the draft geometry follows the target; the draft vocab
-   size comes from the pack. **The VRAM planner:** free VRAM minus the fixed set for the requested
+   the command line (the kernels already allow no PLE); refuse llama.cpp's fused `ffn_gate_up_exps` and
+   `attn_qkv` forms by name (no shipped Qwen3.6 file uses them; the oracle's fused cases document the
+   layouts if one appears); the draft geometry follows the target; the draft vocab size comes from the
+   pack. The per-layer prefetch hints already exist (`FileExpertSource::warm`, `MADV_WILLNEED` on
+   predicted ids): verify they fire on the Qwen3.6 pack's offsets rather than porting Maya's. **The VRAM planner:** free VRAM minus the fixed set for the requested
    context; KV streaming engaged when the fixed set does not fit (`--kv-resident`); the context lowered
    toward 131,072 only after that; a refusal with numbers below it; the remainder becomes expert slots;
-   then the RAM tier from free RAM minus headroom, the rest mapped from disk (the existing
-   `--mmap-experts` source, with per-layer prefetch hints as Maya's section 7 added); `--vram-cap` and
+   then the RAM tier from free RAM minus headroom (`--resident-experts` machinery), the rest mapped
+   from disk (the existing `--mmap-experts` source with its `MADV_WILLNEED` warm); `--vram-cap` and
    `--ram-cap` for emulation. This step is what makes "6 GB to 32 GB" one binary, and it is where the
    engine's tier counters (VRAM, RAM, disk reads per token) are exposed in the log and on `/health`.
 3. **Kernels and the block (default model).** In order of risk, each with a parity harness:
@@ -306,8 +318,9 @@ beyond seconds of parity runs, so they proceed while the Phase 0 sweeps hold the
    - the full-attention layer as *dense* attention: the decode kernel reads KV through an index list and
      does not care how the list was built, so a "select every cell" producer replaces the indexer; the
      kernels fixed at 12 query heads per KV head (Qwen3.6 has 8) and the short-context kernel fixed at
-     24 heads become parameters; `native_flash_attn.cu` (specialized from llama.cpp's `fattn-vec`) is
-     the fallback for prompts;
+     24 heads become parameters; the prompt path is `qsa_prompt_attn.cu` (on Pascal, the batched decode
+     kernel), parameterized the same way; `native_flash_attn.cu` is a 256-cell diagnostic adapter, not a
+     fallback;
    - the router at top-8 over 256 (generic already; parity at the selection boundary) and the shared
      expert at 512 (its Q8_K rule needs a multiple of 256, which 512 satisfies);
    - the block without hyper-connections: `layer.cpp` *and* `verify.cpp`, because native packs decode
