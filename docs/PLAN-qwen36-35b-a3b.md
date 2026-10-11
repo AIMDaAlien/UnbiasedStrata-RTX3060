@@ -257,9 +257,8 @@ beyond seconds of parity runs, so they proceed while the Phase 0 sweeps hold the
    upstream never published its Python oracles (`ref/` holds only `load.py`; `gdn.py`, `moe.py`,
    `qsa.py`, `docs/semantics.md` are cited but absent), most parity tests carry a host C++ reference
    inside the test file, two embed generated `.inc` vectors, and the ggml-oracle tests link a llama.cpp
-   build through `STRATA_ORACLE_SOURCE_DIR`. So: restore `tools/` and `tests/` from the import commit
-   `12a7825` into the dev checkout (they are development tooling, not shipped; the fork removed them
-   with the installer), then write `ref/qwen36.py` new on `ref/load.py`, following the submodule's
+   build through `STRATA_ORACLE_SOURCE_DIR`. So: `tools/` and `tests/` restored from the import commit `12a7825`
+   (done, commit c00942d: development tooling only, the binary still needs no Python), then write `ref/qwen36.py` new on `ref/load.py`, following the submodule's
    `qwen35moe.cpp` graph with dumps named by its `cb()` calls; `tools/qwen36_synth_gguf.py` from
    `test_iq_pack.py`'s `write_gguf()`; invariant tests (top-8 renormalization, GDN state shapes, the
    output gate). Cross-check with the submodule's `llama-eval-callback` on the same synthetic GGUF.
