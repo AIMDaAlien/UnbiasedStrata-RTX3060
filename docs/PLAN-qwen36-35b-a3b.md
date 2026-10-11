@@ -76,8 +76,8 @@ how the README describes the result and where the expert-cache tuning effort goe
 | | Q4_K_XL at 11 GB | IQ3_XXS at 11 GB |
 | --- | --- | --- |
 | llama.cpp, 256K, fit edge (`--n-cpu-moe` 32 / 18), smoke test, cold cache, 400 tokens | 8.8 tok/s decode, 129 prefill, GPU busy 15% | 24.6 tok/s decode, 434 prefill, GPU busy 41% |
-| llama.cpp, the sweep (warm, 1,200 tokens, `baseline-1080ti.md`) | 13.5 tok/s decode, 152 prefill; nvprof: busy 13.8%, memcpy 0.6%, gaps 86%; 14 to 21 MiB per token from disk | 33.5 tok/s decode, 907 prefill; GPU busy 56% (nvidia-smi; nvprof's 25% carries a 2.2x profiling slowdown); no disk reads |
-| Sweep slope | about one point of GPU busy and 0.7 tok/s per layer moved to the CPU; N = 30 also fits (10,415 MiB) | one point and 0.58 tok/s per layer |
+| llama.cpp, the sweep (warm, 1,200 tokens, `baseline-1080ti.md`) | **the number to beat: N = 30, the lowest N that fits (10,415 MiB): 13.4 tok/s decode on the regina request, 16.3 on the short one.** At N = 32: 13.5 / 12.2, 152 prefill; nvprof at N = 32: busy 13.8%, memcpy 0.6%, gaps 86%; 14 to 21 MiB per token from disk | 33.5 tok/s decode, 907 prefill; GPU busy 56% (nvidia-smi; nvprof's 25% is a cold-cache, profiled launch and an upper bound on the slowdown); no disk reads |
+| Sweep slope | 0.67 to 0.93 points of GPU busy and 0.5 to 0.7 tok/s per layer moved to the CPU (the N = 32 point was the first run and carried steal) | one point and 0.58 tok/s per layer |
 | Route trace, top 40% of experts per layer | 76% of routes (215K routed tokens) | |
 | Replay at the censused sizes, LFU with 3 spares per layer, prefill borrowing cache slots | 78 slots per layer: 83.2% hit, 36.6 RAM and 17.0 disk reads per token | 149 slots: 95.4% hit, 14.6 RAM and 0 disk reads |
 | Replay, no borrowing (prompt buffer held in VRAM) | 52 slots: 72.2% hit, 35.8 disk reads | 103 slots: 89.4% hit, 0 disk reads |
