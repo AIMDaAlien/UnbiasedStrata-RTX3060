@@ -75,13 +75,15 @@ how the README describes the result and where the expert-cache tuning effort goe
 
 | | Q4_K_XL at 11 GB | IQ3_XXS at 11 GB |
 | --- | --- | --- |
-| llama.cpp, 256K, fit edge (`--n-cpu-moe` 32 / 18) | 8.8 tok/s decode, 129 prefill, GPU busy 15% | 24.6 tok/s decode, 434 prefill, GPU busy 41% |
+| llama.cpp, 256K, fit edge (`--n-cpu-moe` 32 / 18), smoke test, cold cache, 400 tokens | 8.8 tok/s decode, 129 prefill, GPU busy 15% | 24.6 tok/s decode, 434 prefill, GPU busy 41% |
+| llama.cpp, the sweep (warm, 1,200 tokens, `baseline-1080ti.md`) | 13.5 tok/s decode, 152 prefill; nvprof: busy 13.8%, memcpy 0.6%, gaps 86%; 14 to 21 MiB per token from disk | 33.5 tok/s decode, 907 prefill; GPU busy 56% (nvidia-smi; nvprof's 25% carries a 2.2x profiling slowdown); no disk reads |
+| Sweep slope | about one point of GPU busy and 0.7 tok/s per layer moved to the CPU; N = 30 also fits (10,415 MiB) | one point and 0.58 tok/s per layer |
 | Route trace, top 40% of experts per layer | 76% of routes (215K routed tokens) | |
 | Replay at the censused sizes, LFU with 3 spares per layer, prefill borrowing cache slots | 78 slots per layer: 83.2% hit, 36.6 RAM and 17.0 disk reads per token | 149 slots: 95.4% hit, 14.6 RAM and 0 disk reads |
 | Replay, no borrowing (prompt buffer held in VRAM) | 52 slots: 72.2% hit, 35.8 disk reads | 103 slots: 89.4% hit, 0 disk reads |
 | Predicted decode, overlap / serial (gpu 17 ms, CPU lane 0.15 ms per expert, disk 1.3 ms; parameters, not measurements), borrowing | 36.2 / 22.4 tok/s | 58.8 / 52.1 tok/s |
 
-Readings: H1 holds (the GPU idles 85% of each Q4 step, 59% at IQ3). H4 holds (83% hit from 35% of the
+Readings: H1 holds (the GPU idles 86% of each Q4 step by the kernel timeline, 44% at IQ3). H2 holds (memcpy is 0.6% of the window; the idle is CPU matmul and, at Q4, page-ins). H4 holds (83% hit from 35% of the
 experts). With 12 GiB of RAM the Q4 arm is disk-limited (17 disk reads per token, about 22 ms, more than
 the whole GPU step), so on this rung IQ3 is the quant that reaches the GPU ceiling and Q4 needs either
 16 GiB of RAM or 12 GB of VRAM. Prefill borrowing cache slots is worth 11 points of hit rate at Q4. Prefill hit rates are linear in slots (a prompt touches nearly every
