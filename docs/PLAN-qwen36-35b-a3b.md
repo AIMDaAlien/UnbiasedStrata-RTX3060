@@ -286,10 +286,15 @@ beyond seconds of parity runs, so they proceed while the Phase 0 sweeps hold the
    **Done 2026-10-11 on branch `qwen36-oracle`** (commits 9630539, f1ef81d, 0c850c3, 2094992, unmerged):
    the oracle matches llama.cpp's own graph on 2,155 comparisons across 14 cases (max abs error 1.1e-4,
    identical top-k everywhere, the nextn block included); seven rival readings each fail; 21 invariant
-   tests. Independent review: no blockers; GQA fixture added after review; **tolerance policy** for the
-   CUDA parity tests: teacher-force expert selection from the oracle's `ffn_moe_topk`, compare seams
-   with per-seam relative tolerances measured from the F32-vs-Q8-activation spread on the real file
-   (~1e-2), and keep exact top-k agreement as an F32-fixture-only test. Real-file facts the engine
+   tests (24 after review). Independent review: no blockers; the GQA fixture (4 query heads over 2 KV
+   heads) added after review and matching on every seam; `ref/load.py`'s dequant bit-identical to ggml's
+   for Q6_K, IQ2_S, IQ3_XXS and IQ4_XS. **Tolerance policy** (`docs/qwen36-port/oracle-crosscheck.md`):
+   the oracle has a Q8 activation mode (`--act-quant q8`) and a per-layer protocol (`--force-topk`,
+   `--force-inputs`) that starts each layer from llama.cpp's inputs; against that, the per-seam relative
+   spread on the real file is 5e-8 (norm), 7e-7 (qkv), 8e-5 (gdn_out), 1.1e-4 (attn_out), 2.3e-3
+   (moe_out), 4e-7 (logits). Those are the kernel parity tolerances. Without forcing, errors compound
+   5 to 30 times and about half the top-k slots flip, so exact top-k agreement stays an F32-fixture-only
+   test. Branch commits after review: e452c51, 0e5344d, 44b0619. Real-file facts the engine
    needs: the plain GGUF has no nextn block (only the `-MTP` files do, as block 40); nothing is fused;
    the router, `ssm_alpha`, `ssm_beta` are F32; down experts are IQ3_XXS in 37 layers and IQ4_XS in
    layers 34, 38, 39; the untied 2048 × 248,320 head is Q6_K.
