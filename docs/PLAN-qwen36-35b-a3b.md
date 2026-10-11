@@ -273,6 +273,16 @@ beyond seconds of parity runs, so they proceed while the Phase 0 sweeps hold the
    test. `make_profile.py` hardcodes 48 layers and 512 experts; the MTP tools hardcode Flash-Next tensor
    names; `iq_pack.py`'s `FORM` table has no `qwen35moe` entry. Dependencies: numpy, regex, gguf-py; no
    torch, no GPU.
+   **Done 2026-10-11 on branch `qwen36-oracle`** (commits 9630539, f1ef81d, 0c850c3, 2094992, unmerged):
+   the oracle matches llama.cpp's own graph on 2,155 comparisons across 14 cases (max abs error 1.1e-4,
+   identical top-k everywhere, the nextn block included); seven rival readings each fail; 21 invariant
+   tests. Independent review: no blockers; GQA fixture added after review; **tolerance policy** for the
+   CUDA parity tests: teacher-force expert selection from the oracle's `ffn_moe_topk`, compare seams
+   with per-seam relative tolerances measured from the F32-vs-Q8-activation spread on the real file
+   (~1e-2), and keep exact top-k agreement as an F32-fixture-only test. Real-file facts the engine
+   needs: the plain GGUF has no nextn block (only the `-MTP` files do, as block 40); nothing is fused;
+   the router, `ssm_alpha`, `ssm_beta` are F32; down experts are IQ3_XXS in 37 layers and IQ4_XS in
+   layers 34, 38, 39; the untied 2048 × 248,320 head is Q6_K.
 2. **Geometry, metadata, sizing (default model).** Per the inventory: `ModelGeometry` is a set of
    Flash-Next defaults; only `qwen4exp.expert_count`, `expert_used_count` and the rope keys are read, and
    `check_architecture` rejects anything but `qwen4exp`. So: read every field of `ModelGeometry` from
