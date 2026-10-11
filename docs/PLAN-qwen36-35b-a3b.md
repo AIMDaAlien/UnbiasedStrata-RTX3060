@@ -253,11 +253,21 @@ the 4090 are taken; if either frees up it becomes the fast-compile card, but not
 differ materially before the right one is judged), as Maya's section 6 did. Steps 1 to 4 need no GPU time
 beyond seconds of parity runs, so they proceed while the Phase 0 sweeps hold the cards.
 
-1. **Oracle and fixture (sonnet, no GPU).** `ref/qwen36.py`: one teacher-forced forward pass of
-   `qwen35moe` from the GGUF via `ref/load.py`, every seam dumped under llama.cpp's `cb()` names;
-   `tools/qwen36_synth_gguf.py` for a tiny synthetic model; invariant tests (top-8 renormalization, GDN
-   state shapes, the output gate). Cross-check with the submodule's `llama-eval-callback` on the same
-   synthetic GGUF.
+1. **Oracle and fixture (sonnet, no GPU).** Found on 2026-10-11 (`docs/qwen36-port/upstream-tooling.md`):
+   upstream never published its Python oracles (`ref/` holds only `load.py`; `gdn.py`, `moe.py`,
+   `qsa.py`, `docs/semantics.md` are cited but absent), most parity tests carry a host C++ reference
+   inside the test file, two embed generated `.inc` vectors, and the ggml-oracle tests link a llama.cpp
+   build through `STRATA_ORACLE_SOURCE_DIR`. So: restore `tools/` and `tests/` from the import commit
+   `12a7825` into the dev checkout (they are development tooling, not shipped; the fork removed them
+   with the installer), then write `ref/qwen36.py` new on `ref/load.py`, following the submodule's
+   `qwen35moe.cpp` graph with dumps named by its `cb()` calls; `tools/qwen36_synth_gguf.py` from
+   `test_iq_pack.py`'s `write_gguf()`; invariant tests (top-8 renormalization, GDN state shapes, the
+   output gate). Cross-check with the submodule's `llama-eval-callback` on the same synthetic GGUF.
+   One model difference already known: Flash-Next's GDN output norm gates with sigmoid(z), `qwen35moe`
+   with SiLU(z); `gdn.cu` and `gdn_parity` encode the sigmoid reading, so that is the first negative
+   test. `make_profile.py` hardcodes 48 layers and 512 experts; the MTP tools hardcode Flash-Next tensor
+   names; `iq_pack.py`'s `FORM` table has no `qwen35moe` entry. Dependencies: numpy, regex, gguf-py; no
+   torch, no GPU.
 2. **Geometry, metadata, sizing (default model).** `ModelGeometry` already parameterizes everything except
    `hc`; add `hc = 1` as "no gated residual" with a plain-residual read/write path; read the `qwen35moe.*`
    keys; the draft geometry follows the target (Maya found it hardcoded in `generate.cpp`); the draft
