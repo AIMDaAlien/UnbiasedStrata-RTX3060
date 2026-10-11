@@ -100,8 +100,8 @@ Real cards in the homelab cover the range, with Pascal at three sizes:
 | 6 GB | GTX 1060 | g7 (192.168.50.185), laptop | sm_61 | the floor; regina's `g7/README.md` has llama.cpp numbers here already |
 | 8 GB | GTX 1070 Ti | host .4 (`llama-qwen36-35b-mtp.service`, live) | sm_61 | second Pascal point |
 | 11 GB | GTX 1080 Ti | .57 at PCI `2a:00`, in **VM 211 `gpu-qwen36`** at 192.168.50.43 (cloned from 210 on 2026-10-11: 8 vCPU, 12 GiB, 100 GB on `local-lvm`, Debian 13, driver 550, CUDA 12.4, gcc-13) | sm_61 | the primary measurement card, and the development card until a pod is rented |
-| 24 GB, rented | RTX 3090 or A6000 on RunPod | on demand; this fork was already checked on a RunPod 3090 container (README) | sm_86 | the fast-compile development card for Phase 2 steps 1 to 5 and the 24 and 32 GB rungs; rented when step 2 starts, released between sessions. The user has approved spending on this |
-| 24 GB | RTX 4090 | VM 221 (192.168.50.151) on pve2 | sm_89 | **in use by another agent's benchmark**; the 24 GB rung waits for it |
+| 32 GB, rented | A6000 or similar on RunPod | on demand; this fork was already checked on a RunPod 3090 container (README) | sm_86 | only for the 32 GB rung and if the 4090 becomes busy again; the user has approved spending on this |
+| 24 GB | RTX 4090 | VM 221 (192.168.50.151) on pve2: 16 vCPU, 62 GB RAM, CUDA 12.4, driver 550; root disk nearly full (build trees under `/models/work`, 174 GB free); system gcc is 14, so builds need gcc-13 as the host compiler | sm_89 | **idle since 2026-10-11 17:20, the user's call: the fast-compile development card for Phase 2 steps 3 to 5 and the 24 GB rung.** Both llama-server units there are inactive; leave them so. No RunPod needed while it stays free |
 | 12, 16, 32 GB | RTX A6000 (48 GB) **capped** | VM 220 (192.168.50.8) on .57 | sm_86 | **in use by another agent**; the emulated rungs wait for it |
 
 The cap is Maya's `STRATA_GLM_VRAM_GB` idea: the engine limits its own total VRAM so the expert pool gets
@@ -284,8 +284,9 @@ with the censused fixed set, the ladder, the envelope, the execution plan with e
 15%, step 3 45%, step 4 20%, step 5 10%, step 6 5%, step 7 5%) and the risks. Where it and this plan
 differed, the plan was corrected to the study on 2026-10-11 (its section 8 lists the eight points).
 
-Where: VM 211, the 1080 Ti, under the Pascal build from the first step (see Section 1). The A6000 and
-the 4090 are taken; if either frees up it becomes the fast-compile card, but nothing waits for it. Each step has a parity harness in Strata's negative-test discipline (every wrong reading must
+Where: step 2 on VM 211 (the 1080 Ti, the Pascal build from the first step, Section 1). From step 3 on,
+kernel work and parity iterate on the 4090 in VM 221 (sm_89, idle since 2026-10-11) and every kernel
+also passes on the 1080 Ti before its step closes; the 4090 is also the 24 GB rung for step 5. Each step has a parity harness in Strata's negative-test discipline (every wrong reading must
 differ materially before the right one is judged), as Maya's section 6 did. Steps 1 to 4 need no GPU time
 beyond seconds of parity runs, so they proceed while the Phase 0 sweeps hold the cards.
 
