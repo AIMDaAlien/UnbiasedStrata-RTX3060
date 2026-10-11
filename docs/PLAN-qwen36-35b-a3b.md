@@ -72,7 +72,8 @@ Real cards in the homelab cover the range, with Pascal at three sizes:
 | --- | --- | --- | --- | --- |
 | 6 GB | GTX 1060 | g7 (192.168.50.185), laptop | sm_61 | the floor; regina's `g7/README.md` has llama.cpp numbers here already |
 | 8 GB | GTX 1070 Ti | host .4 (`llama-qwen36-35b-mtp.service`, live) | sm_61 | second Pascal point |
-| 11 GB | GTX 1080 Ti | .57 at PCI `2a:00`, in **VM 211 `gpu-qwen36`** (cloned from 210 on 2026-10-11: 8 vCPU, 12 GiB, 100 GB on `local-lvm`) | sm_61 | the primary measurement card **and the development card**: no other GPU is available |
+| 11 GB | GTX 1080 Ti | .57 at PCI `2a:00`, in **VM 211 `gpu-qwen36`** at 192.168.50.43 (cloned from 210 on 2026-10-11: 8 vCPU, 12 GiB, 100 GB on `local-lvm`, Debian 13, driver 550, CUDA 12.4, gcc-13) | sm_61 | the primary measurement card, and the development card until a pod is rented |
+| 24 GB, rented | RTX 3090 or A6000 on RunPod | on demand; this fork was already checked on a RunPod 3090 container (README) | sm_86 | the fast-compile development card for Phase 2 steps 1 to 5 and the 24 and 32 GB rungs; rented when step 2 starts, released between sessions. The user has approved spending on this |
 | 24 GB | RTX 4090 | VM 221 (192.168.50.151) on pve2 | sm_89 | **in use by another agent's benchmark**; the 24 GB rung waits for it |
 | 12, 16, 32 GB | RTX A6000 (48 GB) **capped** | VM 220 (192.168.50.8) on .57 | sm_86 | **in use by another agent**; the emulated rungs wait for it |
 
@@ -81,10 +82,10 @@ what a card of that size would leave it. It is built in Phase 2 step 2; the 1080
 rungs with it (the real 1060 and 1070 Ti then check launch failures, FP16 paths and PCIe), and the A6000
 emulates 12, 16 and 32 GB whenever it is free.
 
-Consequence of having only the 1080 Ti: **the Pascal build comes first, not last.** Every parity harness
-and the streaming runner are brought up under `STRATA_EXPERIMENTAL_SM60=ON` on sm_61 from the start, so
-Pascal surprises surface in the first week instead of the last. Compile times on 8 vCPU of a Zen 1 are
-the cost; `make build JOBS=8` and incremental builds.
+Consequence of the 1080 Ti being the only local card: **the Pascal build comes first, not last.** Every
+parity harness and the streaming runner are brought up under `STRATA_EXPERIMENTAL_SM60=ON` on sm_61 from
+the start, so Pascal surprises surface in the first week. The rented sm_86 pod runs the same harnesses in
+parallel for fast iteration; a kernel passes when it passes on both.
 
 Constraints across the ladder:
 
