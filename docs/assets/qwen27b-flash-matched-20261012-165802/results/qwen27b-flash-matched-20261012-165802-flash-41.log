@@ -1,0 +1,38 @@
+campaign qwen27b-flash-matched-20261012-165802-flash-41: targets=['matched-strata-iq3-medium'] packs=['deepswe2']
+tasks: 24  out=/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-41.json
+
+=== matched-strata-iq3-medium  (http://127.0.0.1:18081/v1)  0 rows so far
+  right server already up — will not tear it down
+  gate ok: 'ready'  1.1s
+  PASS deepswe2/e1-bounded-queue-close    1/1  45.0 t/s  77.5s
+  PASS deepswe2/e2-lru-eviction           1/1  43.0 t/s  33.9s
+  PASS deepswe2/e3-retry-idempotent       1/1  40.8 t/s  48.3s
+  PASS deepswe2/e4-session-store-split    1/1  40.7 t/s  59.9s
+  PASS deepswe2/e5-validate-pipeline      1/1  41.1 t/s  84.6s
+  PASS deepswe2/e6-index-rebuild          1/1  42.9 t/s  84.5s
+  PASS deepswe2/e7-money-rounding         1/1  43.0 t/s  142.5s
+  FAIL deepswe2/e8-event-sourcing         0/1  40.9 t/s  34.0s  [check-fail: evt.aggregate.InvalidEvent: missing ]
+  PASS deepswe2/e9-parallel-dedup         1/1  42.1 t/s  39.6s
+  PASS deepswe2/e10-csv-dialect           1/1  41.6 t/s  63.8s
+  PASS deepswe2/e11-scheduler-priority    1/1  42.7 t/s  70.8s
+  PASS deepswe2/e12-schema-migration      1/1  42.1 t/s  60.8s
+  PASS deepswe2/e13-stream-window         1/1  41.8 t/s  92.9s
+  PASS deepswe2/e14-parser-precedence     1/1  43.9 t/s  139.4s
+  PASS deepswe2/e15-backpressure-queue    1/1  42.4 t/s  83.2s
+  PASS deepswe2/e16-trie-autocomplete     1/1  45.9 t/s  58.2s
+  PASS deepswe2/e17-batch-chunking        1/1  44.2 t/s  23.2s
+  PASS deepswe2/e18-ttl-cache             1/1  42.6 t/s  49.5s
+  PASS deepswe2/e19-idempotent-http       1/1  41.2 t/s  31.4s
+  PASS deepswe2/e20-iter-drain            1/1  42.9 t/s  56.4s
+  PASS deepswe2/e21-index-invalidation    1/1  42.8 t/s  124.3s
+  PASS deepswe2/e22-multiprocess-shard    1/1  43.1 t/s  109.0s
+  PASS deepswe2/e23-config-layers         1/1  42.8 t/s  74.1s
+  FAIL deepswe2/e24-fsm-parallel          0/1  41.8 t/s  282.1s  [check-fail: AssertionError: history must be a co]
+  target wall: 1925.4s
+
+================ SUMMARY ================
+matched-strata-iq3-medium: 22/24 checks | 22/24 full | median decode 42.7 t/s | wall 1925.4s
+    t2    2/2 checks, 2/2 full
+    t3    8/8 checks, 8/8 full
+    t4    12/14 checks, 12/14 full
+results: /home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-41.json

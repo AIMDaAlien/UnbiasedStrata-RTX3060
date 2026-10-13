@@ -1,0 +1,25 @@
+DEEP e1-bounded-queue-close PASS
+DEEP e2-lru-eviction PASS
+DEEP e3-retry-idempotent PASS
+DEEP e4-session-store-split PASS
+DEEP e5-validate-pipeline PASS
+DEEP e6-index-rebuild PASS
+DEEP e7-money-rounding PASS
+DEEP e8-event-sourcing PASS
+DEEP e9-parallel-dedup PASS
+DEEP e10-csv-dialect PASS
+DEEP e11-scheduler-priority PASS
+DEEP e12-schema-migration PASS
+DEEP e13-stream-window PASS
+DEEP e14-parser-precedence PASS
+DEEP e15-backpressure-queue PASS
+DEEP e16-trie-autocomplete PASS
+DEEP e17-batch-chunking PASS
+DEEP e18-ttl-cache PASS
+DEEP e19-idempotent-http PASS
+DEEP e20-iter-drain PASS
+DEEP e21-index-invalidation PASS
+DEEP e22-multiprocess-shard PASS
+DEEP e23-config-layers PASS
+DEEP e24-fsm-parallel PASS
+PASS 27 repair cases; full24 DeepSWE2 and40 code pass; structural mutants rejected; triage/marker cases pass

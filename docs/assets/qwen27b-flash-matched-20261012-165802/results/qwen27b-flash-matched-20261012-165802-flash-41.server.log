@@ -1,0 +1,202 @@
+Oct 12 18:06:40 omarchy systemd[1422]: Started [systemd-run] /usr/bin/env -u GGML_VK_VISIBLE_DEVICES /usr/bin/python3 /home/USER/opt/UnbiasedStrata/local/launch.py --config /home/USER/bench/results/qwen27b-flash-matched-strata-config.json.
+Oct 12 18:06:40 omarchy env[454676]: unbiased-strata: loading the model (this takes a few minutes)...
+Oct 12 18:06:40 omarchy env[454682]: strata generate: PCIe probe: 6.4 GB/s host->device (best of 6.4 6.4 6.4 6.4) -> pcie_frac 0.18 (default 0.55)
+Oct 12 18:06:41 omarchy env[454682]: strata generate: native pack: /home/USER/opt/UnbiasedStrata/local/pack-iq3_xxs experts (largest blob 2.33 MB), token embedding IQ3_S in mapped host memory (260 MiB)
+Oct 12 18:06:41 omarchy env[454682]: strata generate: 1466 MiB of weights loaded from /home/USER/opt/UnbiasedStrata/local/pack-iq3_xxs (302 canonical tensors skipped: served natively)
+Oct 12 18:06:42 omarchy env[454682]: strata generate: 300 native projection matrices, 1781.11 MiB of weights
+Oct 12 18:06:42 omarchy env[454682]: strata generate: the SSD is kept awake while rows are read: one page of the table after 100 ms without a read, until 60 s after the last request (STRATA_SSD_KEEPALIVE=0 turns it off)
+Oct 12 18:06:42 omarchy env[454682]: strata generate: profile /home/USER/opt/UnbiasedStrata/local/pack-iq3_xxs/expert-profile.bin: 24576 ranked pairs, built for 24576 slots
+Oct 12 18:06:43 omarchy env[454682]: strata generate: KV streaming: 32768 of 196608 cells per QSA layer in VRAM, the K/V in 2.32 GiB of pinned RAM
+Oct 12 18:06:43 omarchy env[454682]: strata generate: PLE on, table 320001536 rows of /home/USER/opt/Strata-data/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf
+Oct 12 18:06:44 omarchy env[454682]: strata mtp: draft layer loaded, 835 MiB of VRAM (experts 675, dense 111), files read in 0.38 s (2074 MiB/s)
+Oct 12 18:06:44 omarchy env[454682]: strata generate: experimental native Q5_K head, 437043200 bytes
+Oct 12 18:06:44 omarchy env[454682]: strata generate: GPU 0: NVIDIA GeForce RTX 3060, compute capability 8.6
+Oct 12 18:06:44 omarchy env[454682]: strata generate: experts via mmap (--mmap-experts; the GGUF shards in place, no experts.bin)
+Oct 12 18:06:44 omarchy env[454682]: strata generate: expert cache auto: 6.06 GiB free, 700 MiB reserved (+184 MiB for the draft head) -> 2393 slots
+Oct 12 18:06:44 omarchy env[454682]: strata generate: expert cache 3180 slots, 5.19 GiB of VRAM; policy is
+Oct 12 18:06:44 omarchy env[454682]: strata generate: the GPU computes the experts in the cache; it rounds differently from the CPU,
+Oct 12 18:06:44 omarchy env[454682]:                  so a reply can differ slightly from a run without the cache (same quality:
+Oct 12 18:06:44 omarchy env[454682]:                  bench/results/2026-09-27-cache-parity).
+Oct 12 18:06:44 omarchy env[454682]:                  PROFILE, ranked by routing frequency, no eviction.
+Oct 12 18:06:55 omarchy env[454682]: strata generate: pre-filled 3180 of 3180 slots from the profile; slot 0 verified
+Oct 12 18:06:55 omarchy env[454682]: strata generate: routing-aware prefetch of the file tier on (the next layer's router)
+Oct 12 18:06:55 omarchy env[454682]: strata generate: R4 hit path ON - resident experts are computed on the GPU
+Oct 12 18:06:55 omarchy env[454682]: strata generate: 12 expert-pool workers + the host thread
+Oct 12 18:06:55 omarchy env[454682]: strata generate: session is up (engine 0.1.39)
+Oct 12 18:06:55 omarchy env[454682]: strata generate: token graph hit path: 3180 resident experts, decided on the device
+Oct 12 18:06:55 omarchy env[454682]: FileExpertSource: allocating 39.16 GiB page-locked cache complement
+Oct 12 18:07:17 omarchy env[454682]: FileExpertSource: copied cache complement through layer 8/48 (7.73 GiB)
+Oct 12 18:07:22 omarchy env[454682]: FileExpertSource: copied cache complement through layer 16/48 (12.86 GiB)
+Oct 12 18:07:29 omarchy env[454682]: FileExpertSource: copied cache complement through layer 24/48 (18.71 GiB)
+Oct 12 18:07:38 omarchy env[454682]: FileExpertSource: copied cache complement through layer 32/48 (26.95 GiB)
+Oct 12 18:07:44 omarchy env[454682]: FileExpertSource: copied cache complement through layer 40/48 (33.42 GiB)
+Oct 12 18:07:50 omarchy env[454682]: FileExpertSource: copied cache complement through layer 48/48 (39.16 GiB)
+Oct 12 18:07:50 omarchy env[454682]: FileExpertSource: mapped pinned cache complement ready: resident 39.16 GiB, pinned 39.16 GiB; page-locked and mapped
+Oct 12 18:07:50 omarchy env[454682]: FileExpertSource: 2694 of the prompt path's 2694 lendable slots keep their experts in RAM too
+Oct 12 18:07:50 omarchy env[454682]: strata generate: resident RAM mode: 39.16 GiB of experts in RAM (page-locked), 3180 in the GPU cache; adaptive swaps exchange them with the GPU cache (no file reads)
+Oct 12 18:07:50 omarchy env[454682]: strata serve: prompt chunk auto: 10496 tokens, a 512-slot ring
+Oct 12 18:07:50 omarchy env[454682]: strata serve: the prompt path borrows 2694 CUDA0 cache slots (4.39 GiB)
+Oct 12 18:07:51 omarchy env[454682]: strata hc: CUDA0: the hyper-connection read runs as staged (the norm per token and stream, the down projection's activations staged ahead by cp.async); checked bit for bit against the plain read on this card (STRATA_HC_SPLIT=1 or 0 for the earlier ones)
+Oct 12 18:07:51 omarchy env[454682]: strata verify: window up to 6 tokens, 70.0 MiB of device buffers
+Oct 12 18:07:51 omarchy env[454682]: strata mtp: draft head over 106299 tokens (178.4 MiB)
+Oct 12 18:07:51 omarchy env[454682]: strata serve: 377 MiB of VRAM free with everything loaded
+Oct 12 18:07:51 omarchy env[454676]: unbiased-strata: ready on http://127.0.0.1:18081 (context 196608 tokens)
+Oct 12 18:07:52 omarchy env[454682]: strata verify: captured the 6-token window (upload no error, sync no error)
+Oct 12 18:07:52 omarchy env[454682]: strata verify: captured the 4-token window (upload no error, sync no error)
+Oct 12 18:07:52 omarchy env[454682]: strata verify: captured the 1-token window (upload no error, sync no error)
+Oct 12 18:07:53 omarchy env[454682]: strata serve: prompt 17 tokens = 0 reused + 17 read in 365 ms (46.5 tok/s), 25 generated in 735 ms (34.0 tok/s), drafts accepted 15 of 27, 1 checkpoints
+Oct 12 18:07:53 omarchy env[454682]: strata serve: decode expert cache hit rate: 53.4% (8981 hits / 16822 lookups); 938 more read by the GPU over PCIe or from another GPU (5.3% of all 17760 routed)
+Oct 12 18:07:53 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 31 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:07:53 omarchy env[454682]: strata serve: expert tiers: GPU 8981 hits this request; since the start RAM 10597 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:07:53 omarchy env[454682]: strata serve: KV streaming: 96.81% of 4140 block reads hit VRAM, 0.5 MiB read from RAM
+Oct 12 18:07:58 omarchy env[454682]: strata verify: captured the 2-token window (upload no error, sync no error)
+Oct 12 18:07:58 omarchy env[454682]: strata verify: captured the 3-token window (upload no error, sync no error)
+Oct 12 18:08:15 omarchy env[454682]: strata verify: captured the 5-token window (upload no error, sync no error)
+Oct 12 18:09:10 omarchy env[454682]: strata serve: prompt 598 tokens = 0 reused + 598 read in 4700 ms (127.2 tok/s), 3273 generated in 72784 ms (45.0 tok/s), drafts accepted 2277 of 2719, 1 checkpoints
+Oct 12 18:09:10 omarchy env[454682]: strata serve: decode expert cache hit rate: 66.0% (1127961 hits / 1708038 lookups); 75162 more read by the GPU over PCIe or from another GPU (4.2% of all 1783200 routed)
+Oct 12 18:09:10 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 3064 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:09:10 omarchy env[454682]: strata serve: expert tiers: GPU 1127961 hits this request; since the start RAM 602193 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:09:10 omarchy env[454682]: strata serve: KV streaming: 99.94% of 19154364 block reads hit VRAM, 46.8 MiB read from RAM
+Oct 12 18:09:10 omarchy env[454682]: strata serve: suffix drafts: 72 windows, 238 of 271 drafts accepted
+Oct 12 18:09:44 omarchy env[454682]: strata serve: prompt 582 tokens = 0 reused + 582 read in 4762 ms (122.2 tok/s), 1253 generated in 29117 ms (43.0 tok/s), drafts accepted 901 of 1075, 1 checkpoints
+Oct 12 18:09:44 omarchy env[454682]: strata serve: decode expert cache hit rate: 54.9% (354476 hits / 645741 lookups); 39219 more read by the GPU over PCIe or from another GPU (5.7% of all 684960 routed)
+Oct 12 18:09:44 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 4258 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:09:44 omarchy env[454682]: strata serve: expert tiers: GPU 354476 hits this request; since the start RAM 893894 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:09:44 omarchy env[454682]: strata serve: KV streaming: 99.89% of 5099736 block reads hit VRAM, 22.2 MiB read from RAM
+Oct 12 18:09:44 omarchy env[454682]: strata serve: suffix drafts: 75 windows, 301 of 326 drafts accepted
+Oct 12 18:10:33 omarchy env[454682]: strata serve: prompt 627 tokens = 0 reused + 627 read in 4793 ms (130.8 tok/s), 1777 generated in 43543 ms (40.8 tok/s), drafts accepted 1203 of 1571, 1 checkpoints
+Oct 12 18:10:33 omarchy env[454682]: strata serve: decode expert cache hit rate: 59.1% (578295 hits / 978060 lookups); 51540 more read by the GPU over PCIe or from another GPU (5.0% of all 1029600 routed)
+Oct 12 18:10:33 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 6054 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:10:33 omarchy env[454682]: strata serve: expert tiers: GPU 578295 hits this request; since the start RAM 1286236 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:10:33 omarchy env[454682]: strata serve: KV streaming: 99.92% of 9492144 block reads hit VRAM, 29.1 MiB read from RAM
+Oct 12 18:10:33 omarchy env[454682]: strata serve: suffix drafts: 95 windows, 302 of 347 drafts accepted
+Oct 12 18:11:33 omarchy env[454682]: strata serve: prompt 750 tokens = 0 reused + 750 read in 4897 ms (153.1 tok/s), 2239 generated in 54975 ms (40.7 tok/s), drafts accepted 1475 of 2016, 1 checkpoints
+Oct 12 18:11:33 omarchy env[454682]: strata serve: decode expert cache hit rate: 64.8% (828220 hits / 1277631 lookups); 56769 more read by the GPU over PCIe or from another GPU (4.3% of all 1334400 routed)
+Oct 12 18:11:33 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 8424 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:11:33 omarchy env[454682]: strata serve: expert tiers: GPU 828220 hits this request; since the start RAM 1738783 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:11:33 omarchy env[454682]: strata serve: KV streaming: 99.94% of 13946304 block reads hit VRAM, 36.2 MiB read from RAM
+Oct 12 18:11:33 omarchy env[454682]: strata serve: suffix drafts: 29 windows, 53 of 82 drafts accepted
+Oct 12 18:12:57 omarchy env[454682]: strata serve: prompt 617 tokens = 0 reused + 617 read in 4470 ms (138.0 tok/s), 3291 generated in 80164 ms (41.1 tok/s), drafts accepted 2190 of 2904, 1 checkpoints
+Oct 12 18:12:57 omarchy env[454682]: strata serve: decode expert cache hit rate: 63.6% (1168983 hits / 1837945 lookups); 84455 more read by the GPU over PCIe or from another GPU (4.4% of all 1922400 routed)
+Oct 12 18:12:57 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 11896 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:12:57 omarchy env[454682]: strata serve: expert tiers: GPU 1168983 hits this request; since the start RAM 2398567 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:12:57 omarchy env[454682]: strata serve: KV streaming: 99.94% of 20912220 block reads hit VRAM, 47.2 MiB read from RAM
+Oct 12 18:12:57 omarchy env[454682]: strata serve: suffix drafts: 61 windows, 142 of 165 drafts accepted
+Oct 12 18:14:22 omarchy env[454682]: strata serve: prompt 844 tokens = 0 reused + 844 read in 5342 ms (158.0 tok/s), 3397 generated in 79111 ms (42.9 tok/s), drafts accepted 2350 of 2876, 1 checkpoints
+Oct 12 18:14:22 omarchy env[454682]: strata serve: decode expert cache hit rate: 61.9% (1111806 hits / 1796241 lookups); 88239 more read by the GPU over PCIe or from another GPU (4.7% of all 1884480 routed)
+Oct 12 18:14:22 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 15210 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:14:22 omarchy env[454682]: strata serve: expert tiers: GPU 1111806 hits this request; since the start RAM 3073922 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:14:22 omarchy env[454682]: strata serve: KV streaming: 99.94% of 21651024 block reads hit VRAM, 51.3 MiB read from RAM
+Oct 12 18:14:22 omarchy env[454682]: strata serve: suffix drafts: 115 windows, 420 of 454 drafts accepted
+Oct 12 18:16:44 omarchy env[454682]: strata serve: prompt 580 tokens = 0 reused + 580 read in 4817 ms (120.4 tok/s), 5920 generated in 137679 ms (43.0 tok/s), drafts accepted 4065 of 5034, 1 checkpoints
+Oct 12 18:16:44 omarchy env[454682]: strata serve: decode expert cache hit rate: 63.2% (1996158 hits / 3160968 lookups); 147192 more read by the GPU over PCIe or from another GPU (4.4% of all 3308160 routed)
+Oct 12 18:16:44 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 21218 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:16:44 omarchy env[454682]: strata serve: expert tiers: GPU 1996158 hits this request; since the start RAM 4206017 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:16:44 omarchy env[454682]: strata serve: KV streaming: 99.95% of 38584416 block reads hit VRAM, 78.6 MiB read from RAM
+Oct 12 18:16:44 omarchy env[454682]: strata serve: suffix drafts: 67 windows, 196 of 239 drafts accepted
+Oct 12 18:17:18 omarchy env[454682]: strata serve: prompt 569 tokens = 0 reused + 569 read in 4513 ms (126.1 tok/s), 1205 generated in 29456 ms (40.9 tok/s), drafts accepted 823 of 1031, 1 checkpoints
+Oct 12 18:17:18 omarchy env[454682]: strata serve: decode expert cache hit rate: 56.2% (359967 hits / 640853 lookups); 37387 more read by the GPU over PCIe or from another GPU (5.5% of all 678240 routed)
+Oct 12 18:17:18 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 22417 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:17:18 omarchy env[454682]: strata serve: expert tiers: GPU 359967 hits this request; since the start RAM 4490664 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:17:18 omarchy env[454682]: strata serve: KV streaming: 99.89% of 4938864 block reads hit VRAM, 21.5 MiB read from RAM
+Oct 12 18:17:18 omarchy env[454682]: strata serve: suffix drafts: 66 windows, 204 of 218 drafts accepted
+Oct 12 18:17:58 omarchy env[454682]: strata serve: prompt 660 tokens = 0 reused + 660 read in 4776 ms (138.2 tok/s), 1464 generated in 34800 ms (42.1 tok/s), drafts accepted 1021 of 1254, 1 checkpoints
+Oct 12 18:17:58 omarchy env[454682]: strata serve: decode expert cache hit rate: 56.6% (436741 hits / 771311 lookups); 43729 more read by the GPU over PCIe or from another GPU (5.4% of all 815040 routed)
+Oct 12 18:17:58 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 23838 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:17:58 omarchy env[454682]: strata serve: expert tiers: GPU 436741 hits this request; since the start RAM 4819994 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:17:58 omarchy env[454682]: strata serve: KV streaming: 99.91% of 7050132 block reads hit VRAM, 25.7 MiB read from RAM
+Oct 12 18:17:58 omarchy env[454682]: strata serve: suffix drafts: 67 windows, 256 of 275 drafts accepted
+Oct 12 18:19:02 omarchy env[454682]: strata serve: prompt 597 tokens = 0 reused + 597 read in 4456 ms (134.0 tok/s), 2467 generated in 59354 ms (41.6 tok/s), drafts accepted 1660 of 2170, 1 checkpoints
+Oct 12 18:19:02 omarchy env[454682]: strata serve: decode expert cache hit rate: 63.0% (859166 hits / 1364602 lookups); 64358 more read by the GPU over PCIe or from another GPU (4.5% of all 1428960 routed)
+Oct 12 18:19:02 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 26439 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:19:02 omarchy env[454682]: strata serve: expert tiers: GPU 859166 hits this request; since the start RAM 5320085 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:19:02 omarchy env[454682]: strata serve: KV streaming: 99.94% of 14484852 block reads hit VRAM, 37.1 MiB read from RAM
+Oct 12 18:19:02 omarchy env[454682]: strata serve: suffix drafts: 122 windows, 400 of 441 drafts accepted
+Oct 12 18:20:13 omarchy env[454682]: strata serve: prompt 688 tokens = 0 reused + 688 read in 4875 ms (141.1 tok/s), 2811 generated in 65898 ms (42.7 tok/s), drafts accepted 1942 of 2396, 1 checkpoints
+Oct 12 18:20:13 omarchy env[454682]: strata serve: decode expert cache hit rate: 61.7% (921850 hits / 1493882 lookups); 74758 more read by the GPU over PCIe or from another GPU (4.8% of all 1568640 routed)
+Oct 12 18:20:13 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 29197 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:20:13 omarchy env[454682]: strata serve: expert tiers: GPU 921850 hits this request; since the start RAM 5891914 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:20:13 omarchy env[454682]: strata serve: KV streaming: 99.94% of 16699896 block reads hit VRAM, 42.3 MiB read from RAM
+Oct 12 18:20:13 omarchy env[454682]: strata serve: suffix drafts: 73 windows, 236 of 281 drafts accepted
+Oct 12 18:21:13 omarchy env[454682]: strata serve: prompt 684 tokens = 0 reused + 684 read in 4673 ms (146.4 tok/s), 2361 generated in 56087 ms (42.1 tok/s), drafts accepted 1627 of 2041, 1 checkpoints
+Oct 12 18:21:13 omarchy env[454682]: strata serve: decode expert cache hit rate: 60.9% (772010 hits / 1266935 lookups); 65065 more read by the GPU over PCIe or from another GPU (4.9% of all 1332000 routed)
+Oct 12 18:21:13 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 31552 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:21:13 omarchy env[454682]: strata serve: expert tiers: GPU 772010 hits this request; since the start RAM 6387615 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:21:13 omarchy env[454682]: strata serve: KV streaming: 99.93% of 13637484 block reads hit VRAM, 36.8 MiB read from RAM
+Oct 12 18:21:13 omarchy env[454682]: strata serve: suffix drafts: 68 windows, 214 of 257 drafts accepted
+Oct 12 18:22:46 omarchy env[454682]: strata serve: prompt 682 tokens = 0 reused + 682 read in 4872 ms (140.0 tok/s), 3678 generated in 88062 ms (41.8 tok/s), drafts accepted 2488 of 3197, 1 checkpoints
+Oct 12 18:22:46 omarchy env[454682]: strata serve: decode expert cache hit rate: 62.8% (1262619 hits / 2010171 lookups); 95589 more read by the GPU over PCIe or from another GPU (4.5% of all 2105760 routed)
+Oct 12 18:22:46 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 35200 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:22:46 omarchy env[454682]: strata serve: expert tiers: GPU 1262619 hits this request; since the start RAM 7123575 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:22:46 omarchy env[454682]: strata serve: KV streaming: 99.94% of 23642652 block reads hit VRAM, 52.7 MiB read from RAM
+Oct 12 18:22:46 omarchy env[454682]: strata serve: suffix drafts: 185 windows, 545 of 614 drafts accepted
+Oct 12 18:25:06 omarchy env[454682]: strata serve: prompt 607 tokens = 0 reused + 607 read in 4589 ms (132.3 tok/s), 5914 generated in 134780 ms (43.9 tok/s), drafts accepted 4076 of 5084, 1 checkpoints
+Oct 12 18:25:06 omarchy env[454682]: strata serve: decode expert cache hit rate: 66.7% (2127918 hits / 3189146 lookups); 133894 more read by the GPU over PCIe or from another GPU (4.0% of all 3323040 routed)
+Oct 12 18:25:06 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 41051 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:25:06 omarchy env[454682]: strata serve: expert tiers: GPU 2127918 hits this request; since the start RAM 8175835 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:25:06 omarchy env[454682]: strata serve: KV streaming: 99.95% of 38880900 block reads hit VRAM, 78.8 MiB read from RAM
+Oct 12 18:25:06 omarchy env[454682]: strata serve: suffix drafts: 126 windows, 442 of 496 drafts accepted
+Oct 12 18:26:29 omarchy env[454682]: strata serve: prompt 718 tokens = 0 reused + 718 read in 4964 ms (144.6 tok/s), 3320 generated in 78246 ms (42.4 tok/s), drafts accepted 2255 of 2874, 1 checkpoints
+Oct 12 18:26:29 omarchy env[454682]: strata serve: decode expert cache hit rate: 65.1% (1177959 hits / 1809793 lookups); 80927 more read by the GPU over PCIe or from another GPU (4.3% of all 1890720 routed)
+Oct 12 18:26:29 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 44366 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:26:29 omarchy env[454682]: strata serve: expert tiers: GPU 1177959 hits this request; since the start RAM 8811140 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:26:29 omarchy env[454682]: strata serve: KV streaming: 99.94% of 21087360 block reads hit VRAM, 48.8 MiB read from RAM
+Oct 12 18:26:29 omarchy env[454682]: strata serve: suffix drafts: 66 windows, 212 of 252 drafts accepted
+Oct 12 18:27:28 omarchy env[454682]: strata serve: prompt 621 tokens = 0 reused + 621 read in 4822 ms (128.8 tok/s), 2450 generated in 53387 ms (45.9 tok/s), drafts accepted 1756 of 1955, 1 checkpoints
+Oct 12 18:27:28 omarchy env[454682]: strata serve: decode expert cache hit rate: 62.1% (752553 hits / 1211493 lookups); 60987 more read by the GPU over PCIe or from another GPU (4.8% of all 1272480 routed)
+Oct 12 18:27:28 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 46728 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:27:28 omarchy env[454682]: strata serve: expert tiers: GPU 752553 hits this request; since the start RAM 9280574 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:27:28 omarchy env[454682]: strata serve: KV streaming: 99.93% of 12896952 block reads hit VRAM, 37.1 MiB read from RAM
+Oct 12 18:27:28 omarchy env[454682]: strata serve: suffix drafts: 23 windows, 80 of 86 drafts accepted
+Oct 12 18:27:51 omarchy env[454682]: strata serve: prompt 561 tokens = 0 reused + 561 read in 4613 ms (121.6 tok/s), 821 generated in 18577 ms (44.2 tok/s), drafts accepted 610 of 687, 1 checkpoints
+Oct 12 18:27:51 omarchy env[454682]: strata serve: decode expert cache hit rate: 50.8% (205319 hits / 403985 lookups); 27055 more read by the GPU over PCIe or from another GPU (6.3% of all 431040 routed)
+Oct 12 18:27:51 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 47436 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:27:51 omarchy env[454682]: strata serve: expert tiers: GPU 205319 hits this request; since the start RAM 9480654 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:27:51 omarchy env[454682]: strata serve: KV streaming: 99.84% of 2602788 block reads hit VRAM, 16.7 MiB read from RAM
+Oct 12 18:27:51 omarchy env[454682]: strata serve: suffix drafts: 45 windows, 206 of 214 drafts accepted
+Oct 12 18:28:41 omarchy env[454682]: strata serve: prompt 634 tokens = 0 reused + 634 read in 4749 ms (133.5 tok/s), 1908 generated in 44784 ms (42.6 tok/s), drafts accepted 1320 of 1668, 1 checkpoints
+Oct 12 18:28:41 omarchy env[454682]: strata serve: decode expert cache hit rate: 62.5% (645327 hits / 1032551 lookups); 50329 more read by the GPU over PCIe or from another GPU (4.6% of all 1082880 routed)
+Oct 12 18:28:41 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 49323 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:28:41 omarchy env[454682]: strata serve: expert tiers: GPU 645327 hits this request; since the start RAM 9869472 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:28:41 omarchy env[454682]: strata serve: KV streaming: 99.93% of 10249320 block reads hit VRAM, 30.8 MiB read from RAM
+Oct 12 18:28:41 omarchy env[454682]: strata serve: suffix drafts: 92 windows, 333 of 365 drafts accepted
+Oct 12 18:29:12 omarchy env[454682]: strata serve: prompt 595 tokens = 0 reused + 595 read in 4618 ms (128.9 tok/s), 1104 generated in 26797 ms (41.2 tok/s), drafts accepted 772 of 960, 1 checkpoints
+Oct 12 18:29:12 omarchy env[454682]: strata serve: decode expert cache hit rate: 55.8% (326517 hits / 584962 lookups); 35198 more read by the GPU over PCIe or from another GPU (5.7% of all 620160 routed)
+Oct 12 18:29:12 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 50404 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:29:12 omarchy env[454682]: strata serve: expert tiers: GPU 326517 hits this request; since the start RAM 10135002 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:29:12 omarchy env[454682]: strata serve: KV streaming: 99.88% of 4406352 block reads hit VRAM, 20.6 MiB read from RAM
+Oct 12 18:29:12 omarchy env[454682]: strata serve: suffix drafts: 45 windows, 162 of 179 drafts accepted
+Oct 12 18:30:09 omarchy env[454682]: strata serve: prompt 664 tokens = 0 reused + 664 read in 4719 ms (140.7 tok/s), 2217 generated in 51626 ms (42.9 tok/s), drafts accepted 1539 of 1907, 1 checkpoints
+Oct 12 18:30:09 omarchy env[454682]: strata serve: decode expert cache hit rate: 61.7% (729175 hits / 1182345 lookups); 58455 more read by the GPU over PCIe or from another GPU (4.7% of all 1240800 routed)
+Oct 12 18:30:09 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 52559 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:30:09 omarchy env[454682]: strata serve: expert tiers: GPU 729175 hits this request; since the start RAM 10582250 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:30:09 omarchy env[454682]: strata serve: KV streaming: 99.93% of 12501900 block reads hit VRAM, 34.8 MiB read from RAM
+Oct 12 18:30:09 omarchy env[454682]: strata serve: suffix drafts: 97 windows, 339 of 377 drafts accepted
+Oct 12 18:32:13 omarchy env[454682]: strata serve: prompt 793 tokens = 0 reused + 793 read in 5125 ms (154.7 tok/s), 5108 generated in 119218 ms (42.8 tok/s), drafts accepted 3463 of 4371, 1 checkpoints
+Oct 12 18:32:13 omarchy env[454682]: strata serve: decode expert cache hit rate: 65.8% (1821676 hits / 2768512 lookups); 119168 more read by the GPU over PCIe or from another GPU (4.1% of all 2887680 routed)
+Oct 12 18:32:13 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 57794 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:32:13 omarchy env[454682]: strata serve: expert tiers: GPU 1821676 hits this request; since the start RAM 11522166 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:32:13 omarchy env[454682]: strata serve: KV streaming: 99.95% of 34345572 block reads hit VRAM, 71.3 MiB read from RAM
+Oct 12 18:32:13 omarchy env[454682]: strata serve: suffix drafts: 118 windows, 355 of 385 drafts accepted
+Oct 12 18:34:02 omarchy env[454682]: strata serve: prompt 886 tokens = 0 reused + 886 read in 5308 ms (166.9 tok/s), 4464 generated in 103668 ms (43.1 tok/s), drafts accepted 3054 of 3786, 1 checkpoints
+Oct 12 18:34:02 omarchy env[454682]: strata serve: decode expert cache hit rate: 65.3% (1558524 hits / 2387995 lookups); 106565 more read by the GPU over PCIe or from another GPU (4.3% of all 2494560 routed)
+Oct 12 18:34:02 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 62229 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:34:02 omarchy env[454682]: strata serve: expert tiers: GPU 1558524 hits this request; since the start RAM 12357720 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:34:02 omarchy env[454682]: strata serve: KV streaming: 99.95% of 29600208 block reads hit VRAM, 64.7 MiB read from RAM
+Oct 12 18:34:02 omarchy env[454682]: strata serve: suffix drafts: 86 windows, 229 of 262 drafts accepted
+Oct 12 18:35:16 omarchy env[454682]: strata serve: prompt 724 tokens = 0 reused + 724 read in 4816 ms (150.3 tok/s), 2965 generated in 69286 ms (42.8 tok/s), drafts accepted 2008 of 2543, 1 checkpoints
+Oct 12 18:35:16 omarchy env[454682]: strata serve: decode expert cache hit rate: 65.4% (1053495 hits / 1610368 lookups); 70592 more read by the GPU over PCIe or from another GPU (4.2% of all 1680960 routed)
+Oct 12 18:35:16 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 65331 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:35:16 omarchy env[454682]: strata serve: expert tiers: GPU 1053495 hits this request; since the start RAM 12917101 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:35:16 omarchy env[454682]: strata serve: KV streaming: 99.94% of 18172716 block reads hit VRAM, 44.6 MiB read from RAM
+Oct 12 18:35:16 omarchy env[454682]: strata serve: suffix drafts: 54 windows, 141 of 157 drafts accepted
+Oct 12 18:39:58 omarchy env[454682]: strata serve: prompt 797 tokens = 0 reused + 797 read in 5150 ms (154.8 tok/s), 11574 generated in 276959 ms (41.8 tok/s), drafts accepted 7671 of 10228, 1 checkpoints
+Oct 12 18:39:58 omarchy env[454682]: strata serve: decode expert cache hit rate: 68.7% (4483574 hits / 6529646 lookups); 253234 more read by the GPU over PCIe or from another GPU (3.7% of all 6782880 routed)
+Oct 12 18:39:58 omarchy env[454682]: strata serve: resident RAM: 39.16 GiB of experts in RAM, 77560 exchanged with the VRAM tier, 0 blob reads from the file
+Oct 12 18:39:58 omarchy env[454682]: strata serve: expert tiers: GPU 4483574 hits this request; since the start RAM 14948969 blobs, files 0 blobs 5576.8 MB read (the GGUF in place)
+Oct 12 18:39:58 omarchy env[454682]: strata serve: KV streaming: 99.96% of 84209088 block reads hit VRAM, 149.5 MiB read from RAM
+Oct 12 18:39:58 omarchy env[454682]: strata serve: suffix drafts: 398 windows, 1084 of 1211 drafts accepted
+Oct 12 18:39:58 omarchy systemd[1422]: Stopping [systemd-run] /usr/bin/env -u GGML_VK_VISIBLE_DEVICES /usr/bin/python3 /home/USER/opt/UnbiasedStrata/local/launch.py --config /home/USER/bench/results/qwen27b-flash-matched-strata-config.json...
+Oct 12 18:39:58 omarchy env[454676]: unbiased-strata: stopping
+Oct 12 18:40:05 omarchy systemd[1422]: Stopped [systemd-run] /usr/bin/env -u GGML_VK_VISIBLE_DEVICES /usr/bin/python3 /home/USER/opt/UnbiasedStrata/local/launch.py --config /home/USER/bench/results/qwen27b-flash-matched-strata-config.json.
+Oct 12 18:40:05 omarchy systemd[1422]: bench-matched-flash-41-20261012-165802.service: Consumed 6h 17min 17.848s CPU time over 33min 25.639s wall clock time, 55.4G memory peak, 1.1G memory swap peak.

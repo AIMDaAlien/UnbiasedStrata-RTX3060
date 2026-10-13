@@ -1,0 +1,909 @@
+Oct 12 19:16:26 omarchy systemd[1422]: Started [systemd-run] /usr/bin/env -u GGML_VK_VISIBLE_DEVICES /usr/bin/llama-server -m /home/USER/Models/Swift-Qwen3.8-27B-Q5_K_M.gguf -c 131072 -fa on -ctk q4_0 -ctv q4_0 -fit off -dev Vulkan1,Vulkan2 -sm layer -ts 16,11 -np 1 --metrics --spec-type draft-mtp --spec-draft-n-max 2 -ctkd q4_0 -ctvd q4_0 --alias matched-qwen38-27b-q5 --host 127.0.0.1 --port 18080.
+Oct 12 19:16:27 omarchy env[557226]: WARNING: radv is not a conformant Vulkan implementation, testing use only.
+Oct 12 19:16:27 omarchy env[557226]: 0.00.119.260 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+Oct 12 19:16:27 omarchy env[557226]: 0.00.119.470 W srv  llama_server: -----------------
+Oct 12 19:16:27 omarchy env[557226]: 0.00.119.472 W srv  llama_server: CORS is set to allow all origins ('*') and no API key is set
+Oct 12 19:16:27 omarchy env[557226]: 0.00.119.472 W srv  llama_server: this can be a security risk (cross-origin attacks)
+Oct 12 19:16:27 omarchy env[557226]: 0.00.119.472 W srv  llama_server: more info: https://github.com/ggml-org/llama.cpp/pull/25655
+Oct 12 19:16:27 omarchy env[557226]: 0.00.119.472 W srv  llama_server: -----------------
+Oct 12 19:16:27 omarchy env[557226]: 0.00.120.649 I srv    load_model: loading model '/home/USER/Models/Swift-Qwen3.8-27B-Q5_K_M.gguf'
+Oct 12 19:16:34 omarchy env[557226]: 0.07.259.088 I cmn          init: llama threadpool init, n_threads = 16
+Oct 12 19:16:34 omarchy env[557226]: 0.07.383.420 I common_speculative_init_result: creating MTP draft context against the target model '/home/USER/Models/Swift-Qwen3.8-27B-Q5_K_M.gguf'
+Oct 12 19:16:34 omarchy env[557226]: 0.07.552.356 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 131072, kv_unified = 'false'
+Oct 12 19:16:34 omarchy env[557226]: 0.07.607.302 W srv          init: chat template supports preserving reasoning, it is enabled by default (may use more tokens, disable via --no-reasoning-preserve)
+Oct 12 19:16:34 omarchy env[557226]: 0.07.607.312 I srv  llama_server: model loaded
+Oct 12 19:16:34 omarchy env[557226]: 0.07.607.313 I srv  llama_server: listening on http://127.0.0.1:18080
+Oct 12 19:16:36 omarchy env[557226]: 0.09.098.475 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1
+Oct 12 19:16:36 omarchy env[557226]: 0.09.098.506 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+Oct 12 19:16:37 omarchy env[557226]: 0.10.332.150 I slot print_timing: id  0 | task 0 | prompt eval time =     361.03 ms /    17 tokens (   21.24 ms per token,    47.09 tokens per second)
+Oct 12 19:16:37 omarchy env[557226]: 0.10.332.152 I slot print_timing: id  0 | task 0 |        eval time =     872.50 ms /    25 tokens (   36.35 ms per token,    27.51 tokens per second)
+Oct 12 19:16:37 omarchy env[557226]: 0.10.332.153 I slot print_timing: id  0 | task 0 |       total time =    1233.53 ms /    42 tokens
+Oct 12 19:16:37 omarchy env[557226]: 0.10.332.153 I slot print_timing: id  0 | task 0 |    graphs reused =          9
+Oct 12 19:16:37 omarchy env[557226]: 0.10.332.155 I slot print_timing: id  0 | task 0 | draft acceptance = 0.88889 (   16 accepted /    18 generated), mean len =  2.78
+Oct 12 19:16:37 omarchy env[557226]: 0.10.332.182 I slot      release: id  0 | task 0 | stop processing: n_tokens = 42, truncated = 0
+Oct 12 19:16:37 omarchy env[557226]: 0.10.334.852 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 23905674842
+Oct 12 19:16:37 omarchy env[557226]: 0.10.379.742 I slot launch_slot_: id  0 | task 12 | processing task, is_child = 0
+Oct 12 19:16:42 omarchy env[557226]: 0.15.516.839 I slot print_timing: id  0 | task 12 | n_gen =    100, tg =  30.43 t/s, tg_3s =  30.74 t/s
+Oct 12 19:16:45 omarchy env[557226]: 0.18.589.728 I slot print_timing: id  0 | task 12 | n_gen =    192, tg =  30.19 t/s, tg_3s =  29.94 t/s
+Oct 12 19:16:48 omarchy env[557226]: 0.21.662.219 I slot print_timing: id  0 | task 12 | n_gen =    282, tg =  29.90 t/s, tg_3s =  29.29 t/s
+Oct 12 19:16:51 omarchy env[557226]: 0.24.735.274 I slot print_timing: id  0 | task 12 | n_gen =    370, tg =  29.59 t/s, tg_3s =  28.64 t/s
+Oct 12 19:16:54 omarchy env[557226]: 0.27.810.176 I slot print_timing: id  0 | task 12 | n_gen =    457, tg =  29.33 t/s, tg_3s =  28.29 t/s
+Oct 12 19:16:57 omarchy env[557226]: 0.30.881.843 I slot print_timing: id  0 | task 12 | n_gen =    548, tg =  29.38 t/s, tg_3s =  29.63 t/s
+Oct 12 19:17:00 omarchy env[557226]: 0.33.954.091 I slot print_timing: id  0 | task 12 | n_gen =    640, tg =  29.46 t/s, tg_3s =  29.95 t/s
+Oct 12 19:17:03 omarchy env[557226]: 0.37.038.822 I slot print_timing: id  0 | task 12 | n_gen =    732, tg =  29.50 t/s, tg_3s =  29.82 t/s
+Oct 12 19:17:07 omarchy env[557226]: 0.40.128.817 I slot print_timing: id  0 | task 12 | n_gen =    815, tg =  29.21 t/s, tg_3s =  26.86 t/s
+Oct 12 19:17:10 omarchy env[557226]: 0.43.214.263 I slot print_timing: id  0 | task 12 | n_gen =    903, tg =  29.14 t/s, tg_3s =  28.52 t/s
+Oct 12 19:17:13 omarchy env[557226]: 0.46.310.832 I slot print_timing: id  0 | task 12 | n_gen =    993, tg =  29.14 t/s, tg_3s =  29.06 t/s
+Oct 12 19:17:16 omarchy env[557226]: 0.49.403.714 I slot print_timing: id  0 | task 12 | n_gen =   1088, tg =  29.27 t/s, tg_3s =  30.72 t/s
+Oct 12 19:17:19 omarchy env[557226]: 0.52.499.716 I slot print_timing: id  0 | task 12 | n_gen =   1184, tg =  29.40 t/s, tg_3s =  31.01 t/s
+Oct 12 19:17:22 omarchy env[557226]: 0.55.501.998 I slot print_timing: id  0 | task 12 | n_gen =   1277, tg =  29.51 t/s, tg_3s =  30.98 t/s
+Oct 12 19:17:24 omarchy env[557226]: 0.57.443.836 I slot print_timing: id  0 | task 12 | prompt eval time =    1883.48 ms /   598 tokens (    3.15 ms per token,   317.50 tokens per second)
+Oct 12 19:17:24 omarchy env[557226]: 0.57.443.838 I slot print_timing: id  0 | task 12 |        eval time =   45180.51 ms /  1336 tokens (   33.84 ms per token,    29.55 tokens per second)
+Oct 12 19:17:24 omarchy env[557226]: 0.57.443.839 I slot print_timing: id  0 | task 12 |       total time =   47063.98 ms /  1934 tokens
+Oct 12 19:17:24 omarchy env[557226]: 0.57.443.839 I slot print_timing: id  0 | task 12 |    graphs reused =        472
+Oct 12 19:17:24 omarchy env[557226]: 0.57.443.841 I slot print_timing: id  0 | task 12 | draft acceptance = 0.92431 (  867 accepted /   938 generated), mean len =  2.85
+Oct 12 19:17:24 omarchy env[557226]: 0.57.443.880 I slot      release: id  0 | task 12 | stop processing: n_tokens = 1934, truncated = 0
+Oct 12 19:17:24 omarchy env[557226]: 0.57.707.407 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 23952786542
+Oct 12 19:17:24 omarchy env[557226]: 0.57.770.399 I slot launch_slot_: id  0 | task 485 | processing task, is_child = 0
+Oct 12 19:17:29 omarchy env[557226]: 1.02.843.361 I slot print_timing: id  0 | task 485 | n_gen =    101, tg =  30.75 t/s, tg_3s =  31.05 t/s
+Oct 12 19:17:32 omarchy env[557226]: 1.05.912.712 I slot print_timing: id  0 | task 485 | n_gen =    193, tg =  30.37 t/s, tg_3s =  29.97 t/s
+Oct 12 19:17:35 omarchy env[557226]: 1.08.990.334 I slot print_timing: id  0 | task 485 | n_gen =    273, tg =  28.94 t/s, tg_3s =  25.99 t/s
+Oct 12 19:17:39 omarchy env[557226]: 1.12.059.160 I slot print_timing: id  0 | task 485 | n_gen =    357, tg =  28.55 t/s, tg_3s =  27.37 t/s
+Oct 12 19:17:42 omarchy env[557226]: 1.15.131.361 I slot print_timing: id  0 | task 485 | n_gen =    443, tg =  28.44 t/s, tg_3s =  27.99 t/s
+Oct 12 19:17:45 omarchy env[557226]: 1.18.214.654 I slot print_timing: id  0 | task 485 | n_gen =    535, tg =  28.67 t/s, tg_3s =  29.84 t/s
+Oct 12 19:17:48 omarchy env[557226]: 1.21.293.439 I slot print_timing: id  0 | task 485 | n_gen =    628, tg =  28.89 t/s, tg_3s =  30.21 t/s
+Oct 12 19:17:51 omarchy env[557226]: 1.24.375.794 I slot print_timing: id  0 | task 485 | n_gen =    724, tg =  29.17 t/s, tg_3s =  31.15 t/s
+Oct 12 19:17:52 omarchy env[557226]: 1.25.727.109 I slot print_timing: id  0 | task 485 | prompt eval time =    1820.43 ms /   582 tokens (    3.13 ms per token,   319.70 tokens per second)
+Oct 12 19:17:52 omarchy env[557226]: 1.25.727.111 I slot print_timing: id  0 | task 485 |        eval time =   26136.16 ms /   764 tokens (   34.25 ms per token,    29.19 tokens per second)
+Oct 12 19:17:52 omarchy env[557226]: 1.25.727.112 I slot print_timing: id  0 | task 485 |       total time =   27956.60 ms /  1346 tokens
+Oct 12 19:17:52 omarchy env[557226]: 1.25.727.112 I slot print_timing: id  0 | task 485 |    graphs reused =        740
+Oct 12 19:17:52 omarchy env[557226]: 1.25.727.114 I slot print_timing: id  0 | task 485 | draft acceptance = 0.90625 (  493 accepted /   544 generated), mean len =  2.81
+Oct 12 19:17:52 omarchy env[557226]: 1.25.727.151 I slot      release: id  0 | task 485 | stop processing: n_tokens = 1347, truncated = 0
+Oct 12 19:17:52 omarchy env[557226]: 1.25.754.523 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 23981069813
+Oct 12 19:17:52 omarchy env[557226]: 1.25.817.803 I slot launch_slot_: id  0 | task 761 | processing task, is_child = 0
+Oct 12 19:17:57 omarchy env[557226]: 1.30.926.760 I slot print_timing: id  0 | task 761 | n_gen =    102, tg =  30.94 t/s, tg_3s =  31.24 t/s
+Oct 12 19:18:00 omarchy env[557226]: 1.33.999.279 I slot print_timing: id  0 | task 761 | n_gen =    198, tg =  31.09 t/s, tg_3s =  31.24 t/s
+Oct 12 19:18:04 omarchy env[557226]: 1.37.073.974 I slot print_timing: id  0 | task 761 | n_gen =    289, tg =  30.60 t/s, tg_3s =  29.60 t/s
+Oct 12 19:18:07 omarchy env[557226]: 1.40.154.002 I slot print_timing: id  0 | task 761 | n_gen =    377, tg =  30.10 t/s, tg_3s =  28.57 t/s
+Oct 12 19:18:10 omarchy env[557226]: 1.43.234.432 I slot print_timing: id  0 | task 761 | n_gen =    458, tg =  29.35 t/s, tg_3s =  26.30 t/s
+Oct 12 19:18:13 omarchy env[557226]: 1.46.318.507 I slot print_timing: id  0 | task 761 | n_gen =    546, tg =  29.21 t/s, tg_3s =  28.53 t/s
+Oct 12 19:18:16 omarchy env[557226]: 1.49.400.968 I slot print_timing: id  0 | task 761 | n_gen =    631, tg =  28.98 t/s, tg_3s =  27.58 t/s
+Oct 12 19:18:19 omarchy env[557226]: 1.52.488.821 I slot print_timing: id  0 | task 761 | n_gen =    718, tg =  28.88 t/s, tg_3s =  28.17 t/s
+Oct 12 19:18:22 omarchy env[557226]: 1.55.574.944 I slot print_timing: id  0 | task 761 | n_gen =    808, tg =  28.91 t/s, tg_3s =  29.16 t/s
+Oct 12 19:18:25 omarchy env[557226]: 1.58.665.257 I slot print_timing: id  0 | task 761 | n_gen =    900, tg =  29.00 t/s, tg_3s =  29.77 t/s
+Oct 12 19:18:28 omarchy env[557226]: 2.01.762.982 I slot print_timing: id  0 | task 761 | n_gen =    975, tg =  28.56 t/s, tg_3s =  24.21 t/s
+Oct 12 19:18:31 omarchy env[557226]: 2.04.859.603 I slot print_timing: id  0 | task 761 | n_gen =   1061, tg =  28.50 t/s, tg_3s =  27.77 t/s
+Oct 12 19:18:34 omarchy env[557226]: 2.07.860.389 I slot print_timing: id  0 | task 761 | n_gen =   1152, tg =  28.63 t/s, tg_3s =  30.33 t/s
+Oct 12 19:18:37 omarchy env[557226]: 2.10.868.860 I slot print_timing: id  0 | task 761 | n_gen =   1243, tg =  28.75 t/s, tg_3s =  30.25 t/s
+Oct 12 19:18:40 omarchy env[557226]: 2.13.877.696 I slot print_timing: id  0 | task 761 | n_gen =   1333, tg =  28.82 t/s, tg_3s =  29.91 t/s
+Oct 12 19:18:43 omarchy env[557226]: 2.16.883.547 I slot print_timing: id  0 | task 761 | n_gen =   1418, tg =  28.79 t/s, tg_3s =  28.28 t/s
+Oct 12 19:18:46 omarchy env[557226]: 2.19.905.894 I slot print_timing: id  0 | task 761 | n_gen =   1500, tg =  28.69 t/s, tg_3s =  27.13 t/s
+Oct 12 19:18:49 omarchy env[557226]: 2.22.919.919 I slot print_timing: id  0 | task 761 | n_gen =   1593, tg =  28.81 t/s, tg_3s =  30.86 t/s
+Oct 12 19:18:52 omarchy env[557226]: 2.25.942.204 I slot print_timing: id  0 | task 761 | n_gen =   1686, tg =  28.91 t/s, tg_3s =  30.77 t/s
+Oct 12 19:18:55 omarchy env[557226]: 2.28.959.502 I slot print_timing: id  0 | task 761 | n_gen =   1779, tg =  29.01 t/s, tg_3s =  30.82 t/s
+Oct 12 19:18:56 omarchy env[557226]: 2.29.252.626 I slot print_timing: id  0 | task 761 | prompt eval time =    1844.11 ms /   627 tokens (    2.94 ms per token,   340.00 tokens per second)
+Oct 12 19:18:56 omarchy env[557226]: 2.29.252.629 I slot print_timing: id  0 | task 761 |        eval time =   61590.60 ms /  1786 tokens (   34.50 ms per token,    28.98 tokens per second)
+Oct 12 19:18:56 omarchy env[557226]: 2.29.252.629 I slot print_timing: id  0 | task 761 |       total time =   63434.71 ms /  2413 tokens
+Oct 12 19:18:56 omarchy env[557226]: 2.29.252.630 I slot print_timing: id  0 | task 761 |    graphs reused =       1369
+Oct 12 19:18:56 omarchy env[557226]: 2.29.252.631 I slot print_timing: id  0 | task 761 | draft acceptance = 0.90267 ( 1150 accepted /  1274 generated), mean len =  2.81
+Oct 12 19:18:56 omarchy env[557226]: 2.29.252.670 I slot      release: id  0 | task 761 | stop processing: n_tokens = 2414, truncated = 0
+Oct 12 19:18:56 omarchy env[557226]: 2.29.355.980 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 24044595333
+Oct 12 19:18:56 omarchy env[557226]: 2.29.419.847 I slot launch_slot_: id  0 | task 1402 | processing task, is_child = 0
+Oct 12 19:19:01 omarchy env[557226]: 2.34.972.165 I slot print_timing: id  0 | task 1402 | n_gen =    100, tg =  28.65 t/s, tg_3s =  28.94 t/s
+Oct 12 19:19:04 omarchy env[557226]: 2.38.052.253 I slot print_timing: id  0 | task 1402 | n_gen =    194, tg =  29.53 t/s, tg_3s =  30.52 t/s
+Oct 12 19:19:08 omarchy env[557226]: 2.41.132.019 I slot print_timing: id  0 | task 1402 | n_gen =    283, tg =  29.33 t/s, tg_3s =  28.90 t/s
+Oct 12 19:19:11 omarchy env[557226]: 2.44.213.944 I slot print_timing: id  0 | task 1402 | n_gen =    365, tg =  28.67 t/s, tg_3s =  26.61 t/s
+Oct 12 19:19:14 omarchy env[557226]: 2.47.297.326 I slot print_timing: id  0 | task 1402 | n_gen =    454, tg =  28.71 t/s, tg_3s =  28.86 t/s
+Oct 12 19:19:17 omarchy env[557226]: 2.50.386.168 I slot print_timing: id  0 | task 1402 | n_gen =    536, tg =  28.35 t/s, tg_3s =  26.55 t/s
+Oct 12 19:19:20 omarchy env[557226]: 2.53.477.535 I slot print_timing: id  0 | task 1402 | n_gen =    617, tg =  28.05 t/s, tg_3s =  26.20 t/s
+Oct 12 19:19:23 omarchy env[557226]: 2.56.567.510 I slot print_timing: id  0 | task 1402 | n_gen =    703, tg =  28.02 t/s, tg_3s =  27.83 t/s
+Oct 12 19:19:26 omarchy env[557226]: 2.59.658.851 I slot print_timing: id  0 | task 1402 | n_gen =    797, tg =  28.29 t/s, tg_3s =  30.41 t/s
+Oct 12 19:19:29 omarchy env[557226]: 3.02.660.031 I slot print_timing: id  0 | task 1402 | n_gen =    875, tg =  28.06 t/s, tg_3s =  25.99 t/s
+Oct 12 19:19:32 omarchy env[557226]: 3.05.755.121 I slot print_timing: id  0 | task 1402 | n_gen =    964, tg =  28.13 t/s, tg_3s =  28.76 t/s
+Oct 12 19:19:35 omarchy env[557226]: 3.08.759.032 I slot print_timing: id  0 | task 1402 | n_gen =   1056, tg =  28.33 t/s, tg_3s =  30.63 t/s
+Oct 12 19:19:38 omarchy env[557226]: 3.11.765.132 I slot print_timing: id  0 | task 1402 | n_gen =   1143, tg =  28.37 t/s, tg_3s =  28.94 t/s
+Oct 12 19:19:41 omarchy env[557226]: 3.14.776.885 I slot print_timing: id  0 | task 1402 | n_gen =   1236, tg =  28.55 t/s, tg_3s =  30.88 t/s
+Oct 12 19:19:44 omarchy env[557226]: 3.17.787.365 I slot print_timing: id  0 | task 1402 | n_gen =   1329, tg =  28.70 t/s, tg_3s =  30.89 t/s
+Oct 12 19:19:47 omarchy env[557226]: 3.20.801.350 I slot print_timing: id  0 | task 1402 | n_gen =   1418, tg =  28.75 t/s, tg_3s =  29.53 t/s
+Oct 12 19:19:50 omarchy env[557226]: 3.23.817.612 I slot print_timing: id  0 | task 1402 | n_gen =   1510, tg =  28.85 t/s, tg_3s =  30.50 t/s
+Oct 12 19:19:53 omarchy env[557226]: 3.26.837.091 I slot print_timing: id  0 | task 1402 | n_gen =   1603, tg =  28.96 t/s, tg_3s =  30.80 t/s
+Oct 12 19:19:56 omarchy env[557226]: 3.29.856.864 I slot print_timing: id  0 | task 1402 | n_gen =   1693, tg =  29.00 t/s, tg_3s =  29.80 t/s
+Oct 12 19:19:59 omarchy env[557226]: 3.32.879.445 I slot print_timing: id  0 | task 1402 | n_gen =   1781, tg =  29.01 t/s, tg_3s =  29.11 t/s
+Oct 12 19:20:02 omarchy env[557226]: 3.35.910.614 I slot print_timing: id  0 | task 1402 | n_gen =   1861, tg =  28.88 t/s, tg_3s =  26.39 t/s
+Oct 12 19:20:05 omarchy env[557226]: 3.38.941.127 I slot print_timing: id  0 | task 1402 | n_gen =   1943, tg =  28.80 t/s, tg_3s =  27.06 t/s
+Oct 12 19:20:08 omarchy env[557226]: 3.41.971.572 I slot print_timing: id  0 | task 1402 | n_gen =   2033, tg =  28.84 t/s, tg_3s =  29.70 t/s
+Oct 12 19:20:11 omarchy env[557226]: 3.45.009.552 I slot print_timing: id  0 | task 1402 | n_gen =   2126, tg =  28.91 t/s, tg_3s =  30.61 t/s
+Oct 12 19:20:14 omarchy env[557226]: 3.48.047.427 I slot print_timing: id  0 | task 1402 | n_gen =   2219, tg =  28.98 t/s, tg_3s =  30.61 t/s
+Oct 12 19:20:18 omarchy env[557226]: 3.51.084.480 I slot print_timing: id  0 | task 1402 | n_gen =   2312, tg =  29.04 t/s, tg_3s =  30.62 t/s
+Oct 12 19:20:21 omarchy env[557226]: 3.54.125.891 I slot print_timing: id  0 | task 1402 | n_gen =   2405, tg =  29.10 t/s, tg_3s =  30.58 t/s
+Oct 12 19:20:24 omarchy env[557226]: 3.57.169.911 I slot print_timing: id  0 | task 1402 | n_gen =   2498, tg =  29.15 t/s, tg_3s =  30.55 t/s
+Oct 12 19:20:27 omarchy env[557226]: 4.00.224.184 I slot print_timing: id  0 | task 1402 | n_gen =   2591, tg =  29.20 t/s, tg_3s =  30.45 t/s
+Oct 12 19:20:27 omarchy env[557226]: 4.00.323.848 I slot print_timing: id  0 | task 1402 | prompt eval time =    2097.17 ms /   750 tokens (    2.80 ms per token,   357.62 tokens per second)
+Oct 12 19:20:27 omarchy env[557226]: 4.00.323.851 I slot print_timing: id  0 | task 1402 |        eval time =   88806.71 ms /  2592 tokens (   34.28 ms per token,    29.18 tokens per second)
+Oct 12 19:20:27 omarchy env[557226]: 4.00.323.851 I slot print_timing: id  0 | task 1402 |       total time =   90903.88 ms /  3342 tokens
+Oct 12 19:20:27 omarchy env[557226]: 4.00.323.852 I slot print_timing: id  0 | task 1402 |    graphs reused =       2271
+Oct 12 19:20:27 omarchy env[557226]: 4.00.323.853 I slot print_timing: id  0 | task 1402 | draft acceptance = 0.91849 ( 1679 accepted /  1828 generated), mean len =  2.84
+Oct 12 19:20:27 omarchy env[557226]: 4.00.323.897 I slot      release: id  0 | task 1402 | stop processing: n_tokens = 3343, truncated = 0
+Oct 12 19:20:27 omarchy env[557226]: 4.00.338.413 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 24135666558
+Oct 12 19:20:27 omarchy env[557226]: 4.00.407.249 I slot launch_slot_: id  0 | task 2320 | processing task, is_child = 0
+Oct 12 19:20:32 omarchy env[557226]: 4.05.510.535 I slot print_timing: id  0 | task 2320 | n_gen =    101, tg =  30.68 t/s, tg_3s =  30.98 t/s
+Oct 12 19:20:35 omarchy env[557226]: 4.08.586.454 I slot print_timing: id  0 | task 2320 | n_gen =    189, tg =  29.67 t/s, tg_3s =  28.61 t/s
+Oct 12 19:20:38 omarchy env[557226]: 4.11.660.755 I slot print_timing: id  0 | task 2320 | n_gen =    276, tg =  29.22 t/s, tg_3s =  28.30 t/s
+Oct 12 19:20:41 omarchy env[557226]: 4.14.740.354 I slot print_timing: id  0 | task 2320 | n_gen =    366, tg =  29.22 t/s, tg_3s =  29.22 t/s
+Oct 12 19:20:44 omarchy env[557226]: 4.17.823.209 I slot print_timing: id  0 | task 2320 | n_gen =    453, tg =  29.03 t/s, tg_3s =  28.22 t/s
+Oct 12 19:20:47 omarchy env[557226]: 4.20.905.908 I slot print_timing: id  0 | task 2320 | n_gen =    537, tg =  28.73 t/s, tg_3s =  27.25 t/s
+Oct 12 19:20:50 omarchy env[557226]: 4.23.986.139 I slot print_timing: id  0 | task 2320 | n_gen =    615, tg =  28.25 t/s, tg_3s =  25.32 t/s
+Oct 12 19:20:54 omarchy env[557226]: 4.27.074.946 I slot print_timing: id  0 | task 2320 | n_gen =    703, tg =  28.28 t/s, tg_3s =  28.49 t/s
+Oct 12 19:20:57 omarchy env[557226]: 4.30.166.798 I slot print_timing: id  0 | task 2320 | n_gen =    788, tg =  28.19 t/s, tg_3s =  27.49 t/s
+Oct 12 19:21:00 omarchy env[557226]: 4.33.256.779 I slot print_timing: id  0 | task 2320 | n_gen =    873, tg =  28.12 t/s, tg_3s =  27.51 t/s
+Oct 12 19:21:03 omarchy env[557226]: 4.36.353.770 I slot print_timing: id  0 | task 2320 | n_gen =    960, tg =  28.12 t/s, tg_3s =  28.09 t/s
+Oct 12 19:21:06 omarchy env[557226]: 4.39.449.445 I slot print_timing: id  0 | task 2320 | n_gen =   1038, tg =  27.88 t/s, tg_3s =  25.20 t/s
+Oct 12 19:21:09 omarchy env[557226]: 4.42.451.011 I slot print_timing: id  0 | task 2320 | n_gen =   1117, tg =  27.76 t/s, tg_3s =  26.32 t/s
+Oct 12 19:21:12 omarchy env[557226]: 4.45.452.110 I slot print_timing: id  0 | task 2320 | n_gen =   1189, tg =  27.50 t/s, tg_3s =  23.99 t/s
+Oct 12 19:21:15 omarchy env[557226]: 4.48.460.397 I slot print_timing: id  0 | task 2320 | n_gen =   1272, tg =  27.51 t/s, tg_3s =  27.59 t/s
+Oct 12 19:21:18 omarchy env[557226]: 4.51.467.176 I slot print_timing: id  0 | task 2320 | n_gen =   1364, tg =  27.69 t/s, tg_3s =  30.60 t/s
+Oct 12 19:21:21 omarchy env[557226]: 4.54.478.722 I slot print_timing: id  0 | task 2320 | n_gen =   1456, tg =  27.86 t/s, tg_3s =  30.55 t/s
+Oct 12 19:21:24 omarchy env[557226]: 4.57.493.463 I slot print_timing: id  0 | task 2320 | n_gen =   1545, tg =  27.95 t/s, tg_3s =  29.52 t/s
+Oct 12 19:21:27 omarchy env[557226]: 5.00.510.449 I slot print_timing: id  0 | task 2320 | n_gen =   1617, tg =  27.74 t/s, tg_3s =  23.86 t/s
+Oct 12 19:21:30 omarchy env[557226]: 5.03.528.974 I slot print_timing: id  0 | task 2320 | n_gen =   1690, tg =  27.56 t/s, tg_3s =  24.18 t/s
+Oct 12 19:21:33 omarchy env[557226]: 5.06.551.760 I slot print_timing: id  0 | task 2320 | n_gen =   1764, tg =  27.42 t/s, tg_3s =  24.48 t/s
+Oct 12 19:21:36 omarchy env[557226]: 5.09.569.151 I slot print_timing: id  0 | task 2320 | n_gen =   1842, tg =  27.35 t/s, tg_3s =  25.85 t/s
+Oct 12 19:21:39 omarchy env[557226]: 5.12.591.946 I slot print_timing: id  0 | task 2320 | n_gen =   1928, tg =  27.40 t/s, tg_3s =  28.45 t/s
+Oct 12 19:21:42 omarchy env[557226]: 5.15.618.435 I slot print_timing: id  0 | task 2320 | n_gen =   2003, tg =  27.29 t/s, tg_3s =  24.78 t/s
+Oct 12 19:21:45 omarchy env[557226]: 5.18.649.826 I slot print_timing: id  0 | task 2320 | n_gen =   2091, tg =  27.36 t/s, tg_3s =  29.03 t/s
+Oct 12 19:21:48 omarchy env[557226]: 5.21.680.265 I slot print_timing: id  0 | task 2320 | n_gen =   2184, tg =  27.48 t/s, tg_3s =  30.69 t/s
+Oct 12 19:21:51 omarchy env[557226]: 5.24.721.411 I slot print_timing: id  0 | task 2320 | n_gen =   2268, tg =  27.49 t/s, tg_3s =  27.62 t/s
+Oct 12 19:21:54 omarchy env[557226]: 5.27.758.085 I slot print_timing: id  0 | task 2320 | n_gen =   2354, tg =  27.52 t/s, tg_3s =  28.32 t/s
+Oct 12 19:21:57 omarchy env[557226]: 5.30.794.787 I slot print_timing: id  0 | task 2320 | n_gen =   2436, tg =  27.50 t/s, tg_3s =  27.00 t/s
+Oct 12 19:22:00 omarchy env[557226]: 5.33.838.744 I slot print_timing: id  0 | task 2320 | n_gen =   2526, tg =  27.57 t/s, tg_3s =  29.57 t/s
+Oct 12 19:22:03 omarchy env[557226]: 5.36.884.608 I slot print_timing: id  0 | task 2320 | n_gen =   2618, tg =  27.65 t/s, tg_3s =  30.20 t/s
+Oct 12 19:22:06 omarchy env[557226]: 5.39.931.771 I slot print_timing: id  0 | task 2320 | n_gen =   2709, tg =  27.72 t/s, tg_3s =  29.86 t/s
+Oct 12 19:22:09 omarchy env[557226]: 5.42.986.969 I slot print_timing: id  0 | task 2320 | n_gen =   2801, tg =  27.80 t/s, tg_3s =  30.11 t/s
+Oct 12 19:22:12 omarchy env[557226]: 5.46.036.844 I slot print_timing: id  0 | task 2320 | n_gen =   2894, tg =  27.87 t/s, tg_3s =  30.49 t/s
+Oct 12 19:22:13 omarchy env[557226]: 5.46.829.829 I slot print_timing: id  0 | task 2320 | prompt eval time =    1843.37 ms /   617 tokens (    2.99 ms per token,   334.71 tokens per second)
+Oct 12 19:22:13 omarchy env[557226]: 5.46.829.832 I slot print_timing: id  0 | task 2320 |        eval time =  104579.09 ms /  2916 tokens (   35.88 ms per token,    27.87 tokens per second)
+Oct 12 19:22:13 omarchy env[557226]: 5.46.829.832 I slot print_timing: id  0 | task 2320 |       total time =  106422.46 ms /  3533 tokens
+Oct 12 19:22:13 omarchy env[557226]: 5.46.829.832 I slot print_timing: id  0 | task 2320 |    graphs reused =       3335
+Oct 12 19:22:13 omarchy env[557226]: 5.46.829.834 I slot print_timing: id  0 | task 2320 | draft acceptance = 0.85548 ( 1841 accepted /  2152 generated), mean len =  2.71
+Oct 12 19:22:13 omarchy env[557226]: 5.46.829.873 I slot      release: id  0 | task 2320 | stop processing: n_tokens = 3534, truncated = 0
+Oct 12 19:22:13 omarchy env[557226]: 5.46.843.491 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 24242172534
+Oct 12 19:22:13 omarchy env[557226]: 5.46.911.392 I slot launch_slot_: id  0 | task 3400 | processing task, is_child = 0
+Oct 12 19:22:19 omarchy env[557226]: 5.52.908.929 I slot print_timing: id  0 | task 3400 | n_gen =    102, tg =  27.65 t/s, tg_3s =  27.92 t/s
+Oct 12 19:22:22 omarchy env[557226]: 5.55.989.889 I slot print_timing: id  0 | task 3400 | n_gen =    198, tg =  29.25 t/s, tg_3s =  31.16 t/s
+Oct 12 19:22:26 omarchy env[557226]: 5.59.070.002 I slot print_timing: id  0 | task 3400 | n_gen =    290, tg =  29.45 t/s, tg_3s =  29.87 t/s
+Oct 12 19:22:29 omarchy env[557226]: 6.02.151.486 I slot print_timing: id  0 | task 3400 | n_gen =    372, tg =  28.77 t/s, tg_3s =  26.61 t/s
+Oct 12 19:22:32 omarchy env[557226]: 6.05.240.822 I slot print_timing: id  0 | task 3400 | n_gen =    460, tg =  28.71 t/s, tg_3s =  28.49 t/s
+Oct 12 19:22:35 omarchy env[557226]: 6.08.329.772 I slot print_timing: id  0 | task 3400 | n_gen =    537, tg =  28.10 t/s, tg_3s =  24.93 t/s
+Oct 12 19:22:38 omarchy env[557226]: 6.11.420.696 I slot print_timing: id  0 | task 3400 | n_gen =    619, tg =  27.88 t/s, tg_3s =  26.53 t/s
+Oct 12 19:22:41 omarchy env[557226]: 6.14.513.785 I slot print_timing: id  0 | task 3400 | n_gen =    703, tg =  27.79 t/s, tg_3s =  27.16 t/s
+Oct 12 19:22:44 omarchy env[557226]: 6.17.515.463 I slot print_timing: id  0 | task 3400 | n_gen =    786, tg =  27.78 t/s, tg_3s =  27.65 t/s
+Oct 12 19:22:47 omarchy env[557226]: 6.20.518.095 I slot print_timing: id  0 | task 3400 | n_gen =    864, tg =  27.61 t/s, tg_3s =  25.98 t/s
+Oct 12 19:22:50 omarchy env[557226]: 6.23.520.236 I slot print_timing: id  0 | task 3400 | n_gen =    942, tg =  27.46 t/s, tg_3s =  25.98 t/s
+Oct 12 19:22:53 omarchy env[557226]: 6.26.532.473 I slot print_timing: id  0 | task 3400 | n_gen =   1028, tg =  27.55 t/s, tg_3s =  28.55 t/s
+Oct 12 19:22:56 omarchy env[557226]: 6.29.537.077 I slot print_timing: id  0 | task 3400 | n_gen =   1111, tg =  27.56 t/s, tg_3s =  27.62 t/s
+Oct 12 19:22:59 omarchy env[557226]: 6.32.550.931 I slot print_timing: id  0 | task 3400 | n_gen =   1198, tg =  27.65 t/s, tg_3s =  28.87 t/s
+Oct 12 19:23:02 omarchy env[557226]: 6.35.569.925 I slot print_timing: id  0 | task 3400 | n_gen =   1290, tg =  27.83 t/s, tg_3s =  30.47 t/s
+Oct 12 19:23:05 omarchy env[557226]: 6.38.586.266 I slot print_timing: id  0 | task 3400 | n_gen =   1379, tg =  27.93 t/s, tg_3s =  29.51 t/s
+Oct 12 19:23:08 omarchy env[557226]: 6.41.605.869 I slot print_timing: id  0 | task 3400 | n_gen =   1465, tg =  27.97 t/s, tg_3s =  28.48 t/s
+Oct 12 19:23:11 omarchy env[557226]: 6.44.631.636 I slot print_timing: id  0 | task 3400 | n_gen =   1555, tg =  28.06 t/s, tg_3s =  29.74 t/s
+Oct 12 19:23:14 omarchy env[557226]: 6.47.650.986 I slot print_timing: id  0 | task 3400 | n_gen =   1646, tg =  28.17 t/s, tg_3s =  30.14 t/s
+Oct 12 19:23:17 omarchy env[557226]: 6.50.672.664 I slot print_timing: id  0 | task 3400 | n_gen =   1731, tg =  28.17 t/s, tg_3s =  28.13 t/s
+Oct 12 19:23:20 omarchy env[557226]: 6.53.700.392 I slot print_timing: id  0 | task 3400 | n_gen =   1817, tg =  28.18 t/s, tg_3s =  28.40 t/s
+Oct 12 19:23:23 omarchy env[557226]: 6.56.732.522 I slot print_timing: id  0 | task 3400 | n_gen =   1905, tg =  28.22 t/s, tg_3s =  29.02 t/s
+Oct 12 19:23:26 omarchy env[557226]: 6.59.764.679 I slot print_timing: id  0 | task 3400 | n_gen =   1988, tg =  28.18 t/s, tg_3s =  27.37 t/s
+Oct 12 19:23:29 omarchy env[557226]: 7.02.800.058 I slot print_timing: id  0 | task 3400 | n_gen =   2072, tg =  28.16 t/s, tg_3s =  27.67 t/s
+Oct 12 19:23:32 omarchy env[557226]: 7.05.831.023 I slot print_timing: id  0 | task 3400 | n_gen =   2151, tg =  28.08 t/s, tg_3s =  26.06 t/s
+Oct 12 19:23:35 omarchy env[557226]: 7.08.869.756 I slot print_timing: id  0 | task 3400 | n_gen =   2235, tg =  28.06 t/s, tg_3s =  27.64 t/s
+Oct 12 19:23:38 omarchy env[557226]: 7.11.912.233 I slot print_timing: id  0 | task 3400 | n_gen =   2324, tg =  28.10 t/s, tg_3s =  29.25 t/s
+Oct 12 19:23:41 omarchy env[557226]: 7.14.956.953 I slot print_timing: id  0 | task 3400 | n_gen =   2412, tg =  28.13 t/s, tg_3s =  28.90 t/s
+Oct 12 19:23:44 omarchy env[557226]: 7.17.999.566 I slot print_timing: id  0 | task 3400 | n_gen =   2485, tg =  27.99 t/s, tg_3s =  23.99 t/s
+Oct 12 19:23:48 omarchy env[557226]: 7.21.056.606 I slot print_timing: id  0 | task 3400 | n_gen =   2575, tg =  28.04 t/s, tg_3s =  29.44 t/s
+Oct 12 19:23:51 omarchy env[557226]: 7.24.106.712 I slot print_timing: id  0 | task 3400 | n_gen =   2668, tg =  28.12 t/s, tg_3s =  30.49 t/s
+Oct 12 19:23:54 omarchy env[557226]: 7.27.160.537 I slot print_timing: id  0 | task 3400 | n_gen =   2761, tg =  28.19 t/s, tg_3s =  30.45 t/s
+Oct 12 19:23:57 omarchy env[557226]: 7.30.220.205 I slot print_timing: id  0 | task 3400 | n_gen =   2854, tg =  28.26 t/s, tg_3s =  30.40 t/s
+Oct 12 19:24:00 omarchy env[557226]: 7.33.278.246 I slot print_timing: id  0 | task 3400 | n_gen =   2947, tg =  28.32 t/s, tg_3s =  30.41 t/s
+Oct 12 19:24:03 omarchy env[557226]: 7.36.340.774 I slot print_timing: id  0 | task 3400 | n_gen =   3036, tg =  28.34 t/s, tg_3s =  29.06 t/s
+Oct 12 19:24:06 omarchy env[557226]: 7.39.413.512 I slot print_timing: id  0 | task 3400 | n_gen =   3119, tg =  28.30 t/s, tg_3s =  27.01 t/s
+Oct 12 19:24:09 omarchy env[557226]: 7.42.475.145 I slot print_timing: id  0 | task 3400 | n_gen =   3209, tg =  28.33 t/s, tg_3s =  29.40 t/s
+Oct 12 19:24:12 omarchy env[557226]: 7.45.552.521 I slot print_timing: id  0 | task 3400 | n_gen =   3300, tg =  28.37 t/s, tg_3s =  29.57 t/s
+Oct 12 19:24:15 omarchy env[557226]: 7.48.629.385 I slot print_timing: id  0 | task 3400 | n_gen =   3392, tg =  28.41 t/s, tg_3s =  29.90 t/s
+Oct 12 19:24:18 omarchy env[557226]: 7.51.711.064 I slot print_timing: id  0 | task 3400 | n_gen =   3485, tg =  28.45 t/s, tg_3s =  30.18 t/s
+Oct 12 19:24:21 omarchy env[557226]: 7.54.713.448 I slot print_timing: id  0 | task 3400 | n_gen =   3574, tg =  28.48 t/s, tg_3s =  29.64 t/s
+Oct 12 19:24:24 omarchy env[557226]: 7.57.811.156 I slot print_timing: id  0 | task 3400 | n_gen =   3667, tg =  28.52 t/s, tg_3s =  30.02 t/s
+Oct 12 19:24:27 omarchy env[557226]: 8.00.910.796 I slot print_timing: id  0 | task 3400 | n_gen =   3760, tg =  28.55 t/s, tg_3s =  30.00 t/s
+Oct 12 19:24:28 omarchy env[557226]: 8.01.511.226 I slot print_timing: id  0 | task 3400 | prompt eval time =    2344.15 ms /   844 tokens (    2.78 ms per token,   360.05 tokens per second)
+Oct 12 19:24:28 omarchy env[557226]: 8.01.511.229 I slot print_timing: id  0 | task 3400 |        eval time =  132255.57 ms /  3778 tokens (   35.02 ms per token,    28.56 tokens per second)
+Oct 12 19:24:28 omarchy env[557226]: 8.01.511.229 I slot print_timing: id  0 | task 3400 |       total time =  134599.72 ms /  4622 tokens
+Oct 12 19:24:28 omarchy env[557226]: 8.01.511.230 I slot print_timing: id  0 | task 3400 |    graphs reused =       4671
+Oct 12 19:24:28 omarchy env[557226]: 8.01.511.231 I slot print_timing: id  0 | task 3400 | draft acceptance = 0.89682 ( 2425 accepted /  2704 generated), mean len =  2.79
+Oct 12 19:24:28 omarchy env[557226]: 8.01.511.276 I slot      release: id  0 | task 3400 | stop processing: n_tokens = 4621, truncated = 0
+Oct 12 19:24:28 omarchy env[557226]: 8.01.525.251 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 24376853937
+Oct 12 19:24:28 omarchy env[557226]: 8.01.598.661 I slot launch_slot_: id  0 | task 4756 | processing task, is_child = 0
+Oct 12 19:24:33 omarchy env[557226]: 8.06.621.037 I slot print_timing: id  0 | task 4756 | n_gen =    100, tg =  30.30 t/s, tg_3s =  30.60 t/s
+Oct 12 19:24:36 omarchy env[557226]: 8.09.693.546 I slot print_timing: id  0 | task 4756 | n_gen =    195, tg =  30.60 t/s, tg_3s =  30.92 t/s
+Oct 12 19:24:39 omarchy env[557226]: 8.12.771.531 I slot print_timing: id  0 | task 4756 | n_gen =    284, tg =  30.05 t/s, tg_3s =  28.92 t/s
+Oct 12 19:24:42 omarchy env[557226]: 8.15.847.178 I slot print_timing: id  0 | task 4756 | n_gen =    369, tg =  29.45 t/s, tg_3s =  27.64 t/s
+Oct 12 19:24:45 omarchy env[557226]: 8.18.932.176 I slot print_timing: id  0 | task 4756 | n_gen =    459, tg =  29.40 t/s, tg_3s =  29.17 t/s
+Oct 12 19:24:48 omarchy env[557226]: 8.22.010.628 I slot print_timing: id  0 | task 4756 | n_gen =    545, tg =  29.16 t/s, tg_3s =  27.94 t/s
+Oct 12 19:24:52 omarchy env[557226]: 8.25.094.791 I slot print_timing: id  0 | task 4756 | n_gen =    633, tg =  29.07 t/s, tg_3s =  28.53 t/s
+Oct 12 19:24:55 omarchy env[557226]: 8.28.183.474 I slot print_timing: id  0 | task 4756 | n_gen =    719, tg =  28.92 t/s, tg_3s =  27.84 t/s
+Oct 12 19:24:58 omarchy env[557226]: 8.31.271.904 I slot print_timing: id  0 | task 4756 | n_gen =    799, tg =  28.58 t/s, tg_3s =  25.90 t/s
+Oct 12 19:25:01 omarchy env[557226]: 8.34.361.987 I slot print_timing: id  0 | task 4756 | n_gen =    885, tg =  28.51 t/s, tg_3s =  27.83 t/s
+Oct 12 19:25:04 omarchy env[557226]: 8.37.455.336 I slot print_timing: id  0 | task 4756 | n_gen =    963, tg =  28.21 t/s, tg_3s =  25.22 t/s
+Oct 12 19:25:07 omarchy env[557226]: 8.40.455.917 I slot print_timing: id  0 | task 4756 | n_gen =   1043, tg =  28.08 t/s, tg_3s =  26.66 t/s
+Oct 12 19:25:10 omarchy env[557226]: 8.43.457.972 I slot print_timing: id  0 | task 4756 | n_gen =   1124, tg =  28.00 t/s, tg_3s =  26.98 t/s
+Oct 12 19:25:13 omarchy env[557226]: 8.46.459.331 I slot print_timing: id  0 | task 4756 | n_gen =   1213, tg =  28.12 t/s, tg_3s =  29.65 t/s
+Oct 12 19:25:16 omarchy env[557226]: 8.49.473.539 I slot print_timing: id  0 | task 4756 | n_gen =   1289, tg =  27.93 t/s, tg_3s =  25.21 t/s
+Oct 12 19:25:19 omarchy env[557226]: 8.52.481.631 I slot print_timing: id  0 | task 4756 | n_gen =   1370, tg =  27.87 t/s, tg_3s =  26.93 t/s
+Oct 12 19:25:22 omarchy env[557226]: 8.55.491.965 I slot print_timing: id  0 | task 4756 | n_gen =   1447, tg =  27.73 t/s, tg_3s =  25.58 t/s
+Oct 12 19:25:25 omarchy env[557226]: 8.58.509.131 I slot print_timing: id  0 | task 4756 | n_gen =   1525, tg =  27.63 t/s, tg_3s =  25.85 t/s
+Oct 12 19:25:28 omarchy env[557226]: 9.01.524.899 I slot print_timing: id  0 | task 4756 | n_gen =   1615, tg =  27.75 t/s, tg_3s =  29.84 t/s
+Oct 12 19:25:31 omarchy env[557226]: 9.04.541.523 I slot print_timing: id  0 | task 4756 | n_gen =   1696, tg =  27.70 t/s, tg_3s =  26.85 t/s
+Oct 12 19:25:34 omarchy env[557226]: 9.07.560.969 I slot print_timing: id  0 | task 4756 | n_gen =   1777, tg =  27.66 t/s, tg_3s =  26.83 t/s
+Oct 12 19:25:37 omarchy env[557226]: 9.10.583.349 I slot print_timing: id  0 | task 4756 | n_gen =   1856, tg =  27.59 t/s, tg_3s =  26.14 t/s
+Oct 12 19:25:40 omarchy env[557226]: 9.13.600.151 I slot print_timing: id  0 | task 4756 | n_gen =   1930, tg =  27.46 t/s, tg_3s =  24.53 t/s
+Oct 12 19:25:43 omarchy env[557226]: 9.16.626.291 I slot print_timing: id  0 | task 4756 | n_gen =   2011, tg =  27.43 t/s, tg_3s =  26.77 t/s
+Oct 12 19:25:46 omarchy env[557226]: 9.19.654.919 I slot print_timing: id  0 | task 4756 | n_gen =   2087, tg =  27.34 t/s, tg_3s =  25.09 t/s
+Oct 12 19:25:49 omarchy env[557226]: 9.22.684.955 I slot print_timing: id  0 | task 4756 | n_gen =   2169, tg =  27.33 t/s, tg_3s =  27.06 t/s
+Oct 12 19:25:52 omarchy env[557226]: 9.25.715.340 I slot print_timing: id  0 | task 4756 | n_gen =   2260, tg =  27.43 t/s, tg_3s =  30.03 t/s
+Oct 12 19:25:55 omarchy env[557226]: 9.28.752.600 I slot print_timing: id  0 | task 4756 | n_gen =   2342, tg =  27.41 t/s, tg_3s =  27.00 t/s
+Oct 12 19:25:58 omarchy env[557226]: 9.31.784.902 I slot print_timing: id  0 | task 4756 | n_gen =   2433, tg =  27.50 t/s, tg_3s =  30.01 t/s
+Oct 12 19:26:01 omarchy env[557226]: 9.34.829.838 I slot print_timing: id  0 | task 4756 | n_gen =   2524, tg =  27.58 t/s, tg_3s =  29.89 t/s
+Oct 12 19:26:04 omarchy env[557226]: 9.37.875.485 I slot print_timing: id  0 | task 4756 | n_gen =   2617, tg =  27.68 t/s, tg_3s =  30.54 t/s
+Oct 12 19:26:07 omarchy env[557226]: 9.40.918.881 I slot print_timing: id  0 | task 4756 | n_gen =   2707, tg =  27.74 t/s, tg_3s =  29.57 t/s
+Oct 12 19:26:10 omarchy env[557226]: 9.43.974.230 I slot print_timing: id  0 | task 4756 | n_gen =   2796, tg =  27.78 t/s, tg_3s =  29.13 t/s
+Oct 12 19:26:13 omarchy env[557226]: 9.47.031.135 I slot print_timing: id  0 | task 4756 | n_gen =   2877, tg =  27.74 t/s, tg_3s =  26.50 t/s
+Oct 12 19:26:17 omarchy env[557226]: 9.50.077.643 I slot print_timing: id  0 | task 4756 | n_gen =   2966, tg =  27.78 t/s, tg_3s =  29.21 t/s
+Oct 12 19:26:20 omarchy env[557226]: 9.53.136.533 I slot print_timing: id  0 | task 4756 | n_gen =   3054, tg =  27.81 t/s, tg_3s =  28.77 t/s
+Oct 12 19:26:23 omarchy env[557226]: 9.56.193.326 I slot print_timing: id  0 | task 4756 | n_gen =   3137, tg =  27.79 t/s, tg_3s =  27.15 t/s
+Oct 12 19:26:26 omarchy env[557226]: 9.59.254.781 I slot print_timing: id  0 | task 4756 | n_gen =   3213, tg =  27.71 t/s, tg_3s =  24.82 t/s
+Oct 12 19:26:29 omarchy env[557226]: 10.02.315.839 I slot print_timing: id  0 | task 4756 | n_gen =   3291, tg =  27.66 t/s, tg_3s =  25.48 t/s
+Oct 12 19:26:32 omarchy env[557226]: 10.05.381.327 I slot print_timing: id  0 | task 4756 | n_gen =   3379, tg =  27.68 t/s, tg_3s =  28.71 t/s
+Oct 12 19:26:35 omarchy env[557226]: 10.08.453.821 I slot print_timing: id  0 | task 4756 | n_gen =   3462, tg =  27.67 t/s, tg_3s =  27.01 t/s
+Oct 12 19:26:38 omarchy env[557226]: 10.11.527.791 I slot print_timing: id  0 | task 4756 | n_gen =   3555, tg =  27.73 t/s, tg_3s =  30.25 t/s
+Oct 12 19:26:41 omarchy env[557226]: 10.14.609.765 I slot print_timing: id  0 | task 4756 | n_gen =   3645, tg =  27.76 t/s, tg_3s =  29.20 t/s
+Oct 12 19:26:44 omarchy env[557226]: 10.17.684.607 I slot print_timing: id  0 | task 4756 | n_gen =   3733, tg =  27.78 t/s, tg_3s =  28.62 t/s
+Oct 12 19:26:47 omarchy env[557226]: 10.20.766.643 I slot print_timing: id  0 | task 4756 | n_gen =   3819, tg =  27.78 t/s, tg_3s =  27.90 t/s
+Oct 12 19:26:50 omarchy env[557226]: 10.23.864.999 I slot print_timing: id  0 | task 4756 | n_gen =   3911, tg =  27.83 t/s, tg_3s =  29.69 t/s
+Oct 12 19:26:53 omarchy env[557226]: 10.26.964.369 I slot print_timing: id  0 | task 4756 | n_gen =   4004, tg =  27.87 t/s, tg_3s =  30.01 t/s
+Oct 12 19:26:57 omarchy env[557226]: 10.30.063.369 I slot print_timing: id  0 | task 4756 | n_gen =   4097, tg =  27.92 t/s, tg_3s =  30.01 t/s
+Oct 12 19:27:00 omarchy env[557226]: 10.33.162.474 I slot print_timing: id  0 | task 4756 | n_gen =   4190, tg =  27.96 t/s, tg_3s =  30.01 t/s
+Oct 12 19:27:03 omarchy env[557226]: 10.36.163.210 I slot print_timing: id  0 | task 4756 | n_gen =   4280, tg =  28.00 t/s, tg_3s =  29.99 t/s
+Oct 12 19:27:06 omarchy env[557226]: 10.39.261.819 I slot print_timing: id  0 | task 4756 | n_gen =   4372, tg =  28.04 t/s, tg_3s =  29.69 t/s
+Oct 12 19:27:09 omarchy env[557226]: 10.42.360.695 I slot print_timing: id  0 | task 4756 | n_gen =   4465, tg =  28.07 t/s, tg_3s =  30.01 t/s
+Oct 12 19:27:11 omarchy env[557226]: 10.44.961.986 I slot print_timing: id  0 | task 4756 | prompt eval time =    1754.67 ms /   580 tokens (    3.03 ms per token,   330.55 tokens per second)
+Oct 12 19:27:11 omarchy env[557226]: 10.44.961.989 I slot print_timing: id  0 | task 4756 |        eval time =  161608.54 ms /  4542 tokens (   35.59 ms per token,    28.10 tokens per second)
+Oct 12 19:27:11 omarchy env[557226]: 10.44.961.989 I slot print_timing: id  0 | task 4756 |       total time =  163363.21 ms /  5122 tokens
+Oct 12 19:27:11 omarchy env[557226]: 10.44.961.990 I slot print_timing: id  0 | task 4756 |    graphs reused =       6302
+Oct 12 19:27:11 omarchy env[557226]: 10.44.961.991 I slot print_timing: id  0 | task 4756 | draft acceptance = 0.87636 ( 2892 accepted /  3300 generated), mean len =  2.75
+Oct 12 19:27:11 omarchy env[557226]: 10.44.962.029 I slot      release: id  0 | task 4756 | stop processing: n_tokens = 5122, truncated = 0
+Oct 12 19:27:11 omarchy env[557226]: 10.44.977.045 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 24540304690
+Oct 12 19:27:11 omarchy env[557226]: 10.45.051.385 I slot launch_slot_: id  0 | task 6410 | processing task, is_child = 0
+Oct 12 19:27:16 omarchy env[557226]: 10.49.952.094 I slot print_timing: id  0 | task 6410 | n_gen =    100, tg =  31.26 t/s, tg_3s =  31.58 t/s
+Oct 12 19:27:19 omarchy env[557226]: 10.53.025.642 I slot print_timing: id  0 | task 6410 | n_gen =    195, tg =  31.09 t/s, tg_3s =  30.91 t/s
+Oct 12 19:27:23 omarchy env[557226]: 10.56.104.091 I slot print_timing: id  0 | task 6410 | n_gen =    282, tg =  30.15 t/s, tg_3s =  28.26 t/s
+Oct 12 19:27:26 omarchy env[557226]: 10.59.183.759 I slot print_timing: id  0 | task 6410 | n_gen =    361, tg =  29.04 t/s, tg_3s =  25.65 t/s
+Oct 12 19:27:29 omarchy env[557226]: 11.02.266.838 I slot print_timing: id  0 | task 6410 | n_gen =    446, tg =  28.74 t/s, tg_3s =  27.57 t/s
+Oct 12 19:27:32 omarchy env[557226]: 11.05.350.725 I slot print_timing: id  0 | task 6410 | n_gen =    527, tg =  28.33 t/s, tg_3s =  26.27 t/s
+Oct 12 19:27:35 omarchy env[557226]: 11.08.431.576 I slot print_timing: id  0 | task 6410 | n_gen =    609, tg =  28.09 t/s, tg_3s =  26.62 t/s
+Oct 12 19:27:38 omarchy env[557226]: 11.11.512.766 I slot print_timing: id  0 | task 6410 | n_gen =    686, tg =  27.70 t/s, tg_3s =  24.99 t/s
+Oct 12 19:27:41 omarchy env[557226]: 11.14.608.772 I slot print_timing: id  0 | task 6410 | n_gen =    782, tg =  28.07 t/s, tg_3s =  31.01 t/s
+Oct 12 19:27:44 omarchy env[557226]: 11.17.695.006 I slot print_timing: id  0 | task 6410 | n_gen =    871, tg =  28.15 t/s, tg_3s =  28.84 t/s
+Oct 12 19:27:47 omarchy env[557226]: 11.20.788.345 I slot print_timing: id  0 | task 6410 | n_gen =    965, tg =  28.35 t/s, tg_3s =  30.39 t/s
+Oct 12 19:27:50 omarchy env[557226]: 11.23.788.551 I slot print_timing: id  0 | task 6410 | n_gen =   1054, tg =  28.46 t/s, tg_3s =  29.66 t/s
+Oct 12 19:27:53 omarchy env[557226]: 11.26.793.638 I slot print_timing: id  0 | task 6410 | n_gen =   1133, tg =  28.29 t/s, tg_3s =  26.29 t/s
+Oct 12 19:27:56 omarchy env[557226]: 11.29.888.436 I slot print_timing: id  0 | task 6410 | n_gen =   1214, tg =  28.14 t/s, tg_3s =  26.17 t/s
+Oct 12 19:27:59 omarchy env[557226]: 11.32.903.281 I slot print_timing: id  0 | task 6410 | n_gen =   1307, tg =  28.32 t/s, tg_3s =  30.85 t/s
+Oct 12 19:28:02 omarchy env[557226]: 11.35.914.552 I slot print_timing: id  0 | task 6410 | n_gen =   1400, tg =  28.48 t/s, tg_3s =  30.88 t/s
+Oct 12 19:28:05 omarchy env[557226]: 11.38.932.251 I slot print_timing: id  0 | task 6410 | n_gen =   1493, tg =  28.61 t/s, tg_3s =  30.82 t/s
+Oct 12 19:28:06 omarchy env[557226]: 11.39.124.868 I slot print_timing: id  0 | task 6410 | prompt eval time =    1733.65 ms /   569 tokens (    3.05 ms per token,   328.21 tokens per second)
+Oct 12 19:28:06 omarchy env[557226]: 11.39.124.870 I slot print_timing: id  0 | task 6410 |        eval time =   52339.72 ms /  1498 tokens (   34.96 ms per token,    28.60 tokens per second)
+Oct 12 19:28:06 omarchy env[557226]: 11.39.124.871 I slot print_timing: id  0 | task 6410 |       total time =   54073.37 ms /  2067 tokens
+Oct 12 19:28:06 omarchy env[557226]: 11.39.124.871 I slot print_timing: id  0 | task 6410 |    graphs reused =       6837
+Oct 12 19:28:06 omarchy env[557226]: 11.39.124.873 I slot print_timing: id  0 | task 6410 | draft acceptance = 0.88192 (  956 accepted /  1084 generated), mean len =  2.76
+Oct 12 19:28:06 omarchy env[557226]: 11.39.124.909 I slot      release: id  0 | task 6410 | stop processing: n_tokens = 2067, truncated = 0
+Oct 12 19:28:06 omarchy env[557226]: 11.39.138.106 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 24594467569
+Oct 12 19:28:06 omarchy env[557226]: 11.39.201.817 I slot launch_slot_: id  0 | task 6956 | processing task, is_child = 0
+Oct 12 19:28:11 omarchy env[557226]: 11.44.750.962 I slot print_timing: id  0 | task 6956 | n_gen =    102, tg =  29.18 t/s, tg_3s =  29.47 t/s
+Oct 12 19:28:14 omarchy env[557226]: 11.47.827.975 I slot print_timing: id  0 | task 6956 | n_gen =    195, tg =  29.67 t/s, tg_3s =  30.22 t/s
+Oct 12 19:28:17 omarchy env[557226]: 11.50.903.996 I slot print_timing: id  0 | task 6956 | n_gen =    279, tg =  28.92 t/s, tg_3s =  27.31 t/s
+Oct 12 19:28:20 omarchy env[557226]: 11.53.987.204 I slot print_timing: id  0 | task 6956 | n_gen =    369, tg =  28.98 t/s, tg_3s =  29.19 t/s
+Oct 12 19:28:24 omarchy env[557226]: 11.57.073.290 I slot print_timing: id  0 | task 6956 | n_gen =    465, tg =  29.40 t/s, tg_3s =  31.11 t/s
+Oct 12 19:28:27 omarchy env[557226]: 12.00.158.930 I slot print_timing: id  0 | task 6956 | n_gen =    559, tg =  29.57 t/s, tg_3s =  30.46 t/s
+Oct 12 19:28:30 omarchy env[557226]: 12.03.244.987 I slot print_timing: id  0 | task 6956 | n_gen =    649, tg =  29.51 t/s, tg_3s =  29.16 t/s
+Oct 12 19:28:33 omarchy env[557226]: 12.06.333.646 I slot print_timing: id  0 | task 6956 | n_gen =    725, tg =  28.91 t/s, tg_3s =  24.61 t/s
+Oct 12 19:28:36 omarchy env[557226]: 12.09.424.627 I slot print_timing: id  0 | task 6956 | n_gen =    803, tg =  28.51 t/s, tg_3s =  25.23 t/s
+Oct 12 19:28:39 omarchy env[557226]: 12.12.519.046 I slot print_timing: id  0 | task 6956 | n_gen =    888, tg =  28.40 t/s, tg_3s =  27.47 t/s
+Oct 12 19:28:42 omarchy env[557226]: 12.15.613.101 I slot print_timing: id  0 | task 6956 | n_gen =    964, tg =  28.06 t/s, tg_3s =  24.56 t/s
+Oct 12 19:28:45 omarchy env[557226]: 12.18.617.484 I slot print_timing: id  0 | task 6956 | n_gen =   1048, tg =  28.05 t/s, tg_3s =  27.96 t/s
+Oct 12 19:28:48 omarchy env[557226]: 12.21.619.233 I slot print_timing: id  0 | task 6956 | n_gen =   1141, tg =  28.27 t/s, tg_3s =  30.98 t/s
+Oct 12 19:28:51 omarchy env[557226]: 12.24.630.185 I slot print_timing: id  0 | task 6956 | n_gen =   1234, tg =  28.45 t/s, tg_3s =  30.89 t/s
+Oct 12 19:28:54 omarchy env[557226]: 12.27.638.506 I slot print_timing: id  0 | task 6956 | n_gen =   1327, tg =  28.61 t/s, tg_3s =  30.91 t/s
+Oct 12 19:28:55 omarchy env[557226]: 12.28.515.697 I slot print_timing: id  0 | task 6956 | prompt eval time =    2088.07 ms /   660 tokens (    3.16 ms per token,   316.08 tokens per second)
+Oct 12 19:28:55 omarchy env[557226]: 12.28.515.699 I slot print_timing: id  0 | task 6956 |        eval time =   47225.69 ms /  1354 tokens (   34.90 ms per token,    28.65 tokens per second)
+Oct 12 19:28:55 omarchy env[557226]: 12.28.515.700 I slot print_timing: id  0 | task 6956 |       total time =   49313.76 ms /  2014 tokens
+Oct 12 19:28:55 omarchy env[557226]: 12.28.515.700 I slot print_timing: id  0 | task 6956 |    graphs reused =       7320
+Oct 12 19:28:55 omarchy env[557226]: 12.28.515.702 I slot print_timing: id  0 | task 6956 | draft acceptance = 0.88344 (  864 accepted /   978 generated), mean len =  2.77
+Oct 12 19:28:55 omarchy env[557226]: 12.28.515.745 I slot      release: id  0 | task 6956 | stop processing: n_tokens = 2013, truncated = 0
+Oct 12 19:28:55 omarchy env[557226]: 12.28.540.838 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 24643858405
+Oct 12 19:28:55 omarchy env[557226]: 12.28.604.646 I slot launch_slot_: id  0 | task 7449 | processing task, is_child = 0
+Oct 12 19:29:00 omarchy env[557226]: 12.33.977.612 I slot print_timing: id  0 | task 7449 | n_gen =    102, tg =  28.44 t/s, tg_3s =  28.72 t/s
+Oct 12 19:29:03 omarchy env[557226]: 12.37.051.311 I slot print_timing: id  0 | task 7449 | n_gen =    192, tg =  28.83 t/s, tg_3s =  29.28 t/s
+Oct 12 19:29:07 omarchy env[557226]: 12.40.126.237 I slot print_timing: id  0 | task 7449 | n_gen =    273, tg =  28.04 t/s, tg_3s =  26.34 t/s
+Oct 12 19:29:10 omarchy env[557226]: 12.43.201.270 I slot print_timing: id  0 | task 7449 | n_gen =    356, tg =  27.79 t/s, tg_3s =  26.99 t/s
+Oct 12 19:29:13 omarchy env[557226]: 12.46.282.731 I slot print_timing: id  0 | task 7449 | n_gen =    444, tg =  27.94 t/s, tg_3s =  28.56 t/s
+Oct 12 19:29:16 omarchy env[557226]: 12.49.363.002 I slot print_timing: id  0 | task 7449 | n_gen =    526, tg =  27.72 t/s, tg_3s =  26.62 t/s
+Oct 12 19:29:19 omarchy env[557226]: 12.52.450.852 I slot print_timing: id  0 | task 7449 | n_gen =    607, tg =  27.52 t/s, tg_3s =  26.23 t/s
+Oct 12 19:29:22 omarchy env[557226]: 12.55.533.869 I slot print_timing: id  0 | task 7449 | n_gen =    686, tg =  27.28 t/s, tg_3s =  25.62 t/s
+Oct 12 19:29:25 omarchy env[557226]: 12.58.624.968 I slot print_timing: id  0 | task 7449 | n_gen =    770, tg =  27.27 t/s, tg_3s =  27.17 t/s
+Oct 12 19:29:28 omarchy env[557226]: 13.01.712.641 I slot print_timing: id  0 | task 7449 | n_gen =    862, tg =  27.52 t/s, tg_3s =  29.80 t/s
+Oct 12 19:29:31 omarchy env[557226]: 13.04.809.765 I slot print_timing: id  0 | task 7449 | n_gen =    953, tg =  27.69 t/s, tg_3s =  29.38 t/s
+Oct 12 19:29:34 omarchy env[557226]: 13.07.810.055 I slot print_timing: id  0 | task 7449 | n_gen =   1041, tg =  27.82 t/s, tg_3s =  29.33 t/s
+Oct 12 19:29:37 omarchy env[557226]: 13.10.813.773 I slot print_timing: id  0 | task 7449 | n_gen =   1127, tg =  27.88 t/s, tg_3s =  28.63 t/s
+Oct 12 19:29:40 omarchy env[557226]: 13.13.817.953 I slot print_timing: id  0 | task 7449 | n_gen =   1220, tg =  28.09 t/s, tg_3s =  30.96 t/s
+Oct 12 19:29:43 omarchy env[557226]: 13.16.826.437 I slot print_timing: id  0 | task 7449 | n_gen =   1310, tg =  28.21 t/s, tg_3s =  29.92 t/s
+Oct 12 19:29:46 omarchy env[557226]: 13.19.834.139 I slot print_timing: id  0 | task 7449 | n_gen =   1400, tg =  28.32 t/s, tg_3s =  29.92 t/s
+Oct 12 19:29:49 omarchy env[557226]: 13.22.847.271 I slot print_timing: id  0 | task 7449 | n_gen =   1480, tg =  28.21 t/s, tg_3s =  26.55 t/s
+Oct 12 19:29:52 omarchy env[557226]: 13.25.863.115 I slot print_timing: id  0 | task 7449 | n_gen =   1558, tg =  28.09 t/s, tg_3s =  25.86 t/s
+Oct 12 19:29:55 omarchy env[557226]: 13.28.878.350 I slot print_timing: id  0 | task 7449 | n_gen =   1643, tg =  28.09 t/s, tg_3s =  28.19 t/s
+Oct 12 19:29:58 omarchy env[557226]: 13.31.900.625 I slot print_timing: id  0 | task 7449 | n_gen =   1722, tg =  28.00 t/s, tg_3s =  26.14 t/s
+Oct 12 19:30:01 omarchy env[557226]: 13.34.921.323 I slot print_timing: id  0 | task 7449 | n_gen =   1809, tg =  28.03 t/s, tg_3s =  28.80 t/s
+Oct 12 19:30:04 omarchy env[557226]: 13.37.941.652 I slot print_timing: id  0 | task 7449 | n_gen =   1889, tg =  27.96 t/s, tg_3s =  26.49 t/s
+Oct 12 19:30:07 omarchy env[557226]: 13.40.964.567 I slot print_timing: id  0 | task 7449 | n_gen =   1965, tg =  27.84 t/s, tg_3s =  25.14 t/s
+Oct 12 19:30:10 omarchy env[557226]: 13.43.991.765 I slot print_timing: id  0 | task 7449 | n_gen =   2049, tg =  27.84 t/s, tg_3s =  27.75 t/s
+Oct 12 19:30:13 omarchy env[557226]: 13.47.020.485 I slot print_timing: id  0 | task 7449 | n_gen =   2142, tg =  27.95 t/s, tg_3s =  30.71 t/s
+Oct 12 19:30:16 omarchy env[557226]: 13.50.054.123 I slot print_timing: id  0 | task 7449 | n_gen =   2234, tg =  28.04 t/s, tg_3s =  30.33 t/s
+Oct 12 19:30:20 omarchy env[557226]: 13.53.093.463 I slot print_timing: id  0 | task 7449 | n_gen =   2327, tg =  28.14 t/s, tg_3s =  30.60 t/s
+Oct 12 19:30:23 omarchy env[557226]: 13.56.133.884 I slot print_timing: id  0 | task 7449 | n_gen =   2420, tg =  28.22 t/s, tg_3s =  30.59 t/s
+Oct 12 19:30:26 omarchy env[557226]: 13.59.179.049 I slot print_timing: id  0 | task 7449 | n_gen =   2513, tg =  28.30 t/s, tg_3s =  30.54 t/s
+Oct 12 19:30:27 omarchy env[557226]: 14.00.356.621 I slot print_timing: id  0 | task 7449 | prompt eval time =    1822.03 ms /   597 tokens (    3.05 ms per token,   327.66 tokens per second)
+Oct 12 19:30:27 omarchy env[557226]: 14.00.356.624 I slot print_timing: id  0 | task 7449 |        eval time =   89929.83 ms /  2549 tokens (   35.29 ms per token,    28.33 tokens per second)
+Oct 12 19:30:27 omarchy env[557226]: 14.00.356.624 I slot print_timing: id  0 | task 7449 |       total time =   91751.86 ms /  3146 tokens
+Oct 12 19:30:27 omarchy env[557226]: 14.00.356.624 I slot print_timing: id  0 | task 7449 |    graphs reused =       8236
+Oct 12 19:30:27 omarchy env[557226]: 14.00.356.626 I slot print_timing: id  0 | task 7449 | draft acceptance = 0.87433 ( 1621 accepted /  1854 generated), mean len =  2.75
+Oct 12 19:30:27 omarchy env[557226]: 14.00.356.666 I slot      release: id  0 | task 7449 | stop processing: n_tokens = 3145, truncated = 0
+Oct 12 19:30:27 omarchy env[557226]: 14.00.387.937 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 24735699327
+Oct 12 19:30:27 omarchy env[557226]: 14.00.454.464 I slot launch_slot_: id  0 | task 8380 | processing task, is_child = 0
+Oct 12 19:30:32 omarchy env[557226]: 14.05.948.922 I slot print_timing: id  0 | task 8380 | n_gen =    101, tg =  29.00 t/s, tg_3s =  29.29 t/s
+Oct 12 19:30:35 omarchy env[557226]: 14.09.027.545 I slot print_timing: id  0 | task 8380 | n_gen =    190, tg =  28.96 t/s, tg_3s =  28.91 t/s
+Oct 12 19:30:39 omarchy env[557226]: 14.12.106.792 I slot print_timing: id  0 | task 8380 | n_gen =    274, tg =  28.42 t/s, tg_3s =  27.28 t/s
+Oct 12 19:30:42 omarchy env[557226]: 14.15.189.105 I slot print_timing: id  0 | task 8380 | n_gen =    357, tg =  28.06 t/s, tg_3s =  26.93 t/s
+Oct 12 19:30:45 omarchy env[557226]: 14.18.272.344 I slot print_timing: id  0 | task 8380 | n_gen =    429, tg =  27.14 t/s, tg_3s =  23.35 t/s
+Oct 12 19:30:48 omarchy env[557226]: 14.21.352.158 I slot print_timing: id  0 | task 8380 | n_gen =    519, tg =  27.48 t/s, tg_3s =  29.22 t/s
+Oct 12 19:30:51 omarchy env[557226]: 14.24.440.116 I slot print_timing: id  0 | task 8380 | n_gen =    607, tg =  27.62 t/s, tg_3s =  28.50 t/s
+Oct 12 19:30:54 omarchy env[557226]: 14.27.530.863 I slot print_timing: id  0 | task 8380 | n_gen =    694, tg =  27.69 t/s, tg_3s =  28.15 t/s
+Oct 12 19:30:57 omarchy env[557226]: 14.30.625.020 I slot print_timing: id  0 | task 8380 | n_gen =    781, tg =  27.73 t/s, tg_3s =  28.12 t/s
+Oct 12 19:31:00 omarchy env[557226]: 14.33.720.398 I slot print_timing: id  0 | task 8380 | n_gen =    867, tg =  27.74 t/s, tg_3s =  27.78 t/s
+Oct 12 19:31:03 omarchy env[557226]: 14.36.720.911 I slot print_timing: id  0 | task 8380 | n_gen =    948, tg =  27.67 t/s, tg_3s =  27.00 t/s
+Oct 12 19:31:06 omarchy env[557226]: 14.39.816.285 I slot print_timing: id  0 | task 8380 | n_gen =   1024, tg =  27.42 t/s, tg_3s =  24.55 t/s
+Oct 12 19:31:09 omarchy env[557226]: 14.42.820.595 I slot print_timing: id  0 | task 8380 | n_gen =   1102, tg =  27.31 t/s, tg_3s =  25.96 t/s
+Oct 12 19:31:12 omarchy env[557226]: 14.45.832.293 I slot print_timing: id  0 | task 8380 | n_gen =   1175, tg =  27.09 t/s, tg_3s =  24.24 t/s
+Oct 12 19:31:15 omarchy env[557226]: 14.48.841.626 I slot print_timing: id  0 | task 8380 | n_gen =   1268, tg =  27.34 t/s, tg_3s =  30.90 t/s
+Oct 12 19:31:18 omarchy env[557226]: 14.51.849.498 I slot print_timing: id  0 | task 8380 | n_gen =   1361, tg =  27.56 t/s, tg_3s =  30.92 t/s
+Oct 12 19:31:21 omarchy env[557226]: 14.54.869.597 I slot print_timing: id  0 | task 8380 | n_gen =   1443, tg =  27.54 t/s, tg_3s =  27.15 t/s
+Oct 12 19:31:24 omarchy env[557226]: 14.57.881.630 I slot print_timing: id  0 | task 8380 | n_gen =   1525, tg =  27.52 t/s, tg_3s =  27.22 t/s
+Oct 12 19:31:27 omarchy env[557226]: 15.00.898.394 I slot print_timing: id  0 | task 8380 | n_gen =   1616, tg =  27.66 t/s, tg_3s =  30.16 t/s
+Oct 12 19:31:30 omarchy env[557226]: 15.03.919.386 I slot print_timing: id  0 | task 8380 | n_gen =   1709, tg =  27.81 t/s, tg_3s =  30.78 t/s
+Oct 12 19:31:33 omarchy env[557226]: 15.06.940.290 I slot print_timing: id  0 | task 8380 | n_gen =   1799, tg =  27.90 t/s, tg_3s =  29.79 t/s
+Oct 12 19:31:36 omarchy env[557226]: 15.09.966.913 I slot print_timing: id  0 | task 8380 | n_gen =   1878, tg =  27.82 t/s, tg_3s =  26.10 t/s
+Oct 12 19:31:39 omarchy env[557226]: 15.12.993.563 I slot print_timing: id  0 | task 8380 | n_gen =   1963, tg =  27.83 t/s, tg_3s =  28.08 t/s
+Oct 12 19:31:42 omarchy env[557226]: 15.16.022.511 I slot print_timing: id  0 | task 8380 | n_gen =   2046, tg =  27.81 t/s, tg_3s =  27.40 t/s
+Oct 12 19:31:45 omarchy env[557226]: 15.19.052.250 I slot print_timing: id  0 | task 8380 | n_gen =   2133, tg =  27.85 t/s, tg_3s =  28.72 t/s
+Oct 12 19:31:49 omarchy env[557226]: 15.22.087.482 I slot print_timing: id  0 | task 8380 | n_gen =   2223, tg =  27.92 t/s, tg_3s =  29.65 t/s
+Oct 12 19:31:52 omarchy env[557226]: 15.25.126.280 I slot print_timing: id  0 | task 8380 | n_gen =   2303, tg =  27.86 t/s, tg_3s =  26.33 t/s
+Oct 12 19:31:55 omarchy env[557226]: 15.28.167.536 I slot print_timing: id  0 | task 8380 | n_gen =   2390, tg =  27.89 t/s, tg_3s =  28.61 t/s
+Oct 12 19:31:58 omarchy env[557226]: 15.31.209.909 I slot print_timing: id  0 | task 8380 | n_gen =   2461, tg =  27.73 t/s, tg_3s =  23.34 t/s
+Oct 12 19:32:01 omarchy env[557226]: 15.34.258.603 I slot print_timing: id  0 | task 8380 | n_gen =   2552, tg =  27.80 t/s, tg_3s =  29.85 t/s
+Oct 12 19:32:04 omarchy env[557226]: 15.37.303.576 I slot print_timing: id  0 | task 8380 | n_gen =   2645, tg =  27.89 t/s, tg_3s =  30.54 t/s
+Oct 12 19:32:07 omarchy env[557226]: 15.40.360.953 I slot print_timing: id  0 | task 8380 | n_gen =   2738, tg =  27.97 t/s, tg_3s =  30.42 t/s
+Oct 12 19:32:10 omarchy env[557226]: 15.43.406.493 I slot print_timing: id  0 | task 8380 | n_gen =   2830, tg =  28.04 t/s, tg_3s =  30.21 t/s
+Oct 12 19:32:13 omarchy env[557226]: 15.46.463.254 I slot print_timing: id  0 | task 8380 | n_gen =   2923, tg =  28.11 t/s, tg_3s =  30.42 t/s
+Oct 12 19:32:14 omarchy env[557226]: 15.47.744.864 I slot print_timing: id  0 | task 8380 | prompt eval time =    2046.38 ms /   688 tokens (    2.97 ms per token,   336.20 tokens per second)
+Oct 12 19:32:14 omarchy env[557226]: 15.47.744.867 I slot print_timing: id  0 | task 8380 |        eval time =  105243.89 ms /  2962 tokens (   35.54 ms per token,    28.13 tokens per second)
+Oct 12 19:32:14 omarchy env[557226]: 15.47.744.867 I slot print_timing: id  0 | task 8380 |       total time =  107290.28 ms /  3650 tokens
+Oct 12 19:32:14 omarchy env[557226]: 15.47.744.868 I slot print_timing: id  0 | task 8380 |    graphs reused =       9305
+Oct 12 19:32:14 omarchy env[557226]: 15.47.744.870 I slot print_timing: id  0 | task 8380 | draft acceptance = 0.86830 ( 1879 accepted /  2164 generated), mean len =  2.74
+Oct 12 19:32:14 omarchy env[557226]: 15.47.744.912 I slot      release: id  0 | task 8380 | stop processing: n_tokens = 3649, truncated = 0
+Oct 12 19:32:14 omarchy env[557226]: 15.47.775.201 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 24843087573
+Oct 12 19:32:14 omarchy env[557226]: 15.47.849.982 I slot launch_slot_: id  0 | task 9466 | processing task, is_child = 0
+Oct 12 19:32:20 omarchy env[557226]: 15.53.441.450 I slot print_timing: id  0 | task 9466 | n_gen =    102, tg =  28.46 t/s, tg_3s =  28.74 t/s
+Oct 12 19:32:23 omarchy env[557226]: 15.56.520.379 I slot print_timing: id  0 | task 9466 | n_gen =    193, tg =  28.97 t/s, tg_3s =  29.56 t/s
+Oct 12 19:32:26 omarchy env[557226]: 15.59.597.582 I slot print_timing: id  0 | task 9466 | n_gen =    282, tg =  28.96 t/s, tg_3s =  28.92 t/s
+Oct 12 19:32:29 omarchy env[557226]: 16.02.679.242 I slot print_timing: id  0 | task 9466 | n_gen =    372, tg =  29.02 t/s, tg_3s =  29.21 t/s
+Oct 12 19:32:32 omarchy env[557226]: 16.05.759.885 I slot print_timing: id  0 | task 9466 | n_gen =    463, tg =  29.12 t/s, tg_3s =  29.54 t/s
+Oct 12 19:32:35 omarchy env[557226]: 16.08.845.635 I slot print_timing: id  0 | task 9466 | n_gen =    551, tg =  29.02 t/s, tg_3s =  28.52 t/s
+Oct 12 19:32:38 omarchy env[557226]: 16.11.932.984 I slot print_timing: id  0 | task 9466 | n_gen =    643, tg =  29.13 t/s, tg_3s =  29.80 t/s
+Oct 12 19:32:41 omarchy env[557226]: 16.15.021.197 I slot print_timing: id  0 | task 9466 | n_gen =    734, tg =  29.17 t/s, tg_3s =  29.47 t/s
+Oct 12 19:32:45 omarchy env[557226]: 16.18.108.233 I slot print_timing: id  0 | task 9466 | n_gen =    825, tg =  29.20 t/s, tg_3s =  29.48 t/s
+Oct 12 19:32:48 omarchy env[557226]: 16.21.111.365 I slot print_timing: id  0 | task 9466 | n_gen =    916, tg =  29.31 t/s, tg_3s =  30.30 t/s
+Oct 12 19:32:51 omarchy env[557226]: 16.24.207.510 I slot print_timing: id  0 | task 9466 | n_gen =   1011, tg =  29.43 t/s, tg_3s =  30.68 t/s
+Oct 12 19:32:54 omarchy env[557226]: 16.27.212.918 I slot print_timing: id  0 | task 9466 | n_gen =   1093, tg =  29.26 t/s, tg_3s =  27.28 t/s
+Oct 12 19:32:57 omarchy env[557226]: 16.30.224.831 I slot print_timing: id  0 | task 9466 | n_gen =   1185, tg =  29.36 t/s, tg_3s =  30.55 t/s
+Oct 12 19:33:00 omarchy env[557226]: 16.33.232.494 I slot print_timing: id  0 | task 9466 | n_gen =   1278, tg =  29.47 t/s, tg_3s =  30.92 t/s
+Oct 12 19:33:03 omarchy env[557226]: 16.36.244.871 I slot print_timing: id  0 | task 9466 | n_gen =   1369, tg =  29.51 t/s, tg_3s =  30.21 t/s
+Oct 12 19:33:06 omarchy env[557226]: 16.39.262.028 I slot print_timing: id  0 | task 9466 | n_gen =   1462, tg =  29.59 t/s, tg_3s =  30.82 t/s
+Oct 12 19:33:09 omarchy env[557226]: 16.42.281.047 I slot print_timing: id  0 | task 9466 | n_gen =   1555, tg =  29.66 t/s, tg_3s =  30.80 t/s
+Oct 12 19:33:12 omarchy env[557226]: 16.45.299.718 I slot print_timing: id  0 | task 9466 | n_gen =   1648, tg =  29.73 t/s, tg_3s =  30.81 t/s
+Oct 12 19:33:13 omarchy env[557226]: 16.46.663.365 I slot print_timing: id  0 | task 9466 | prompt eval time =    2042.94 ms /   684 tokens (    2.99 ms per token,   334.81 tokens per second)
+Oct 12 19:33:13 omarchy env[557226]: 16.46.663.368 I slot print_timing: id  0 | task 9466 |        eval time =   56770.32 ms /  1688 tokens (   33.65 ms per token,    29.72 tokens per second)
+Oct 12 19:33:13 omarchy env[557226]: 16.46.663.368 I slot print_timing: id  0 | task 9466 |       total time =   58813.26 ms /  2372 tokens
+Oct 12 19:33:13 omarchy env[557226]: 16.46.663.368 I slot print_timing: id  0 | task 9466 |    graphs reused =       9884
+Oct 12 19:33:13 omarchy env[557226]: 16.46.663.370 I slot print_timing: id  0 | task 9466 | draft acceptance = 0.93867 ( 1102 accepted /  1174 generated), mean len =  2.88
+Oct 12 19:33:13 omarchy env[557226]: 16.46.663.410 I slot      release: id  0 | task 9466 | stop processing: n_tokens = 2373, truncated = 0
+Oct 12 19:33:13 omarchy env[557226]: 16.46.676.728 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 24902006071
+Oct 12 19:33:13 omarchy env[557226]: 16.46.740.799 I slot launch_slot_: id  0 | task 10057 | processing task, is_child = 0
+Oct 12 19:33:19 omarchy env[557226]: 16.52.140.424 I slot print_timing: id  0 | task 10057 | n_gen =    102, tg =  30.10 t/s, tg_3s =  30.40 t/s
+Oct 12 19:33:22 omarchy env[557226]: 16.55.220.471 I slot print_timing: id  0 | task 10057 | n_gen =    198, tg =  30.61 t/s, tg_3s =  31.17 t/s
+Oct 12 19:33:25 omarchy env[557226]: 16.58.300.443 I slot print_timing: id  0 | task 10057 | n_gen =    287, tg =  30.06 t/s, tg_3s =  28.90 t/s
+Oct 12 19:33:28 omarchy env[557226]: 17.01.379.646 I slot print_timing: id  0 | task 10057 | n_gen =    364, tg =  28.82 t/s, tg_3s =  25.01 t/s
+Oct 12 19:33:31 omarchy env[557226]: 17.04.465.512 I slot print_timing: id  0 | task 10057 | n_gen =    439, tg =  27.93 t/s, tg_3s =  24.30 t/s
+Oct 12 19:33:34 omarchy env[557226]: 17.07.541.390 I slot print_timing: id  0 | task 10057 | n_gen =    528, tg =  28.10 t/s, tg_3s =  28.93 t/s
+Oct 12 19:33:37 omarchy env[557226]: 17.10.627.803 I slot print_timing: id  0 | task 10057 | n_gen =    622, tg =  28.43 t/s, tg_3s =  30.46 t/s
+Oct 12 19:33:40 omarchy env[557226]: 17.13.714.453 I slot print_timing: id  0 | task 10057 | n_gen =    717, tg =  28.72 t/s, tg_3s =  30.78 t/s
+Oct 12 19:33:43 omarchy env[557226]: 17.16.807.904 I slot print_timing: id  0 | task 10057 | n_gen =    803, tg =  28.62 t/s, tg_3s =  27.80 t/s
+Oct 12 19:33:46 omarchy env[557226]: 17.19.897.903 I slot print_timing: id  0 | task 10057 | n_gen =    888, tg =  28.51 t/s, tg_3s =  27.51 t/s
+Oct 12 19:33:49 omarchy env[557226]: 17.22.903.511 I slot print_timing: id  0 | task 10057 | n_gen =    976, tg =  28.58 t/s, tg_3s =  29.28 t/s
+Oct 12 19:33:52 omarchy env[557226]: 17.25.999.196 I slot print_timing: id  0 | task 10057 | n_gen =   1064, tg =  28.56 t/s, tg_3s =  28.43 t/s
+Oct 12 19:33:55 omarchy env[557226]: 17.29.010.157 I slot print_timing: id  0 | task 10057 | n_gen =   1152, tg =  28.61 t/s, tg_3s =  29.23 t/s
+Oct 12 19:33:58 omarchy env[557226]: 17.32.017.348 I slot print_timing: id  0 | task 10057 | n_gen =   1245, tg =  28.77 t/s, tg_3s =  30.93 t/s
+Oct 12 19:34:01 omarchy env[557226]: 17.35.027.471 I slot print_timing: id  0 | task 10057 | n_gen =   1337, tg =  28.89 t/s, tg_3s =  30.56 t/s
+Oct 12 19:34:04 omarchy env[557226]: 17.37.457.055 I slot print_timing: id  0 | task 10057 | prompt eval time =    2044.23 ms /   682 tokens (    3.00 ms per token,   333.62 tokens per second)
+Oct 12 19:34:04 omarchy env[557226]: 17.37.457.057 I slot print_timing: id  0 | task 10057 |        eval time =   48671.92 ms /  1411 tokens (   34.52 ms per token,    28.97 tokens per second)
+Oct 12 19:34:04 omarchy env[557226]: 17.37.457.058 I slot print_timing: id  0 | task 10057 |       total time =   50716.15 ms /  2093 tokens
+Oct 12 19:34:04 omarchy env[557226]: 17.37.457.058 I slot print_timing: id  0 | task 10057 |    graphs reused =      10381
+Oct 12 19:34:04 omarchy env[557226]: 17.37.457.060 I slot print_timing: id  0 | task 10057 | draft acceptance = 0.89980 (  907 accepted /  1008 generated), mean len =  2.80
+Oct 12 19:34:04 omarchy env[557226]: 17.37.457.099 I slot      release: id  0 | task 10057 | stop processing: n_tokens = 2093, truncated = 0
+Oct 12 19:34:04 omarchy env[557226]: 17.37.516.324 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 24952799759
+Oct 12 19:34:04 omarchy env[557226]: 17.37.579.325 I slot launch_slot_: id  0 | task 10565 | processing task, is_child = 0
+Oct 12 19:34:09 omarchy env[557226]: 17.42.775.607 I slot print_timing: id  0 | task 10565 | n_gen =    100, tg =  29.46 t/s, tg_3s =  29.75 t/s
+Oct 12 19:34:12 omarchy env[557226]: 17.45.845.440 I slot print_timing: id  0 | task 10565 | n_gen =    193, tg =  29.86 t/s, tg_3s =  30.29 t/s
+Oct 12 19:34:15 omarchy env[557226]: 17.48.924.968 I slot print_timing: id  0 | task 10565 | n_gen =    285, tg =  29.86 t/s, tg_3s =  29.87 t/s
+Oct 12 19:34:18 omarchy env[557226]: 17.52.002.153 I slot print_timing: id  0 | task 10565 | n_gen =    362, tg =  28.68 t/s, tg_3s =  25.02 t/s
+Oct 12 19:34:22 omarchy env[557226]: 17.55.081.523 I slot print_timing: id  0 | task 10565 | n_gen =    450, tg =  28.66 t/s, tg_3s =  28.58 t/s
+Oct 12 19:34:25 omarchy env[557226]: 17.58.163.648 I slot print_timing: id  0 | task 10565 | n_gen =    540, tg =  28.75 t/s, tg_3s =  29.20 t/s
+Oct 12 19:34:28 omarchy env[557226]: 18.01.245.776 I slot print_timing: id  0 | task 10565 | n_gen =    627, tg =  28.67 t/s, tg_3s =  28.23 t/s
+Oct 12 19:34:31 omarchy env[557226]: 18.04.335.384 I slot print_timing: id  0 | task 10565 | n_gen =    720, tg =  28.85 t/s, tg_3s =  30.10 t/s
+Oct 12 19:34:34 omarchy env[557226]: 18.07.422.272 I slot print_timing: id  0 | task 10565 | n_gen =    813, tg =  28.99 t/s, tg_3s =  30.13 t/s
+Oct 12 19:34:37 omarchy env[557226]: 18.10.516.650 I slot print_timing: id  0 | task 10565 | n_gen =    904, tg =  29.03 t/s, tg_3s =  29.41 t/s
+Oct 12 19:34:40 omarchy env[557226]: 18.13.517.325 I slot print_timing: id  0 | task 10565 | n_gen =    993, tg =  29.09 t/s, tg_3s =  29.66 t/s
+Oct 12 19:34:43 omarchy env[557226]: 18.16.521.300 I slot print_timing: id  0 | task 10565 | n_gen =   1082, tg =  29.13 t/s, tg_3s =  29.63 t/s
+Oct 12 19:34:46 omarchy env[557226]: 18.19.525.432 I slot print_timing: id  0 | task 10565 | n_gen =   1173, tg =  29.22 t/s, tg_3s =  30.29 t/s
+Oct 12 19:34:49 omarchy env[557226]: 18.22.537.352 I slot print_timing: id  0 | task 10565 | n_gen =   1261, tg =  29.22 t/s, tg_3s =  29.22 t/s
+Oct 12 19:34:52 omarchy env[557226]: 18.25.549.490 I slot print_timing: id  0 | task 10565 | n_gen =   1349, tg =  29.22 t/s, tg_3s =  29.22 t/s
+Oct 12 19:34:55 omarchy env[557226]: 18.28.557.438 I slot print_timing: id  0 | task 10565 | n_gen =   1430, tg =  29.08 t/s, tg_3s =  26.93 t/s
+Oct 12 19:34:58 omarchy env[557226]: 18.31.573.842 I slot print_timing: id  0 | task 10565 | n_gen =   1521, tg =  29.14 t/s, tg_3s =  30.17 t/s
+Oct 12 19:35:01 omarchy env[557226]: 18.34.594.661 I slot print_timing: id  0 | task 10565 | n_gen =   1613, tg =  29.21 t/s, tg_3s =  30.46 t/s
+Oct 12 19:35:04 omarchy env[557226]: 18.37.611.818 I slot print_timing: id  0 | task 10565 | n_gen =   1702, tg =  29.23 t/s, tg_3s =  29.50 t/s
+Oct 12 19:35:07 omarchy env[557226]: 18.40.637.636 I slot print_timing: id  0 | task 10565 | n_gen =   1788, tg =  29.19 t/s, tg_3s =  28.42 t/s
+Oct 12 19:35:10 omarchy env[557226]: 18.43.660.673 I slot print_timing: id  0 | task 10565 | n_gen =   1879, tg =  29.23 t/s, tg_3s =  30.10 t/s
+Oct 12 19:35:13 omarchy env[557226]: 18.46.686.328 I slot print_timing: id  0 | task 10565 | n_gen =   1963, tg =  29.17 t/s, tg_3s =  27.76 t/s
+Oct 12 19:35:16 omarchy env[557226]: 18.49.714.640 I slot print_timing: id  0 | task 10565 | n_gen =   2042, tg =  29.03 t/s, tg_3s =  26.09 t/s
+Oct 12 19:35:19 omarchy env[557226]: 18.52.744.984 I slot print_timing: id  0 | task 10565 | n_gen =   2127, tg =  28.99 t/s, tg_3s =  28.05 t/s
+Oct 12 19:35:22 omarchy env[557226]: 18.55.774.787 I slot print_timing: id  0 | task 10565 | n_gen =   2204, tg =  28.85 t/s, tg_3s =  25.41 t/s
+Oct 12 19:35:25 omarchy env[557226]: 18.58.814.785 I slot print_timing: id  0 | task 10565 | n_gen =   2283, tg =  28.74 t/s, tg_3s =  25.99 t/s
+Oct 12 19:35:28 omarchy env[557226]: 19.01.847.364 I slot print_timing: id  0 | task 10565 | n_gen =   2359, tg =  28.61 t/s, tg_3s =  25.06 t/s
+Oct 12 19:35:31 omarchy env[557226]: 19.04.886.993 I slot print_timing: id  0 | task 10565 | n_gen =   2437, tg =  28.50 t/s, tg_3s =  25.66 t/s
+Oct 12 19:35:34 omarchy env[557226]: 19.07.931.059 I slot print_timing: id  0 | task 10565 | n_gen =   2519, tg =  28.45 t/s, tg_3s =  26.94 t/s
+Oct 12 19:35:37 omarchy env[557226]: 19.10.976.104 I slot print_timing: id  0 | task 10565 | n_gen =   2606, tg =  28.45 t/s, tg_3s =  28.57 t/s
+Oct 12 19:35:40 omarchy env[557226]: 19.14.018.920 I slot print_timing: id  0 | task 10565 | n_gen =   2695, tg =  28.48 t/s, tg_3s =  29.25 t/s
+Oct 12 19:35:44 omarchy env[557226]: 19.17.073.467 I slot print_timing: id  0 | task 10565 | n_gen =   2776, tg =  28.42 t/s, tg_3s =  26.52 t/s
+Oct 12 19:35:47 omarchy env[557226]: 19.20.126.196 I slot print_timing: id  0 | task 10565 | n_gen =   2869, tg =  28.48 t/s, tg_3s =  30.46 t/s
+Oct 12 19:35:50 omarchy env[557226]: 19.23.181.080 I slot print_timing: id  0 | task 10565 | n_gen =   2962, tg =  28.54 t/s, tg_3s =  30.44 t/s
+Oct 12 19:35:53 omarchy env[557226]: 19.26.242.517 I slot print_timing: id  0 | task 10565 | n_gen =   3055, tg =  28.59 t/s, tg_3s =  30.38 t/s
+Oct 12 19:35:56 omarchy env[557226]: 19.29.299.629 I slot print_timing: id  0 | task 10565 | n_gen =   3147, tg =  28.63 t/s, tg_3s =  30.09 t/s
+Oct 12 19:35:59 omarchy env[557226]: 19.32.360.649 I slot print_timing: id  0 | task 10565 | n_gen =   3238, tg =  28.66 t/s, tg_3s =  29.73 t/s
+Oct 12 19:36:02 omarchy env[557226]: 19.35.425.814 I slot print_timing: id  0 | task 10565 | n_gen =   3329, tg =  28.69 t/s, tg_3s =  29.69 t/s
+Oct 12 19:36:05 omarchy env[557226]: 19.38.492.257 I slot print_timing: id  0 | task 10565 | n_gen =   3422, tg =  28.73 t/s, tg_3s =  30.33 t/s
+Oct 12 19:36:08 omarchy env[557226]: 19.41.585.270 I slot print_timing: id  0 | task 10565 | n_gen =   3515, tg =  28.76 t/s, tg_3s =  30.07 t/s
+Oct 12 19:36:11 omarchy env[557226]: 19.44.285.412 I slot print_timing: id  0 | task 10565 | prompt eval time =    1835.25 ms /   607 tokens (    3.02 ms per token,   330.75 tokens per second)
+Oct 12 19:36:11 omarchy env[557226]: 19.44.285.415 I slot print_timing: id  0 | task 10565 |        eval time =  124870.60 ms /  3595 tokens (   34.74 ms per token,    28.78 tokens per second)
+Oct 12 19:36:11 omarchy env[557226]: 19.44.285.416 I slot print_timing: id  0 | task 10565 |       total time =  126705.85 ms /  4202 tokens
+Oct 12 19:36:11 omarchy env[557226]: 19.44.285.417 I slot print_timing: id  0 | task 10565 |    graphs reused =      11646
+Oct 12 19:36:11 omarchy env[557226]: 19.44.285.419 I slot print_timing: id  0 | task 10565 | draft acceptance = 0.90430 ( 2315 accepted /  2560 generated), mean len =  2.81
+Oct 12 19:36:11 omarchy env[557226]: 19.44.285.476 I slot      release: id  0 | task 10565 | stop processing: n_tokens = 4202, truncated = 0
+Oct 12 19:36:11 omarchy env[557226]: 19.44.299.909 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 25079628137
+Oct 12 19:36:11 omarchy env[557226]: 19.44.377.689 I slot launch_slot_: id  0 | task 11849 | processing task, is_child = 0
+Oct 12 19:36:16 omarchy env[557226]: 19.49.978.185 I slot print_timing: id  0 | task 11849 | n_gen =    102, tg =  28.50 t/s, tg_3s =  28.78 t/s
+Oct 12 19:36:19 omarchy env[557226]: 19.53.053.616 I slot print_timing: id  0 | task 11849 | n_gen =    189, tg =  28.40 t/s, tg_3s =  28.29 t/s
+Oct 12 19:36:23 omarchy env[557226]: 19.56.128.455 I slot print_timing: id  0 | task 11849 | n_gen =    282, tg =  28.99 t/s, tg_3s =  30.25 t/s
+Oct 12 19:36:26 omarchy env[557226]: 19.59.211.823 I slot print_timing: id  0 | task 11849 | n_gen =    360, tg =  28.10 t/s, tg_3s =  25.30 t/s
+Oct 12 19:36:29 omarchy env[557226]: 20.02.294.721 I slot print_timing: id  0 | task 11849 | n_gen =    448, tg =  28.18 t/s, tg_3s =  28.54 t/s
+Oct 12 19:36:32 omarchy env[557226]: 20.05.378.355 I slot print_timing: id  0 | task 11849 | n_gen =    535, tg =  28.19 t/s, tg_3s =  28.21 t/s
+Oct 12 19:36:35 omarchy env[557226]: 20.08.469.964 I slot print_timing: id  0 | task 11849 | n_gen =    617, tg =  27.95 t/s, tg_3s =  26.52 t/s
+Oct 12 19:36:38 omarchy env[557226]: 20.11.556.953 I slot print_timing: id  0 | task 11849 | n_gen =    710, tg =  28.22 t/s, tg_3s =  30.13 t/s
+Oct 12 19:36:41 omarchy env[557226]: 20.14.652.496 I slot print_timing: id  0 | task 11849 | n_gen =    801, tg =  28.35 t/s, tg_3s =  29.40 t/s
+Oct 12 19:36:44 omarchy env[557226]: 20.17.653.961 I slot print_timing: id  0 | task 11849 | n_gen =    891, tg =  28.51 t/s, tg_3s =  29.99 t/s
+Oct 12 19:36:47 omarchy env[557226]: 20.20.656.354 I slot print_timing: id  0 | task 11849 | n_gen =    981, tg =  28.64 t/s, tg_3s =  29.98 t/s
+Oct 12 19:36:50 omarchy env[557226]: 20.23.656.461 I slot print_timing: id  0 | task 11849 | n_gen =   1072, tg =  28.77 t/s, tg_3s =  30.33 t/s
+Oct 12 19:36:53 omarchy env[557226]: 20.26.671.111 I slot print_timing: id  0 | task 11849 | n_gen =   1163, tg =  28.88 t/s, tg_3s =  30.19 t/s
+Oct 12 19:36:56 omarchy env[557226]: 20.29.678.437 I slot print_timing: id  0 | task 11849 | n_gen =   1252, tg =  28.93 t/s, tg_3s =  29.59 t/s
+Oct 12 19:36:59 omarchy env[557226]: 20.32.693.109 I slot print_timing: id  0 | task 11849 | n_gen =   1332, tg =  28.77 t/s, tg_3s =  26.54 t/s
+Oct 12 19:37:02 omarchy env[557226]: 20.35.707.813 I slot print_timing: id  0 | task 11849 | n_gen =   1409, tg =  28.58 t/s, tg_3s =  25.54 t/s
+Oct 12 19:37:05 omarchy env[557226]: 20.38.723.983 I slot print_timing: id  0 | task 11849 | n_gen =   1499, tg =  28.65 t/s, tg_3s =  29.84 t/s
+Oct 12 19:37:08 omarchy env[557226]: 20.41.744.309 I slot print_timing: id  0 | task 11849 | n_gen =   1592, tg =  28.77 t/s, tg_3s =  30.79 t/s
+Oct 12 19:37:11 omarchy env[557226]: 20.44.764.898 I slot print_timing: id  0 | task 11849 | n_gen =   1685, tg =  28.87 t/s, tg_3s =  30.79 t/s
+Oct 12 19:37:14 omarchy env[557226]: 20.47.784.122 I slot print_timing: id  0 | task 11849 | n_gen =   1778, tg =  28.97 t/s, tg_3s =  30.80 t/s
+Oct 12 19:37:17 omarchy env[557226]: 20.50.422.381 I slot print_timing: id  0 | task 11849 | prompt eval time =    2056.55 ms /   718 tokens (    2.86 ms per token,   349.13 tokens per second)
+Oct 12 19:37:17 omarchy env[557226]: 20.50.422.383 I slot print_timing: id  0 | task 11849 |        eval time =   63988.02 ms /  1859 tokens (   34.44 ms per token,    29.04 tokens per second)
+Oct 12 19:37:17 omarchy env[557226]: 20.50.422.384 I slot print_timing: id  0 | task 11849 |       total time =   66044.57 ms /  2577 tokens
+Oct 12 19:37:17 omarchy env[557226]: 20.50.422.384 I slot print_timing: id  0 | task 11849 |    graphs reused =      12298
+Oct 12 19:37:17 omarchy env[557226]: 20.50.422.386 I slot print_timing: id  0 | task 11849 | draft acceptance = 0.90545 ( 1197 accepted /  1322 generated), mean len =  2.81
+Oct 12 19:37:17 omarchy env[557226]: 20.50.422.429 I slot      release: id  0 | task 11849 | stop processing: n_tokens = 2576, truncated = 0
+Oct 12 19:37:18 omarchy env[557226]: 20.51.091.719 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 25145765090
+Oct 12 19:37:18 omarchy env[557226]: 20.51.157.093 I slot launch_slot_: id  0 | task 12514 | processing task, is_child = 0
+Oct 12 19:37:23 omarchy env[557226]: 20.56.454.167 I slot print_timing: id  0 | task 12514 | n_gen =    102, tg =  29.25 t/s, tg_3s =  29.54 t/s
+Oct 12 19:37:26 omarchy env[557226]: 20.59.526.956 I slot print_timing: id  0 | task 12514 | n_gen =    194, tg =  29.57 t/s, tg_3s =  29.94 t/s
+Oct 12 19:37:29 omarchy env[557226]: 21.02.609.134 I slot print_timing: id  0 | task 12514 | n_gen =    285, tg =  29.56 t/s, tg_3s =  29.52 t/s
+Oct 12 19:37:32 omarchy env[557226]: 21.05.687.235 I slot print_timing: id  0 | task 12514 | n_gen =    360, tg =  28.30 t/s, tg_3s =  24.37 t/s
+Oct 12 19:37:35 omarchy env[557226]: 21.08.770.551 I slot print_timing: id  0 | task 12514 | n_gen =    434, tg =  27.46 t/s, tg_3s =  24.00 t/s
+Oct 12 19:37:38 omarchy env[557226]: 21.11.849.607 I slot print_timing: id  0 | task 12514 | n_gen =    524, tg =  27.75 t/s, tg_3s =  29.23 t/s
+Oct 12 19:37:41 omarchy env[557226]: 21.14.931.918 I slot print_timing: id  0 | task 12514 | n_gen =    618, tg =  28.13 t/s, tg_3s =  30.50 t/s
+Oct 12 19:37:44 omarchy env[557226]: 21.18.017.013 I slot print_timing: id  0 | task 12514 | n_gen =    713, tg =  28.46 t/s, tg_3s =  30.79 t/s
+Oct 12 19:37:48 omarchy env[557226]: 21.21.105.303 I slot print_timing: id  0 | task 12514 | n_gen =    805, tg =  28.61 t/s, tg_3s =  29.79 t/s
+Oct 12 19:37:51 omarchy env[557226]: 21.24.195.061 I slot print_timing: id  0 | task 12514 | n_gen =    899, tg =  28.79 t/s, tg_3s =  30.42 t/s
+Oct 12 19:37:54 omarchy env[557226]: 21.27.196.192 I slot print_timing: id  0 | task 12514 | n_gen =    991, tg =  28.95 t/s, tg_3s =  30.66 t/s
+Oct 12 19:37:57 omarchy env[557226]: 21.30.202.965 I slot print_timing: id  0 | task 12514 | n_gen =   1084, tg =  29.11 t/s, tg_3s =  30.93 t/s
+Oct 12 19:38:00 omarchy env[557226]: 21.33.209.107 I slot print_timing: id  0 | task 12514 | n_gen =   1176, tg =  29.22 t/s, tg_3s =  30.60 t/s
+Oct 12 19:38:03 omarchy env[557226]: 21.36.218.583 I slot print_timing: id  0 | task 12514 | n_gen =   1263, tg =  29.20 t/s, tg_3s =  28.91 t/s
+Oct 12 19:38:06 omarchy env[557226]: 21.39.230.135 I slot print_timing: id  0 | task 12514 | n_gen =   1353, tg =  29.25 t/s, tg_3s =  29.88 t/s
+Oct 12 19:38:09 omarchy env[557226]: 21.42.246.693 I slot print_timing: id  0 | task 12514 | n_gen =   1439, tg =  29.20 t/s, tg_3s =  28.51 t/s
+Oct 12 19:38:12 omarchy env[557226]: 21.45.263.807 I slot print_timing: id  0 | task 12514 | n_gen =   1513, tg =  28.93 t/s, tg_3s =  24.53 t/s
+Oct 12 19:38:15 omarchy env[557226]: 21.48.282.837 I slot print_timing: id  0 | task 12514 | n_gen =   1600, tg =  28.92 t/s, tg_3s =  28.82 t/s
+Oct 12 19:38:18 omarchy env[557226]: 21.51.299.648 I slot print_timing: id  0 | task 12514 | n_gen =   1686, tg =  28.90 t/s, tg_3s =  28.51 t/s
+Oct 12 19:38:21 omarchy env[557226]: 21.54.323.124 I slot print_timing: id  0 | task 12514 | n_gen =   1756, tg =  28.62 t/s, tg_3s =  23.15 t/s
+Oct 12 19:38:24 omarchy env[557226]: 21.57.341.602 I slot print_timing: id  0 | task 12514 | n_gen =   1845, tg =  28.66 t/s, tg_3s =  29.49 t/s
+Oct 12 19:38:27 omarchy env[557226]: 22.00.365.893 I slot print_timing: id  0 | task 12514 | n_gen =   1938, tg =  28.75 t/s, tg_3s =  30.75 t/s
+Oct 12 19:38:30 omarchy env[557226]: 22.03.397.621 I slot print_timing: id  0 | task 12514 | n_gen =   2031, tg =  28.84 t/s, tg_3s =  30.68 t/s
+Oct 12 19:38:33 omarchy env[557226]: 22.06.429.302 I slot print_timing: id  0 | task 12514 | n_gen =   2124, tg =  28.91 t/s, tg_3s =  30.68 t/s
+Oct 12 19:38:36 omarchy env[557226]: 22.09.464.728 I slot print_timing: id  0 | task 12514 | n_gen =   2217, tg =  28.98 t/s, tg_3s =  30.64 t/s
+Oct 12 19:38:39 omarchy env[557226]: 22.12.503.719 I slot print_timing: id  0 | task 12514 | n_gen =   2310, tg =  29.04 t/s, tg_3s =  30.60 t/s
+Oct 12 19:38:42 omarchy env[557226]: 22.15.542.304 I slot print_timing: id  0 | task 12514 | n_gen =   2403, tg =  29.10 t/s, tg_3s =  30.61 t/s
+Oct 12 19:38:44 omarchy env[557226]: 22.17.996.410 I slot print_timing: id  0 | task 12514 | prompt eval time =    1843.67 ms /   621 tokens (    2.97 ms per token,   336.83 tokens per second)
+Oct 12 19:38:44 omarchy env[557226]: 22.17.996.412 I slot print_timing: id  0 | task 12514 |        eval time =   84995.52 ms /  2477 tokens (   34.33 ms per token,    29.13 tokens per second)
+Oct 12 19:38:44 omarchy env[557226]: 22.17.996.412 I slot print_timing: id  0 | task 12514 |       total time =   86839.19 ms /  3098 tokens
+Oct 12 19:38:44 omarchy env[557226]: 22.17.996.413 I slot print_timing: id  0 | task 12514 |    graphs reused =      13163
+Oct 12 19:38:44 omarchy env[557226]: 22.17.996.415 I slot print_timing: id  0 | task 12514 | draft acceptance = 0.91381 ( 1601 accepted /  1752 generated), mean len =  2.83
+Oct 12 19:38:44 omarchy env[557226]: 22.17.996.464 I slot      release: id  0 | task 12514 | stop processing: n_tokens = 3098, truncated = 0
+Oct 12 19:38:44 omarchy env[557226]: 22.18.010.010 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 25233339125
+Oct 12 19:38:44 omarchy env[557226]: 22.18.010.361 W srv         alloc:  - making room for prompt cache entry, removing oldest entry (size = 300.054 MiB)
+Oct 12 19:38:45 omarchy env[557226]: 22.18.078.184 I slot launch_slot_: id  0 | task 13394 | processing task, is_child = 0
+Oct 12 19:38:50 omarchy env[557226]: 22.23.260.489 I slot print_timing: id  0 | task 13394 | n_gen =    102, tg =  29.23 t/s, tg_3s =  29.52 t/s
+Oct 12 19:38:53 omarchy env[557226]: 22.26.337.705 I slot print_timing: id  0 | task 13394 | n_gen =    193, tg =  29.39 t/s, tg_3s =  29.57 t/s
+Oct 12 19:38:56 omarchy env[557226]: 22.29.418.282 I slot print_timing: id  0 | task 13394 | n_gen =    286, tg =  29.65 t/s, tg_3s =  30.19 t/s
+Oct 12 19:38:59 omarchy env[557226]: 22.32.495.871 I slot print_timing: id  0 | task 13394 | n_gen =    381, tg =  29.94 t/s, tg_3s =  30.87 t/s
+Oct 12 19:39:02 omarchy env[557226]: 22.35.575.057 I slot print_timing: id  0 | task 13394 | n_gen =    473, tg =  29.93 t/s, tg_3s =  29.88 t/s
+Oct 12 19:39:05 omarchy env[557226]: 22.38.660.674 I slot print_timing: id  0 | task 13394 | n_gen =    554, tg =  29.33 t/s, tg_3s =  26.25 t/s
+Oct 12 19:39:08 omarchy env[557226]: 22.41.740.902 I slot print_timing: id  0 | task 13394 | n_gen =    637, tg =  28.99 t/s, tg_3s =  26.95 t/s
+Oct 12 19:39:11 omarchy env[557226]: 22.44.826.220 I slot print_timing: id  0 | task 13394 | n_gen =    731, tg =  29.18 t/s, tg_3s =  30.47 t/s
+Oct 12 19:39:14 omarchy env[557226]: 22.47.913.399 I slot print_timing: id  0 | task 13394 | n_gen =    827, tg =  29.39 t/s, tg_3s =  31.10 t/s
+Oct 12 19:39:16 omarchy env[557226]: 22.49.748.828 I slot print_timing: id  0 | task 13394 | prompt eval time =    1726.56 ms /   561 tokens (    3.08 ms per token,   324.92 tokens per second)
+Oct 12 19:39:16 omarchy env[557226]: 22.49.748.831 I slot print_timing: id  0 | task 13394 |        eval time =   29943.97 ms /   883 tokens (   33.95 ms per token,    29.46 tokens per second)
+Oct 12 19:39:16 omarchy env[557226]: 22.49.748.832 I slot print_timing: id  0 | task 13394 |       total time =   31670.52 ms /  1444 tokens
+Oct 12 19:39:16 omarchy env[557226]: 22.49.748.832 I slot print_timing: id  0 | task 13394 |    graphs reused =      13470
+Oct 12 19:39:16 omarchy env[557226]: 22.49.748.834 I slot print_timing: id  0 | task 13394 | draft acceptance = 0.91961 (  572 accepted /   622 generated), mean len =  2.84
+Oct 12 19:39:16 omarchy env[557226]: 22.49.748.875 I slot      release: id  0 | task 13394 | stop processing: n_tokens = 1444, truncated = 0
+Oct 12 19:39:16 omarchy env[557226]: 22.49.772.801 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 25265091536
+Oct 12 19:39:16 omarchy env[557226]: 22.49.773.073 W srv         alloc:  - making room for prompt cache entry, removing oldest entry (size = 485.846 MiB)
+Oct 12 19:39:16 omarchy env[557226]: 22.49.836.519 I slot launch_slot_: id  0 | task 13709 | processing task, is_child = 0
+Oct 12 19:39:21 omarchy env[557226]: 22.54.952.606 I slot print_timing: id  0 | task 13709 | n_gen =    102, tg =  30.95 t/s, tg_3s =  31.26 t/s
+Oct 12 19:39:24 omarchy env[557226]: 22.58.028.334 I slot print_timing: id  0 | task 13709 | n_gen =    196, tg =  30.76 t/s, tg_3s =  30.56 t/s
+Oct 12 19:39:28 omarchy env[557226]: 23.01.108.478 I slot print_timing: id  0 | task 13709 | n_gen =    286, tg =  30.26 t/s, tg_3s =  29.22 t/s
+Oct 12 19:39:31 omarchy env[557226]: 23.04.189.450 I slot print_timing: id  0 | task 13709 | n_gen =    366, tg =  29.20 t/s, tg_3s =  25.97 t/s
+Oct 12 19:39:34 omarchy env[557226]: 23.07.277.217 I slot print_timing: id  0 | task 13709 | n_gen =    445, tg =  28.48 t/s, tg_3s =  25.58 t/s
+Oct 12 19:39:37 omarchy env[557226]: 23.10.358.634 I slot print_timing: id  0 | task 13709 | n_gen =    528, tg =  28.23 t/s, tg_3s =  26.94 t/s
+Oct 12 19:39:40 omarchy env[557226]: 23.13.437.007 I slot print_timing: id  0 | task 13709 | n_gen =    606, tg =  27.82 t/s, tg_3s =  25.34 t/s
+Oct 12 19:39:43 omarchy env[557226]: 23.16.531.354 I slot print_timing: id  0 | task 13709 | n_gen =    691, tg =  27.78 t/s, tg_3s =  27.47 t/s
+Oct 12 19:39:46 omarchy env[557226]: 23.19.619.034 I slot print_timing: id  0 | task 13709 | n_gen =    775, tg =  27.71 t/s, tg_3s =  27.20 t/s
+Oct 12 19:39:49 omarchy env[557226]: 23.22.710.251 I slot print_timing: id  0 | task 13709 | n_gen =    848, tg =  27.30 t/s, tg_3s =  23.62 t/s
+Oct 12 19:39:52 omarchy env[557226]: 23.25.804.576 I slot print_timing: id  0 | task 13709 | n_gen =    938, tg =  27.47 t/s, tg_3s =  29.09 t/s
+Oct 12 19:39:55 omarchy env[557226]: 23.28.808.547 I slot print_timing: id  0 | task 13709 | n_gen =   1029, tg =  27.69 t/s, tg_3s =  30.29 t/s
+Oct 12 19:39:58 omarchy env[557226]: 23.31.810.160 I slot print_timing: id  0 | task 13709 | n_gen =   1122, tg =  27.94 t/s, tg_3s =  30.98 t/s
+Oct 12 19:40:01 omarchy env[557226]: 23.34.816.040 I slot print_timing: id  0 | task 13709 | n_gen =   1214, tg =  28.13 t/s, tg_3s =  30.61 t/s
+Oct 12 19:40:04 omarchy env[557226]: 23.37.825.196 I slot print_timing: id  0 | task 13709 | n_gen =   1307, tg =  28.31 t/s, tg_3s =  30.91 t/s
+Oct 12 19:40:07 omarchy env[557226]: 23.40.835.855 I slot print_timing: id  0 | task 13709 | n_gen =   1400, tg =  28.47 t/s, tg_3s =  30.89 t/s
+Oct 12 19:40:10 omarchy env[557226]: 23.43.855.637 I slot print_timing: id  0 | task 13709 | n_gen =   1491, tg =  28.56 t/s, tg_3s =  30.13 t/s
+Oct 12 19:40:13 omarchy env[557226]: 23.46.872.904 I slot print_timing: id  0 | task 13709 | n_gen =   1573, tg =  28.49 t/s, tg_3s =  27.18 t/s
+Oct 12 19:40:16 omarchy env[557226]: 23.49.891.116 I slot print_timing: id  0 | task 13709 | n_gen =   1664, tg =  28.57 t/s, tg_3s =  30.15 t/s
+Oct 12 19:40:19 omarchy env[557226]: 23.52.918.257 I slot print_timing: id  0 | task 13709 | n_gen =   1754, tg =  28.63 t/s, tg_3s =  29.73 t/s
+Oct 12 19:40:22 omarchy env[557226]: 23.55.940.863 I slot print_timing: id  0 | task 13709 | n_gen =   1847, tg =  28.73 t/s, tg_3s =  30.77 t/s
+Oct 12 19:40:25 omarchy env[557226]: 23.58.964.154 I slot print_timing: id  0 | task 13709 | n_gen =   1940, tg =  28.82 t/s, tg_3s =  30.76 t/s
+Oct 12 19:40:28 omarchy env[557226]: 24.01.987.483 I slot print_timing: id  0 | task 13709 | n_gen =   2033, tg =  28.91 t/s, tg_3s =  30.76 t/s
+Oct 12 19:40:31 omarchy env[557226]: 24.05.020.682 I slot print_timing: id  0 | task 13709 | n_gen =   2126, tg =  28.98 t/s, tg_3s =  30.66 t/s
+Oct 12 19:40:35 omarchy env[557226]: 24.08.059.505 I slot print_timing: id  0 | task 13709 | n_gen =   2219, tg =  29.04 t/s, tg_3s =  30.60 t/s
+Oct 12 19:40:36 omarchy env[557226]: 24.09.332.641 I slot print_timing: id  0 | task 13709 | prompt eval time =    1852.62 ms /   634 tokens (    2.92 ms per token,   342.22 tokens per second)
+Oct 12 19:40:36 omarchy env[557226]: 24.09.332.643 I slot print_timing: id  0 | task 13709 |        eval time =   77643.36 ms /  2257 tokens (   34.42 ms per token,    29.06 tokens per second)
+Oct 12 19:40:36 omarchy env[557226]: 24.09.332.644 I slot print_timing: id  0 | task 13709 |       total time =   79495.98 ms /  2891 tokens
+Oct 12 19:40:36 omarchy env[557226]: 24.09.332.644 I slot print_timing: id  0 | task 13709 |    graphs reused =      14261
+Oct 12 19:40:36 omarchy env[557226]: 24.09.332.646 I slot print_timing: id  0 | task 13709 | draft acceptance = 0.90886 ( 1456 accepted /  1602 generated), mean len =  2.82
+Oct 12 19:40:36 omarchy env[557226]: 24.09.332.686 I slot      release: id  0 | task 13709 | stop processing: n_tokens = 2891, truncated = 0
+Oct 12 19:40:36 omarchy env[557226]: 24.09.347.760 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 25344675347
+Oct 12 19:40:36 omarchy env[557226]: 24.09.347.972 W srv         alloc:  - making room for prompt cache entry, removing oldest entry (size = 474.820 MiB)
+Oct 12 19:40:36 omarchy env[557226]: 24.09.414.139 I slot launch_slot_: id  0 | task 14514 | processing task, is_child = 0
+Oct 12 19:40:41 omarchy env[557226]: 24.14.511.246 I slot print_timing: id  0 | task 14514 | n_gen =    102, tg =  30.90 t/s, tg_3s =  31.20 t/s
+Oct 12 19:40:44 omarchy env[557226]: 24.17.583.876 I slot print_timing: id  0 | task 14514 | n_gen =    197, tg =  30.91 t/s, tg_3s =  30.92 t/s
+Oct 12 19:40:47 omarchy env[557226]: 24.20.661.930 I slot print_timing: id  0 | task 14514 | n_gen =    284, tg =  30.04 t/s, tg_3s =  28.26 t/s
+Oct 12 19:40:50 omarchy env[557226]: 24.23.741.868 I slot print_timing: id  0 | task 14514 | n_gen =    376, tg =  30.00 t/s, tg_3s =  29.87 t/s
+Oct 12 19:40:53 omarchy env[557226]: 24.26.825.941 I slot print_timing: id  0 | task 14514 | n_gen =    461, tg =  29.52 t/s, tg_3s =  27.56 t/s
+Oct 12 19:40:56 omarchy env[557226]: 24.29.907.596 I slot print_timing: id  0 | task 14514 | n_gen =    551, tg =  29.47 t/s, tg_3s =  29.21 t/s
+Oct 12 19:40:59 omarchy env[557226]: 24.32.992.903 I slot print_timing: id  0 | task 14514 | n_gen =    645, tg =  29.61 t/s, tg_3s =  30.47 t/s
+Oct 12 19:41:03 omarchy env[557226]: 24.36.079.328 I slot print_timing: id  0 | task 14514 | n_gen =    733, tg =  29.47 t/s, tg_3s =  28.51 t/s
+Oct 12 19:41:06 omarchy env[557226]: 24.39.171.973 I slot print_timing: id  0 | task 14514 | n_gen =    822, tg =  29.40 t/s, tg_3s =  28.78 t/s
+Oct 12 19:41:09 omarchy env[557226]: 24.42.269.405 I slot print_timing: id  0 | task 14514 | n_gen =    918, tg =  29.55 t/s, tg_3s =  30.99 t/s
+Oct 12 19:41:12 omarchy env[557226]: 24.45.365.333 I slot print_timing: id  0 | task 14514 | n_gen =   1009, tg =  29.54 t/s, tg_3s =  29.39 t/s
+Oct 12 19:41:15 omarchy env[557226]: 24.48.368.240 I slot print_timing: id  0 | task 14514 | n_gen =   1102, tg =  29.66 t/s, tg_3s =  30.97 t/s
+Oct 12 19:41:15 omarchy env[557226]: 24.48.465.513 I slot print_timing: id  0 | task 14514 | prompt eval time =    1827.95 ms /   595 tokens (    3.07 ms per token,   325.50 tokens per second)
+Oct 12 19:41:15 omarchy env[557226]: 24.48.465.515 I slot print_timing: id  0 | task 14514 |        eval time =   37223.31 ms /  1104 tokens (   33.75 ms per token,    29.63 tokens per second)
+Oct 12 19:41:15 omarchy env[557226]: 24.48.465.516 I slot print_timing: id  0 | task 14514 |       total time =   39051.25 ms /  1699 tokens
+Oct 12 19:41:15 omarchy env[557226]: 24.48.465.516 I slot print_timing: id  0 | task 14514 |    graphs reused =      14642
+Oct 12 19:41:15 omarchy env[557226]: 24.48.465.518 I slot print_timing: id  0 | task 14514 | draft acceptance = 0.93005 (  718 accepted /   772 generated), mean len =  2.86
+Oct 12 19:41:15 omarchy env[557226]: 24.48.465.561 I slot      release: id  0 | task 14514 | stop processing: n_tokens = 1699, truncated = 0
+Oct 12 19:41:15 omarchy env[557226]: 24.48.481.864 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 25383808222
+Oct 12 19:41:15 omarchy env[557226]: 24.48.482.134 W srv         alloc:  - making room for prompt cache entry, removing oldest entry (size = 494.898 MiB)
+Oct 12 19:41:15 omarchy env[557226]: 24.48.545.429 I slot launch_slot_: id  0 | task 14904 | processing task, is_child = 0
+Oct 12 19:41:20 omarchy env[557226]: 24.53.935.827 I slot print_timing: id  0 | task 14904 | n_gen =    102, tg =  30.09 t/s, tg_3s =  30.39 t/s
+Oct 12 19:41:23 omarchy env[557226]: 24.57.022.456 I slot print_timing: id  0 | task 14904 | n_gen =    195, tg =  30.11 t/s, tg_3s =  30.13 t/s
+Oct 12 19:41:27 omarchy env[557226]: 25.00.103.109 I slot print_timing: id  0 | task 14904 | n_gen =    282, tg =  29.51 t/s, tg_3s =  28.24 t/s
+Oct 12 19:41:30 omarchy env[557226]: 25.03.182.116 I slot print_timing: id  0 | task 14904 | n_gen =    364, tg =  28.80 t/s, tg_3s =  26.63 t/s
+Oct 12 19:41:33 omarchy env[557226]: 25.06.263.891 I slot print_timing: id  0 | task 14904 | n_gen =    449, tg =  28.56 t/s, tg_3s =  27.58 t/s
+Oct 12 19:41:36 omarchy env[557226]: 25.09.347.429 I slot print_timing: id  0 | task 14904 | n_gen =    543, tg =  28.88 t/s, tg_3s =  30.48 t/s
+Oct 12 19:41:39 omarchy env[557226]: 25.12.440.009 I slot print_timing: id  0 | task 14904 | n_gen =    632, tg =  28.86 t/s, tg_3s =  28.78 t/s
+Oct 12 19:41:42 omarchy env[557226]: 25.15.525.579 I slot print_timing: id  0 | task 14904 | n_gen =    724, tg =  28.98 t/s, tg_3s =  29.82 t/s
+Oct 12 19:41:45 omarchy env[557226]: 25.18.619.442 I slot print_timing: id  0 | task 14904 | n_gen =    815, tg =  29.03 t/s, tg_3s =  29.41 t/s
+Oct 12 19:41:48 omarchy env[557226]: 25.21.712.751 I slot print_timing: id  0 | task 14904 | n_gen =    890, tg =  28.55 t/s, tg_3s =  24.25 t/s
+Oct 12 19:41:51 omarchy env[557226]: 25.24.712.844 I slot print_timing: id  0 | task 14904 | n_gen =    970, tg =  28.39 t/s, tg_3s =  26.67 t/s
+Oct 12 19:41:54 omarchy env[557226]: 25.27.807.926 I slot print_timing: id  0 | task 14904 | n_gen =   1047, tg =  28.10 t/s, tg_3s =  24.88 t/s
+Oct 12 19:41:57 omarchy env[557226]: 25.30.811.209 I slot print_timing: id  0 | task 14904 | n_gen =   1127, tg =  27.99 t/s, tg_3s =  26.64 t/s
+Oct 12 19:42:00 omarchy env[557226]: 25.33.819.741 I slot print_timing: id  0 | task 14904 | n_gen =   1212, tg =  28.01 t/s, tg_3s =  28.25 t/s
+Oct 12 19:42:03 omarchy env[557226]: 25.36.832.243 I slot print_timing: id  0 | task 14904 | n_gen =   1294, tg =  27.96 t/s, tg_3s =  27.22 t/s
+Oct 12 19:42:06 omarchy env[557226]: 25.39.841.548 I slot print_timing: id  0 | task 14904 | n_gen =   1366, tg =  27.71 t/s, tg_3s =  23.93 t/s
+Oct 12 19:42:09 omarchy env[557226]: 25.42.862.476 I slot print_timing: id  0 | task 14904 | n_gen =   1457, tg =  27.85 t/s, tg_3s =  30.12 t/s
+Oct 12 19:42:12 omarchy env[557226]: 25.45.881.076 I slot print_timing: id  0 | task 14904 | n_gen =   1550, tg =  28.01 t/s, tg_3s =  30.81 t/s
+Oct 12 19:42:15 omarchy env[557226]: 25.48.903.521 I slot print_timing: id  0 | task 14904 | n_gen =   1643, tg =  28.15 t/s, tg_3s =  30.77 t/s
+Oct 12 19:42:18 omarchy env[557226]: 25.51.925.351 I slot print_timing: id  0 | task 14904 | n_gen =   1736, tg =  28.28 t/s, tg_3s =  30.78 t/s
+Oct 12 19:42:19 omarchy env[557226]: 25.52.509.805 I slot print_timing: id  0 | task 14904 | prompt eval time =    2033.81 ms /   664 tokens (    3.06 ms per token,   326.48 tokens per second)
+Oct 12 19:42:19 omarchy env[557226]: 25.52.509.808 I slot print_timing: id  0 | task 14904 |        eval time =   61930.45 ms /  1752 tokens (   35.37 ms per token,    28.27 tokens per second)
+Oct 12 19:42:19 omarchy env[557226]: 25.52.509.808 I slot print_timing: id  0 | task 14904 |       total time =   63964.26 ms /  2416 tokens
+Oct 12 19:42:19 omarchy env[557226]: 25.52.509.808 I slot print_timing: id  0 | task 14904 |    graphs reused =      15274
+Oct 12 19:42:19 omarchy env[557226]: 25.52.509.810 I slot print_timing: id  0 | task 14904 | draft acceptance = 0.86953 ( 1113 accepted /  1280 generated), mean len =  2.74
+Oct 12 19:42:19 omarchy env[557226]: 25.52.509.849 I slot      release: id  0 | task 14904 | stop processing: n_tokens = 2417, truncated = 0
+Oct 12 19:42:19 omarchy env[557226]: 25.52.525.057 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 25447852510
+Oct 12 19:42:19 omarchy env[557226]: 25.52.525.399 W srv         alloc:  - making room for prompt cache entry, removing oldest entry (size = 512.567 MiB)
+Oct 12 19:42:19 omarchy env[557226]: 25.52.591.891 I slot launch_slot_: id  0 | task 15548 | processing task, is_child = 0
+Oct 12 19:42:25 omarchy env[557226]: 25.58.334.992 I slot print_timing: id  0 | task 15548 | n_gen =    101, tg =  28.93 t/s, tg_3s =  29.21 t/s
+Oct 12 19:42:28 omarchy env[557226]: 26.01.419.345 I slot print_timing: id  0 | task 15548 | n_gen =    183, tg =  27.82 t/s, tg_3s =  26.59 t/s
+Oct 12 19:42:31 omarchy env[557226]: 26.04.502.242 I slot print_timing: id  0 | task 15548 | n_gen =    272, tg =  28.16 t/s, tg_3s =  28.87 t/s
+Oct 12 19:42:34 omarchy env[557226]: 26.07.582.374 I slot print_timing: id  0 | task 15548 | n_gen =    358, tg =  28.10 t/s, tg_3s =  27.92 t/s
+Oct 12 19:42:37 omarchy env[557226]: 26.10.664.460 I slot print_timing: id  0 | task 15548 | n_gen =    450, tg =  28.44 t/s, tg_3s =  29.85 t/s
+Oct 12 19:42:40 omarchy env[557226]: 26.13.750.706 I slot print_timing: id  0 | task 15548 | n_gen =    531, tg =  28.08 t/s, tg_3s =  26.25 t/s
+Oct 12 19:42:43 omarchy env[557226]: 26.16.840.436 I slot print_timing: id  0 | task 15548 | n_gen =    620, tg =  28.18 t/s, tg_3s =  28.81 t/s
+Oct 12 19:42:46 omarchy env[557226]: 26.19.933.332 I slot print_timing: id  0 | task 15548 | n_gen =    714, tg =  28.46 t/s, tg_3s =  30.39 t/s
+Oct 12 19:42:49 omarchy env[557226]: 26.22.934.063 I slot print_timing: id  0 | task 15548 | n_gen =    802, tg =  28.55 t/s, tg_3s =  29.33 t/s
+Oct 12 19:42:52 omarchy env[557226]: 26.25.935.484 I slot print_timing: id  0 | task 15548 | n_gen =    879, tg =  28.27 t/s, tg_3s =  25.65 t/s
+Oct 12 19:42:55 omarchy env[557226]: 26.28.936.727 I slot print_timing: id  0 | task 15548 | n_gen =    955, tg =  28.01 t/s, tg_3s =  25.32 t/s
+Oct 12 19:42:58 omarchy env[557226]: 26.31.941.726 I slot print_timing: id  0 | task 15548 | n_gen =   1035, tg =  27.90 t/s, tg_3s =  26.62 t/s
+Oct 12 19:43:01 omarchy env[557226]: 26.34.953.222 I slot print_timing: id  0 | task 15548 | n_gen =   1116, tg =  27.82 t/s, tg_3s =  26.90 t/s
+Oct 12 19:43:04 omarchy env[557226]: 26.37.957.427 I slot print_timing: id  0 | task 15548 | n_gen =   1198, tg =  27.79 t/s, tg_3s =  27.30 t/s
+Oct 12 19:43:07 omarchy env[557226]: 26.40.971.706 I slot print_timing: id  0 | task 15548 | n_gen =   1289, tg =  27.94 t/s, tg_3s =  30.19 t/s
+Oct 12 19:43:10 omarchy env[557226]: 26.43.990.200 I slot print_timing: id  0 | task 15548 | n_gen =   1380, tg =  28.08 t/s, tg_3s =  30.15 t/s
+Oct 12 19:43:13 omarchy env[557226]: 26.47.010.378 I slot print_timing: id  0 | task 15548 | n_gen =   1463, tg =  28.04 t/s, tg_3s =  27.48 t/s
+Oct 12 19:43:16 omarchy env[557226]: 26.50.030.522 I slot print_timing: id  0 | task 15548 | n_gen =   1552, tg =  28.12 t/s, tg_3s =  29.47 t/s
+Oct 12 19:43:19 omarchy env[557226]: 26.53.051.284 I slot print_timing: id  0 | task 15548 | n_gen =   1640, tg =  28.17 t/s, tg_3s =  29.13 t/s
+Oct 12 19:43:23 omarchy env[557226]: 26.56.070.562 I slot print_timing: id  0 | task 15548 | n_gen =   1717, tg =  28.04 t/s, tg_3s =  25.50 t/s
+Oct 12 19:43:26 omarchy env[557226]: 26.59.095.035 I slot print_timing: id  0 | task 15548 | n_gen =   1797, tg =  27.97 t/s, tg_3s =  26.45 t/s
+Oct 12 19:43:29 omarchy env[557226]: 27.02.126.653 I slot print_timing: id  0 | task 15548 | n_gen =   1884, tg =  28.00 t/s, tg_3s =  28.70 t/s
+Oct 12 19:43:32 omarchy env[557226]: 27.05.154.727 I slot print_timing: id  0 | task 15548 | n_gen =   1975, tg =  28.09 t/s, tg_3s =  30.05 t/s
+Oct 12 19:43:35 omarchy env[557226]: 27.08.187.993 I slot print_timing: id  0 | task 15548 | n_gen =   2066, tg =  28.17 t/s, tg_3s =  30.00 t/s
+Oct 12 19:43:38 omarchy env[557226]: 27.11.229.440 I slot print_timing: id  0 | task 15548 | n_gen =   2138, tg =  27.99 t/s, tg_3s =  23.67 t/s
+Oct 12 19:43:41 omarchy env[557226]: 27.14.265.905 I slot print_timing: id  0 | task 15548 | n_gen =   2215, tg =  27.89 t/s, tg_3s =  25.36 t/s
+Oct 12 19:43:44 omarchy env[557226]: 27.17.303.654 I slot print_timing: id  0 | task 15548 | n_gen =   2293, tg =  27.81 t/s, tg_3s =  25.68 t/s
+Oct 12 19:43:47 omarchy env[557226]: 27.20.353.999 I slot print_timing: id  0 | task 15548 | n_gen =   2377, tg =  27.80 t/s, tg_3s =  27.54 t/s
+Oct 12 19:43:50 omarchy env[557226]: 27.23.396.223 I slot print_timing: id  0 | task 15548 | n_gen =   2459, tg =  27.77 t/s, tg_3s =  26.95 t/s
+Oct 12 19:43:53 omarchy env[557226]: 27.26.442.728 I slot print_timing: id  0 | task 15548 | n_gen =   2547, tg =  27.81 t/s, tg_3s =  28.89 t/s
+Oct 12 19:43:56 omarchy env[557226]: 27.29.498.655 I slot print_timing: id  0 | task 15548 | n_gen =   2632, tg =  27.81 t/s, tg_3s =  27.81 t/s
+Oct 12 19:43:59 omarchy env[557226]: 27.32.553.571 I slot print_timing: id  0 | task 15548 | n_gen =   2707, tg =  27.70 t/s, tg_3s =  24.55 t/s
+Oct 12 19:44:02 omarchy env[557226]: 27.35.600.607 I slot print_timing: id  0 | task 15548 | n_gen =   2780, tg =  27.59 t/s, tg_3s =  23.96 t/s
+Oct 12 19:44:05 omarchy env[557226]: 27.38.671.408 I slot print_timing: id  0 | task 15548 | n_gen =   2865, tg =  27.59 t/s, tg_3s =  27.68 t/s
+Oct 12 19:44:08 omarchy env[557226]: 27.41.727.542 I slot print_timing: id  0 | task 15548 | n_gen =   2949, tg =  27.59 t/s, tg_3s =  27.49 t/s
+Oct 12 19:44:11 omarchy env[557226]: 27.44.789.250 I slot print_timing: id  0 | task 15548 | n_gen =   3036, tg =  27.61 t/s, tg_3s =  28.42 t/s
+Oct 12 19:44:14 omarchy env[557226]: 27.47.854.406 I slot print_timing: id  0 | task 15548 | n_gen =   3119, tg =  27.60 t/s, tg_3s =  27.08 t/s
+Oct 12 19:44:17 omarchy env[557226]: 27.50.930.550 I slot print_timing: id  0 | task 15548 | n_gen =   3199, tg =  27.56 t/s, tg_3s =  26.01 t/s
+Oct 12 19:44:20 omarchy env[557226]: 27.53.991.770 I slot print_timing: id  0 | task 15548 | n_gen =   3288, tg =  27.60 t/s, tg_3s =  29.07 t/s
+Oct 12 19:44:24 omarchy env[557226]: 27.57.069.333 I slot print_timing: id  0 | task 15548 | n_gen =   3380, tg =  27.65 t/s, tg_3s =  29.89 t/s
+Oct 12 19:44:27 omarchy env[557226]: 28.00.145.616 I slot print_timing: id  0 | task 15548 | n_gen =   3472, tg =  27.71 t/s, tg_3s =  29.91 t/s
+Oct 12 19:44:30 omarchy env[557226]: 28.03.228.854 I slot print_timing: id  0 | task 15548 | n_gen =   3564, tg =  27.76 t/s, tg_3s =  29.84 t/s
+Oct 12 19:44:33 omarchy env[557226]: 28.06.229.206 I slot print_timing: id  0 | task 15548 | n_gen =   3654, tg =  27.81 t/s, tg_3s =  30.00 t/s
+Oct 12 19:44:36 omarchy env[557226]: 28.09.325.884 I slot print_timing: id  0 | task 15548 | n_gen =   3745, tg =  27.85 t/s, tg_3s =  29.39 t/s
+Oct 12 19:44:39 omarchy env[557226]: 28.12.327.649 I slot print_timing: id  0 | task 15548 | n_gen =   3835, tg =  27.89 t/s, tg_3s =  29.98 t/s
+Oct 12 19:44:42 omarchy env[557226]: 28.15.425.231 I slot print_timing: id  0 | task 15548 | n_gen =   3928, tg =  27.94 t/s, tg_3s =  30.02 t/s
+Oct 12 19:44:45 omarchy env[557226]: 28.18.525.024 I slot print_timing: id  0 | task 15548 | n_gen =   4019, tg =  27.97 t/s, tg_3s =  29.36 t/s
+Oct 12 19:44:47 omarchy env[557226]: 28.20.926.741 I slot print_timing: id  0 | task 15548 | prompt eval time =    2285.90 ms /   793 tokens (    2.88 ms per token,   346.91 tokens per second)
+Oct 12 19:44:47 omarchy env[557226]: 28.20.926.743 I slot print_timing: id  0 | task 15548 |        eval time =  146048.84 ms /  4089 tokens (   35.73 ms per token,    27.99 tokens per second)
+Oct 12 19:44:47 omarchy env[557226]: 28.20.926.744 I slot print_timing: id  0 | task 15548 |       total time =  148334.74 ms /  4882 tokens
+Oct 12 19:44:47 omarchy env[557226]: 28.20.926.744 I slot print_timing: id  0 | task 15548 |    graphs reused =      16748
+Oct 12 19:44:47 omarchy env[557226]: 28.20.926.746 I slot print_timing: id  0 | task 15548 | draft acceptance = 0.87156 ( 2599 accepted /  2982 generated), mean len =  2.74
+Oct 12 19:44:47 omarchy env[557226]: 28.20.926.788 I slot      release: id  0 | task 15548 | stop processing: n_tokens = 4883, truncated = 0
+Oct 12 19:44:47 omarchy env[557226]: 28.20.947.268 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 25596269449
+Oct 12 19:44:47 omarchy env[557226]: 28.20.947.723 W srv         alloc:  - making room for prompt cache entry, removing oldest entry (size = 515.845 MiB)
+Oct 12 19:44:47 omarchy env[557226]: 28.21.022.391 I slot launch_slot_: id  0 | task 17043 | processing task, is_child = 0
+Oct 12 19:44:53 omarchy env[557226]: 28.26.744.320 I slot print_timing: id  0 | task 17043 | n_gen =    102, tg =  30.09 t/s, tg_3s =  30.39 t/s
+Oct 12 19:44:56 omarchy env[557226]: 28.29.824.458 I slot print_timing: id  0 | task 17043 | n_gen =    194, tg =  29.99 t/s, tg_3s =  29.87 t/s
+Oct 12 19:44:59 omarchy env[557226]: 28.32.912.694 I slot print_timing: id  0 | task 17043 | n_gen =    278, tg =  29.08 t/s, tg_3s =  27.20 t/s
+Oct 12 19:45:02 omarchy env[557226]: 28.35.995.527 I slot print_timing: id  0 | task 17043 | n_gen =    362, tg =  28.63 t/s, tg_3s =  27.25 t/s
+Oct 12 19:45:06 omarchy env[557226]: 28.39.085.482 I slot print_timing: id  0 | task 17043 | n_gen =    455, tg =  28.92 t/s, tg_3s =  30.10 t/s
+Oct 12 19:45:09 omarchy env[557226]: 28.42.174.189 I slot print_timing: id  0 | task 17043 | n_gen =    546, tg =  29.01 t/s, tg_3s =  29.46 t/s
+Oct 12 19:45:12 omarchy env[557226]: 28.45.264.744 I slot print_timing: id  0 | task 17043 | n_gen =    640, tg =  29.21 t/s, tg_3s =  30.42 t/s
+Oct 12 19:45:15 omarchy env[557226]: 28.48.266.408 I slot print_timing: id  0 | task 17043 | n_gen =    725, tg =  29.10 t/s, tg_3s =  28.32 t/s
+Oct 12 19:45:18 omarchy env[557226]: 28.51.267.905 I slot print_timing: id  0 | task 17043 | n_gen =    816, tg =  29.23 t/s, tg_3s =  30.32 t/s
+Oct 12 19:45:21 omarchy env[557226]: 28.54.271.161 I slot print_timing: id  0 | task 17043 | n_gen =    909, tg =  29.40 t/s, tg_3s =  30.97 t/s
+Oct 12 19:45:24 omarchy env[557226]: 28.57.279.720 I slot print_timing: id  0 | task 17043 | n_gen =    994, tg =  29.30 t/s, tg_3s =  28.25 t/s
+Oct 12 19:45:27 omarchy env[557226]: 29.00.289.098 I slot print_timing: id  0 | task 17043 | n_gen =   1086, tg =  29.40 t/s, tg_3s =  30.57 t/s
+Oct 12 19:45:30 omarchy env[557226]: 29.03.300.731 I slot print_timing: id  0 | task 17043 | n_gen =   1178, tg =  29.49 t/s, tg_3s =  30.55 t/s
+Oct 12 19:45:33 omarchy env[557226]: 29.06.316.722 I slot print_timing: id  0 | task 17043 | n_gen =   1270, tg =  29.56 t/s, tg_3s =  30.50 t/s
+Oct 12 19:45:36 omarchy env[557226]: 29.09.331.263 I slot print_timing: id  0 | task 17043 | n_gen =   1360, tg =  29.58 t/s, tg_3s =  29.86 t/s
+Oct 12 19:45:39 omarchy env[557226]: 29.12.351.138 I slot print_timing: id  0 | task 17043 | n_gen =   1445, tg =  29.49 t/s, tg_3s =  28.15 t/s
+Oct 12 19:45:42 omarchy env[557226]: 29.15.367.878 I slot print_timing: id  0 | task 17043 | n_gen =   1525, tg =  29.32 t/s, tg_3s =  26.52 t/s
+Oct 12 19:45:45 omarchy env[557226]: 29.18.393.663 I slot print_timing: id  0 | task 17043 | n_gen =   1604, tg =  29.14 t/s, tg_3s =  26.11 t/s
+Oct 12 19:45:48 omarchy env[557226]: 29.21.421.469 I slot print_timing: id  0 | task 17043 | n_gen =   1681, tg =  28.95 t/s, tg_3s =  25.43 t/s
+Oct 12 19:45:51 omarchy env[557226]: 29.24.455.042 I slot print_timing: id  0 | task 17043 | n_gen =   1760, tg =  28.80 t/s, tg_3s =  26.04 t/s
+Oct 12 19:45:54 omarchy env[557226]: 29.27.482.534 I slot print_timing: id  0 | task 17043 | n_gen =   1836, tg =  28.63 t/s, tg_3s =  25.10 t/s
+Oct 12 19:45:57 omarchy env[557226]: 29.30.510.771 I slot print_timing: id  0 | task 17043 | n_gen =   1922, tg =  28.62 t/s, tg_3s =  28.40 t/s
+Oct 12 19:46:00 omarchy env[557226]: 29.33.545.555 I slot print_timing: id  0 | task 17043 | n_gen =   2015, tg =  28.71 t/s, tg_3s =  30.64 t/s
+Oct 12 19:46:03 omarchy env[557226]: 29.36.588.962 I slot print_timing: id  0 | task 17043 | n_gen =   2108, tg =  28.78 t/s, tg_3s =  30.56 t/s
+Oct 12 19:46:06 omarchy env[557226]: 29.39.630.102 I slot print_timing: id  0 | task 17043 | n_gen =   2201, tg =  28.86 t/s, tg_3s =  30.58 t/s
+Oct 12 19:46:09 omarchy env[557226]: 29.42.673.821 I slot print_timing: id  0 | task 17043 | n_gen =   2294, tg =  28.92 t/s, tg_3s =  30.55 t/s
+Oct 12 19:46:12 omarchy env[557226]: 29.45.715.184 I slot print_timing: id  0 | task 17043 | n_gen =   2387, tg =  28.98 t/s, tg_3s =  30.58 t/s
+Oct 12 19:46:15 omarchy env[557226]: 29.48.765.851 I slot print_timing: id  0 | task 17043 | n_gen =   2480, tg =  29.04 t/s, tg_3s =  30.49 t/s
+Oct 12 19:46:18 omarchy env[557226]: 29.51.813.911 I slot print_timing: id  0 | task 17043 | n_gen =   2573, tg =  29.09 t/s, tg_3s =  30.51 t/s
+Oct 12 19:46:21 omarchy env[557226]: 29.54.870.270 I slot print_timing: id  0 | task 17043 | n_gen =   2666, tg =  29.13 t/s, tg_3s =  30.43 t/s
+Oct 12 19:46:24 omarchy env[557226]: 29.57.930.659 I slot print_timing: id  0 | task 17043 | n_gen =   2759, tg =  29.17 t/s, tg_3s =  30.39 t/s
+Oct 12 19:46:26 omarchy env[557226]: 29.59.899.575 I slot print_timing: id  0 | task 17043 | prompt eval time =    2365.76 ms /   886 tokens (    2.67 ms per token,   374.51 tokens per second)
+Oct 12 19:46:26 omarchy env[557226]: 29.59.899.578 I slot print_timing: id  0 | task 17043 |        eval time =   96511.30 ms /  2818 tokens (   34.26 ms per token,    29.19 tokens per second)
+Oct 12 19:46:26 omarchy env[557226]: 29.59.899.578 I slot print_timing: id  0 | task 17043 |       total time =   98877.07 ms /  3704 tokens
+Oct 12 19:46:26 omarchy env[557226]: 29.59.899.579 I slot print_timing: id  0 | task 17043 |    graphs reused =      17727
+Oct 12 19:46:26 omarchy env[557226]: 29.59.899.580 I slot print_timing: id  0 | task 17043 | draft acceptance = 0.92180 ( 1827 accepted /  1982 generated), mean len =  2.84
+Oct 12 19:46:26 omarchy env[557226]: 29.59.899.628 I slot      release: id  0 | task 17043 | stop processing: n_tokens = 3704, truncated = 0
+Oct 12 19:46:26 omarchy env[557226]: 29.59.924.180 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 25695242289
+Oct 12 19:46:26 omarchy env[557226]: 29.59.924.537 W srv         alloc:  - making room for prompt cache entry, removing oldest entry (size = 536.706 MiB)
+Oct 12 19:46:26 omarchy env[557226]: 29.59.995.200 I slot launch_slot_: id  0 | task 18038 | processing task, is_child = 0
+Oct 12 19:46:32 omarchy env[557226]: 30.05.410.560 I slot print_timing: id  0 | task 18038 | n_gen =    100, tg =  29.53 t/s, tg_3s =  29.83 t/s
+Oct 12 19:46:35 omarchy env[557226]: 30.08.487.915 I slot print_timing: id  0 | task 18038 | n_gen =    192, tg =  29.70 t/s, tg_3s =  29.90 t/s
+Oct 12 19:46:38 omarchy env[557226]: 30.11.565.602 I slot print_timing: id  0 | task 18038 | n_gen =    272, tg =  28.50 t/s, tg_3s =  25.99 t/s
+Oct 12 19:46:41 omarchy env[557226]: 30.14.650.735 I slot print_timing: id  0 | task 18038 | n_gen =    346, tg =  27.40 t/s, tg_3s =  23.99 t/s
+Oct 12 19:46:44 omarchy env[557226]: 30.17.732.343 I slot print_timing: id  0 | task 18038 | n_gen =    432, tg =  27.50 t/s, tg_3s =  27.91 t/s
+Oct 12 19:46:47 omarchy env[557226]: 30.20.817.313 I slot print_timing: id  0 | task 18038 | n_gen =    518, tg =  27.56 t/s, tg_3s =  27.88 t/s
+Oct 12 19:46:50 omarchy env[557226]: 30.23.904.455 I slot print_timing: id  0 | task 18038 | n_gen =    598, tg =  27.33 t/s, tg_3s =  25.91 t/s
+Oct 12 19:46:53 omarchy env[557226]: 30.26.997.648 I slot print_timing: id  0 | task 18038 | n_gen =    675, tg =  27.03 t/s, tg_3s =  24.89 t/s
+Oct 12 19:46:57 omarchy env[557226]: 30.30.086.147 I slot print_timing: id  0 | task 18038 | n_gen =    768, tg =  27.37 t/s, tg_3s =  30.11 t/s
+Oct 12 19:47:00 omarchy env[557226]: 30.33.086.250 I slot print_timing: id  0 | task 18038 | n_gen =    856, tg =  27.56 t/s, tg_3s =  29.33 t/s
+Oct 12 19:47:03 omarchy env[557226]: 30.36.181.924 I slot print_timing: id  0 | task 18038 | n_gen =    951, tg =  27.84 t/s, tg_3s =  30.69 t/s
+Oct 12 19:47:06 omarchy env[557226]: 30.39.184.039 I slot print_timing: id  0 | task 18038 | n_gen =   1038, tg =  27.93 t/s, tg_3s =  28.98 t/s
+Oct 12 19:47:09 omarchy env[557226]: 30.42.193.919 I slot print_timing: id  0 | task 18038 | n_gen =   1129, tg =  28.10 t/s, tg_3s =  30.23 t/s
+Oct 12 19:47:12 omarchy env[557226]: 30.45.200.047 I slot print_timing: id  0 | task 18038 | n_gen =   1217, tg =  28.19 t/s, tg_3s =  29.27 t/s
+Oct 12 19:47:15 omarchy env[557226]: 30.48.210.676 I slot print_timing: id  0 | task 18038 | n_gen =   1310, tg =  28.36 t/s, tg_3s =  30.89 t/s
+Oct 12 19:47:18 omarchy env[557226]: 30.51.229.190 I slot print_timing: id  0 | task 18038 | n_gen =   1401, tg =  28.47 t/s, tg_3s =  30.15 t/s
+Oct 12 19:47:21 omarchy env[557226]: 30.54.247.755 I slot print_timing: id  0 | task 18038 | n_gen =   1477, tg =  28.28 t/s, tg_3s =  25.18 t/s
+Oct 12 19:47:24 omarchy env[557226]: 30.57.263.900 I slot print_timing: id  0 | task 18038 | n_gen =   1559, tg =  28.22 t/s, tg_3s =  27.19 t/s
+Oct 12 19:47:27 omarchy env[557226]: 31.00.287.316 I slot print_timing: id  0 | task 18038 | n_gen =   1645, tg =  28.23 t/s, tg_3s =  28.44 t/s
+Oct 12 19:47:30 omarchy env[557226]: 31.03.307.262 I slot print_timing: id  0 | task 18038 | n_gen =   1738, tg =  28.36 t/s, tg_3s =  30.80 t/s
+Oct 12 19:47:33 omarchy env[557226]: 31.06.328.786 I slot print_timing: id  0 | task 18038 | n_gen =   1831, tg =  28.47 t/s, tg_3s =  30.78 t/s
+Oct 12 19:47:36 omarchy env[557226]: 31.09.358.387 I slot print_timing: id  0 | task 18038 | n_gen =   1924, tg =  28.57 t/s, tg_3s =  30.70 t/s
+Oct 12 19:47:39 omarchy env[557226]: 31.12.387.623 I slot print_timing: id  0 | task 18038 | n_gen =   2017, tg =  28.66 t/s, tg_3s =  30.70 t/s
+Oct 12 19:47:42 omarchy env[557226]: 31.15.422.841 I slot print_timing: id  0 | task 18038 | n_gen =   2110, tg =  28.75 t/s, tg_3s =  30.64 t/s
+Oct 12 19:47:45 omarchy env[557226]: 31.18.463.877 I slot print_timing: id  0 | task 18038 | n_gen =   2203, tg =  28.82 t/s, tg_3s =  30.58 t/s
+Oct 12 19:47:48 omarchy env[557226]: 31.21.499.268 I slot print_timing: id  0 | task 18038 | n_gen =   2296, tg =  28.89 t/s, tg_3s =  30.64 t/s
+Oct 12 19:47:49 omarchy env[557226]: 31.22.579.175 I slot print_timing: id  0 | task 18038 | prompt eval time =    2062.59 ms /   724 tokens (    2.85 ms per token,   351.01 tokens per second)
+Oct 12 19:47:49 omarchy env[557226]: 31.22.579.178 I slot print_timing: id  0 | task 18038 |        eval time =   80521.27 ms /  2328 tokens (   34.60 ms per token,    28.90 tokens per second)
+Oct 12 19:47:49 omarchy env[557226]: 31.22.579.178 I slot print_timing: id  0 | task 18038 |       total time =   82583.86 ms /  3052 tokens
+Oct 12 19:47:49 omarchy env[557226]: 31.22.579.178 I slot print_timing: id  0 | task 18038 |    graphs reused =      18547
+Oct 12 19:47:49 omarchy env[557226]: 31.22.579.180 I slot print_timing: id  0 | task 18038 | draft acceptance = 0.90241 ( 1498 accepted /  1660 generated), mean len =  2.80
+Oct 12 19:47:49 omarchy env[557226]: 31.22.579.221 I slot      release: id  0 | task 18038 | stop processing: n_tokens = 3052, truncated = 0
+Oct 12 19:47:49 omarchy env[557226]: 31.22.594.445 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 25777921881
+Oct 12 19:47:49 omarchy env[557226]: 31.22.594.658 W srv         alloc:  - making room for prompt cache entry, removing oldest entry (size = 545.493 MiB)
+Oct 12 19:47:49 omarchy env[557226]: 31.22.663.268 I slot launch_slot_: id  0 | task 18872 | processing task, is_child = 0
+Oct 12 19:47:55 omarchy env[557226]: 31.28.203.616 I slot print_timing: id  0 | task 18872 | n_gen =    100, tg =  30.47 t/s, tg_3s =  30.77 t/s
+Oct 12 19:47:58 omarchy env[557226]: 31.31.279.799 I slot print_timing: id  0 | task 18872 | n_gen =    196, tg =  30.83 t/s, tg_3s =  31.21 t/s
+Oct 12 19:48:01 omarchy env[557226]: 31.34.363.515 I slot print_timing: id  0 | task 18872 | n_gen =    291, tg =  30.82 t/s, tg_3s =  30.81 t/s
+Oct 12 19:48:04 omarchy env[557226]: 31.37.443.903 I slot print_timing: id  0 | task 18872 | n_gen =    387, tg =  30.91 t/s, tg_3s =  31.16 t/s
+Oct 12 19:48:07 omarchy env[557226]: 31.40.526.384 I slot print_timing: id  0 | task 18872 | n_gen =    475, tg =  30.44 t/s, tg_3s =  28.55 t/s
+Oct 12 19:48:10 omarchy env[557226]: 31.43.616.613 I slot print_timing: id  0 | task 18872 | n_gen =    561, tg =  30.01 t/s, tg_3s =  27.83 t/s
+Oct 12 19:48:13 omarchy env[557226]: 31.46.707.806 I slot print_timing: id  0 | task 18872 | n_gen =    648, tg =  29.74 t/s, tg_3s =  28.14 t/s
+Oct 12 19:48:16 omarchy env[557226]: 31.49.799.300 I slot print_timing: id  0 | task 18872 | n_gen =    742, tg =  29.82 t/s, tg_3s =  30.41 t/s
+Oct 12 19:48:19 omarchy env[557226]: 31.52.803.603 I slot print_timing: id  0 | task 18872 | n_gen =    828, tg =  29.70 t/s, tg_3s =  28.63 t/s
+Oct 12 19:48:22 omarchy env[557226]: 31.55.807.713 I slot print_timing: id  0 | task 18872 | n_gen =    908, tg =  29.40 t/s, tg_3s =  26.63 t/s
+Oct 12 19:48:25 omarchy env[557226]: 31.58.810.856 I slot print_timing: id  0 | task 18872 | n_gen =    988, tg =  29.15 t/s, tg_3s =  26.64 t/s
+Oct 12 19:48:28 omarchy env[557226]: 32.01.820.243 I slot print_timing: id  0 | task 18872 | n_gen =   1069, tg =  28.97 t/s, tg_3s =  26.92 t/s
+Oct 12 19:48:31 omarchy env[557226]: 32.04.832.851 I slot print_timing: id  0 | task 18872 | n_gen =   1143, tg =  28.64 t/s, tg_3s =  24.56 t/s
+Oct 12 19:48:34 omarchy env[557226]: 32.07.838.778 I slot print_timing: id  0 | task 18872 | n_gen =   1218, tg =  28.38 t/s, tg_3s =  24.95 t/s
+Oct 12 19:48:37 omarchy env[557226]: 32.10.858.523 I slot print_timing: id  0 | task 18872 | n_gen =   1304, tg =  28.39 t/s, tg_3s =  28.48 t/s
+Oct 12 19:48:40 omarchy env[557226]: 32.13.871.531 I slot print_timing: id  0 | task 18872 | n_gen =   1391, tg =  28.42 t/s, tg_3s =  28.87 t/s
+Oct 12 19:48:43 omarchy env[557226]: 32.16.889.035 I slot print_timing: id  0 | task 18872 | n_gen =   1469, tg =  28.27 t/s, tg_3s =  25.85 t/s
+Oct 12 19:48:46 omarchy env[557226]: 32.19.906.876 I slot print_timing: id  0 | task 18872 | n_gen =   1551, tg =  28.21 t/s, tg_3s =  27.17 t/s
+Oct 12 19:48:49 omarchy env[557226]: 32.22.927.265 I slot print_timing: id  0 | task 18872 | n_gen =   1633, tg =  28.15 t/s, tg_3s =  27.15 t/s
+Oct 12 19:48:52 omarchy env[557226]: 32.25.946.000 I slot print_timing: id  0 | task 18872 | n_gen =   1716, tg =  28.12 t/s, tg_3s =  27.49 t/s
+Oct 12 19:48:55 omarchy env[557226]: 32.28.976.934 I slot print_timing: id  0 | task 18872 | n_gen =   1793, tg =  27.99 t/s, tg_3s =  25.40 t/s
+Oct 12 19:48:58 omarchy env[557226]: 32.32.004.647 I slot print_timing: id  0 | task 18872 | n_gen =   1874, tg =  27.93 t/s, tg_3s =  26.75 t/s
+Oct 12 19:49:01 omarchy env[557226]: 32.35.036.058 I slot print_timing: id  0 | task 18872 | n_gen =   1954, tg =  27.87 t/s, tg_3s =  26.39 t/s
+Oct 12 19:49:05 omarchy env[557226]: 32.38.067.078 I slot print_timing: id  0 | task 18872 | n_gen =   2033, tg =  27.79 t/s, tg_3s =  26.06 t/s
+Oct 12 19:49:08 omarchy env[557226]: 32.41.103.266 I slot print_timing: id  0 | task 18872 | n_gen =   2115, tg =  27.76 t/s, tg_3s =  27.01 t/s
+Oct 12 19:49:11 omarchy env[557226]: 32.44.138.347 I slot print_timing: id  0 | task 18872 | n_gen =   2197, tg =  27.73 t/s, tg_3s =  27.02 t/s
+Oct 12 19:49:14 omarchy env[557226]: 32.47.177.893 I slot print_timing: id  0 | task 18872 | n_gen =   2276, tg =  27.67 t/s, tg_3s =  25.99 t/s
+Oct 12 19:49:17 omarchy env[557226]: 32.50.232.863 I slot print_timing: id  0 | task 18872 | n_gen =   2369, tg =  27.77 t/s, tg_3s =  30.44 t/s
+Oct 12 19:49:20 omarchy env[557226]: 32.53.275.725 I slot print_timing: id  0 | task 18872 | n_gen =   2455, tg =  27.78 t/s, tg_3s =  28.26 t/s
+Oct 12 19:49:23 omarchy env[557226]: 32.56.332.495 I slot print_timing: id  0 | task 18872 | n_gen =   2544, tg =  27.83 t/s, tg_3s =  29.12 t/s
+Oct 12 19:49:26 omarchy env[557226]: 32.59.379.152 I slot print_timing: id  0 | task 18872 | n_gen =   2631, tg =  27.85 t/s, tg_3s =  28.56 t/s
+Oct 12 19:49:29 omarchy env[557226]: 33.02.433.459 I slot print_timing: id  0 | task 18872 | n_gen =   2716, tg =  27.85 t/s, tg_3s =  27.83 t/s
+Oct 12 19:49:32 omarchy env[557226]: 33.05.492.988 I slot print_timing: id  0 | task 18872 | n_gen =   2806, tg =  27.90 t/s, tg_3s =  29.42 t/s
+Oct 12 19:49:35 omarchy env[557226]: 33.08.553.523 I slot print_timing: id  0 | task 18872 | n_gen =   2899, tg =  27.97 t/s, tg_3s =  30.39 t/s
+Oct 12 19:49:38 omarchy env[557226]: 33.11.613.941 I slot print_timing: id  0 | task 18872 | n_gen =   2990, tg =  28.02 t/s, tg_3s =  29.73 t/s
+Oct 12 19:49:41 omarchy env[557226]: 33.14.678.315 I slot print_timing: id  0 | task 18872 | n_gen =   3076, tg =  28.02 t/s, tg_3s =  28.06 t/s
+Oct 12 19:49:44 omarchy env[557226]: 33.17.748.875 I slot print_timing: id  0 | task 18872 | n_gen =   3166, tg =  28.06 t/s, tg_3s =  29.31 t/s
+Oct 12 19:49:47 omarchy env[557226]: 33.20.822.926 I slot print_timing: id  0 | task 18872 | n_gen =   3254, tg =  28.07 t/s, tg_3s =  28.63 t/s
+Oct 12 19:49:50 omarchy env[557226]: 33.23.888.284 I slot print_timing: id  0 | task 18872 | n_gen =   3342, tg =  28.09 t/s, tg_3s =  28.71 t/s
+Oct 12 19:49:53 omarchy env[557226]: 33.26.965.715 I slot print_timing: id  0 | task 18872 | n_gen =   3431, tg =  28.11 t/s, tg_3s =  28.92 t/s
+Oct 12 19:49:56 omarchy env[557226]: 33.30.044.676 I slot print_timing: id  0 | task 18872 | n_gen =   3506, tg =  28.02 t/s, tg_3s =  24.36 t/s
+Oct 12 19:50:00 omarchy env[557226]: 33.33.125.496 I slot print_timing: id  0 | task 18872 | n_gen =   3578, tg =  27.91 t/s, tg_3s =  23.37 t/s
+Oct 12 19:50:03 omarchy env[557226]: 33.36.223.654 I slot print_timing: id  0 | task 18872 | n_gen =   3664, tg =  27.90 t/s, tg_3s =  27.76 t/s
+Oct 12 19:50:06 omarchy env[557226]: 33.39.321.040 I slot print_timing: id  0 | task 18872 | n_gen =   3748, tg =  27.89 t/s, tg_3s =  27.12 t/s
+Oct 12 19:50:09 omarchy env[557226]: 33.42.323.673 I slot print_timing: id  0 | task 18872 | n_gen =   3815, tg =  27.76 t/s, tg_3s =  22.31 t/s
+Oct 12 19:50:12 omarchy env[557226]: 33.45.420.370 I slot print_timing: id  0 | task 18872 | n_gen =   3901, tg =  27.76 t/s, tg_3s =  27.77 t/s
+Oct 12 19:50:15 omarchy env[557226]: 33.48.421.352 I slot print_timing: id  0 | task 18872 | n_gen =   3978, tg =  27.72 t/s, tg_3s =  25.66 t/s
+Oct 12 19:50:18 omarchy env[557226]: 33.51.518.428 I slot print_timing: id  0 | task 18872 | n_gen =   4053, tg =  27.65 t/s, tg_3s =  24.22 t/s
+Oct 12 19:50:21 omarchy env[557226]: 33.54.519.190 I slot print_timing: id  0 | task 18872 | n_gen =   4123, tg =  27.56 t/s, tg_3s =  23.33 t/s
+Oct 12 19:50:24 omarchy env[557226]: 33.57.617.731 I slot print_timing: id  0 | task 18872 | n_gen =   4200, tg =  27.50 t/s, tg_3s =  24.85 t/s
+Oct 12 19:50:27 omarchy env[557226]: 34.00.716.786 I slot print_timing: id  0 | task 18872 | n_gen =   4286, tg =  27.51 t/s, tg_3s =  27.75 t/s
+Oct 12 19:50:30 omarchy env[557226]: 34.03.816.910 I slot print_timing: id  0 | task 18872 | n_gen =   4375, tg =  27.53 t/s, tg_3s =  28.71 t/s
+Oct 12 19:50:33 omarchy env[557226]: 34.06.916.529 I slot print_timing: id  0 | task 18872 | n_gen =   4449, tg =  27.46 t/s, tg_3s =  23.87 t/s
+Oct 12 19:50:36 omarchy env[557226]: 34.10.015.434 I slot print_timing: id  0 | task 18872 | n_gen =   4534, tg =  27.46 t/s, tg_3s =  27.43 t/s
+Oct 12 19:50:40 omarchy env[557226]: 34.13.114.572 I slot print_timing: id  0 | task 18872 | n_gen =   4623, tg =  27.49 t/s, tg_3s =  28.72 t/s
+Oct 12 19:50:43 omarchy env[557226]: 34.16.214.175 I slot print_timing: id  0 | task 18872 | n_gen =   4715, tg =  27.53 t/s, tg_3s =  29.68 t/s
+Oct 12 19:50:46 omarchy env[557226]: 34.19.312.655 I slot print_timing: id  0 | task 18872 | n_gen =   4806, tg =  27.56 t/s, tg_3s =  29.37 t/s
+Oct 12 19:50:49 omarchy env[557226]: 34.22.313.118 I slot print_timing: id  0 | task 18872 | n_gen =   4891, tg =  27.57 t/s, tg_3s =  28.33 t/s
+Oct 12 19:50:52 omarchy env[557226]: 34.25.411.229 I slot print_timing: id  0 | task 18872 | n_gen =   4982, tg =  27.60 t/s, tg_3s =  29.37 t/s
+Oct 12 19:50:55 omarchy env[557226]: 34.28.412.782 I slot print_timing: id  0 | task 18872 | n_gen =   5071, tg =  27.64 t/s, tg_3s =  29.65 t/s
+Oct 12 19:50:58 omarchy env[557226]: 34.31.510.116 I slot print_timing: id  0 | task 18872 | n_gen =   5160, tg =  27.65 t/s, tg_3s =  28.73 t/s
+Oct 12 19:51:01 omarchy env[557226]: 34.34.512.581 I slot print_timing: id  0 | task 18872 | n_gen =   5250, tg =  27.69 t/s, tg_3s =  29.98 t/s
+Oct 12 19:51:04 omarchy env[557226]: 34.37.608.020 I slot print_timing: id  0 | task 18872 | n_gen =   5343, tg =  27.73 t/s, tg_3s =  30.04 t/s
+Oct 12 19:51:07 omarchy env[557226]: 34.40.608.988 I slot print_timing: id  0 | task 18872 | n_gen =   5433, tg =  27.76 t/s, tg_3s =  29.99 t/s
+Oct 12 19:51:10 omarchy env[557226]: 34.43.707.619 I slot print_timing: id  0 | task 18872 | n_gen =   5526, tg =  27.80 t/s, tg_3s =  30.01 t/s
+Oct 12 19:51:13 omarchy env[557226]: 34.46.708.613 I slot print_timing: id  0 | task 18872 | n_gen =   5610, tg =  27.80 t/s, tg_3s =  27.99 t/s
+Oct 12 19:51:16 omarchy env[557226]: 34.49.806.281 I slot print_timing: id  0 | task 18872 | n_gen =   5693, tg =  27.79 t/s, tg_3s =  26.79 t/s
+Oct 12 19:51:19 omarchy env[557226]: 34.52.904.891 I slot print_timing: id  0 | task 18872 | n_gen =   5768, tg =  27.73 t/s, tg_3s =  24.20 t/s
+Oct 12 19:51:22 omarchy env[557226]: 34.56.006.445 I slot print_timing: id  0 | task 18872 | n_gen =   5861, tg =  27.77 t/s, tg_3s =  29.98 t/s
+Oct 12 19:51:26 omarchy env[557226]: 34.59.103.962 I slot print_timing: id  0 | task 18872 | n_gen =   5953, tg =  27.79 t/s, tg_3s =  29.70 t/s
+Oct 12 19:51:29 omarchy env[557226]: 35.02.203.391 I slot print_timing: id  0 | task 18872 | n_gen =   6043, tg =  27.81 t/s, tg_3s =  29.04 t/s
+Oct 12 19:51:32 omarchy env[557226]: 35.05.207.842 I slot print_timing: id  0 | task 18872 | n_gen =   6129, tg =  27.82 t/s, tg_3s =  28.62 t/s
+Oct 12 19:51:35 omarchy env[557226]: 35.08.238.485 I slot print_timing: id  0 | task 18872 | n_gen =   6217, tg =  27.84 t/s, tg_3s =  29.04 t/s
+Oct 12 19:51:38 omarchy env[557226]: 35.11.259.776 I slot print_timing: id  0 | task 18872 | n_gen =   6307, tg =  27.86 t/s, tg_3s =  29.79 t/s
+Oct 12 19:51:41 omarchy env[557226]: 35.14.282.664 I slot print_timing: id  0 | task 18872 | n_gen =   6374, tg =  27.79 t/s, tg_3s =  22.16 t/s
+Oct 12 19:51:44 omarchy env[557226]: 35.17.317.328 I slot print_timing: id  0 | task 18872 | n_gen =   6446, tg =  27.74 t/s, tg_3s =  23.73 t/s
+Oct 12 19:51:47 omarchy env[557226]: 35.20.346.233 I slot print_timing: id  0 | task 18872 | n_gen =   6528, tg =  27.73 t/s, tg_3s =  27.07 t/s
+Oct 12 19:51:50 omarchy env[557226]: 35.23.376.047 I slot print_timing: id  0 | task 18872 | n_gen =   6617, tg =  27.75 t/s, tg_3s =  29.37 t/s
+Oct 12 19:51:53 omarchy env[557226]: 35.26.414.424 I slot print_timing: id  0 | task 18872 | n_gen =   6700, tg =  27.74 t/s, tg_3s =  27.32 t/s
+Oct 12 19:51:56 omarchy env[557226]: 35.29.454.463 I slot print_timing: id  0 | task 18872 | n_gen =   6770, tg =  27.69 t/s, tg_3s =  23.03 t/s
+Oct 12 19:51:59 omarchy env[557226]: 35.32.492.953 I slot print_timing: id  0 | task 18872 | n_gen =   6851, tg =  27.67 t/s, tg_3s =  26.66 t/s
+Oct 12 19:52:02 omarchy env[557226]: 35.35.532.208 I slot print_timing: id  0 | task 18872 | n_gen =   6933, tg =  27.66 t/s, tg_3s =  26.98 t/s
+Oct 12 19:52:05 omarchy env[557226]: 35.38.572.378 I slot print_timing: id  0 | task 18872 | n_gen =   7019, tg =  27.67 t/s, tg_3s =  28.29 t/s
+Oct 12 19:52:08 omarchy env[557226]: 35.41.614.649 I slot print_timing: id  0 | task 18872 | n_gen =   7092, tg =  27.63 t/s, tg_3s =  24.00 t/s
+Oct 12 19:52:11 omarchy env[557226]: 35.44.669.066 I slot print_timing: id  0 | task 18872 | n_gen =   7169, tg =  27.60 t/s, tg_3s =  25.21 t/s
+Oct 12 19:52:14 omarchy env[557226]: 35.47.723.572 I slot print_timing: id  0 | task 18872 | n_gen =   7257, tg =  27.61 t/s, tg_3s =  28.81 t/s
+Oct 12 19:52:17 omarchy env[557226]: 35.50.774.601 I slot print_timing: id  0 | task 18872 | n_gen =   7347, tg =  27.64 t/s, tg_3s =  29.50 t/s
+Oct 12 19:52:20 omarchy env[557226]: 35.53.835.188 I slot print_timing: id  0 | task 18872 | n_gen =   7437, tg =  27.66 t/s, tg_3s =  29.41 t/s
+Oct 12 19:52:23 omarchy env[557226]: 35.56.897.456 I slot print_timing: id  0 | task 18872 | n_gen =   7527, tg =  27.67 t/s, tg_3s =  29.39 t/s
+Oct 12 19:52:26 omarchy env[557226]: 35.59.954.957 I slot print_timing: id  0 | task 18872 | n_gen =   7617, tg =  27.69 t/s, tg_3s =  29.44 t/s
+Oct 12 19:52:29 omarchy env[557226]: 36.03.026.697 I slot print_timing: id  0 | task 18872 | n_gen =   7707, tg =  27.71 t/s, tg_3s =  29.30 t/s
+Oct 12 19:52:33 omarchy env[557226]: 36.06.098.628 I slot print_timing: id  0 | task 18872 | n_gen =   7794, tg =  27.72 t/s, tg_3s =  28.32 t/s
+Oct 12 19:52:36 omarchy env[557226]: 36.09.166.213 I slot print_timing: id  0 | task 18872 | n_gen =   7884, tg =  27.74 t/s, tg_3s =  29.34 t/s
+Oct 12 19:52:39 omarchy env[557226]: 36.12.245.267 I slot print_timing: id  0 | task 18872 | n_gen =   7968, tg =  27.73 t/s, tg_3s =  27.28 t/s
+Oct 12 19:52:42 omarchy env[557226]: 36.15.320.600 I slot print_timing: id  0 | task 18872 | n_gen =   8056, tg =  27.74 t/s, tg_3s =  28.61 t/s
+Oct 12 19:52:45 omarchy env[557226]: 36.18.396.572 I slot print_timing: id  0 | task 18872 | n_gen =   8145, tg =  27.75 t/s, tg_3s =  28.93 t/s
+Oct 12 19:52:48 omarchy env[557226]: 36.21.476.957 I slot print_timing: id  0 | task 18872 | n_gen =   8235, tg =  27.77 t/s, tg_3s =  29.22 t/s
+Oct 12 19:52:49 omarchy env[557226]: 36.22.709.495 I slot print_timing: id  0 | task 18872 | prompt eval time =    2290.70 ms /   797 tokens (    2.87 ms per token,   347.93 tokens per second)
+Oct 12 19:52:49 omarchy env[557226]: 36.22.709.497 I slot print_timing: id  0 | task 18872 |        eval time =  297755.41 ms /  8269 tokens (   36.01 ms per token,    27.77 tokens per second)
+Oct 12 19:52:49 omarchy env[557226]: 36.22.709.497 I slot print_timing: id  0 | task 18872 |       total time =  300046.11 ms /  9066 tokens
+Oct 12 19:52:49 omarchy env[557226]: 36.22.709.498 I slot print_timing: id  0 | task 18872 |    graphs reused =      21509
+Oct 12 19:52:49 omarchy env[557226]: 36.22.709.499 I slot print_timing: id  0 | task 18872 | draft acceptance = 0.88063 ( 5275 accepted /  5990 generated), mean len =  2.76
+Oct 12 19:52:49 omarchy env[557226]: 36.22.709.542 I slot      release: id  0 | task 18872 | stop processing: n_tokens = 9067, truncated = 0
+Oct 12 19:52:49 omarchy env[557226]: 36.22.736.197 I srv    operator(): operator(): cleaning up before exit...
+Oct 12 19:52:49 omarchy systemd[1422]: Stopping [systemd-run] /usr/bin/env -u GGML_VK_VISIBLE_DEVICES /usr/bin/llama-server -m /home/USER/Models/Swift-Qwen3.8-27B-Q5_K_M.gguf -c 131072 -fa on -ctk q4_0 -ctv q4_0 -fit off -dev Vulkan1,Vulkan2 -sm layer -ts 16,11 -np 1 --metrics --spec-type draft-mtp --spec-draft-n-max 2 -ctkd q4_0 -ctvd q4_0 --alias matched-qwen38-27b-q5 --host 127.0.0.1 --port 18080...
+Oct 12 19:52:50 omarchy systemd[1422]: Stopped [systemd-run] /usr/bin/env -u GGML_VK_VISIBLE_DEVICES /usr/bin/llama-server -m /home/USER/Models/Swift-Qwen3.8-27B-Q5_K_M.gguf -c 131072 -fa on -ctk q4_0 -ctv q4_0 -fit off -dev Vulkan1,Vulkan2 -sm layer -ts 16,11 -np 1 --metrics --spec-type draft-mtp --spec-draft-n-max 2 -ctkd q4_0 -ctvd q4_0 --alias matched-qwen38-27b-q5 --host 127.0.0.1 --port 18080.
+Oct 12 19:52:50 omarchy systemd[1422]: bench-matched-qwen27b-42-20261012-165802.service: Consumed 12min 36.969s CPU time over 36min 23.149s wall clock time, 8.5G memory peak.

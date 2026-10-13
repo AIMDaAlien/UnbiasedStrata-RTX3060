@@ -8,3 +8,4 @@ __pycache__/
 /local/benchmarks/
 /local/fixtures/
 /snapshot/artifacts/
+!docs/assets/**/*.log

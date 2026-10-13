@@ -1,0 +1,38 @@
+campaign qwen27b-flash-matched-20261012-165802-qwen27b-41: targets=['matched-qwen27b-medium'] packs=['deepswe2']
+tasks: 24  out=/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-41.json
+
+=== matched-qwen27b-medium  (http://127.0.0.1:18080/v1)  0 rows so far
+  right server already up — will not tear it down
+  gate ok: 'ready'  1.2s
+  PASS deepswe2/e1-bounded-queue-close    1/1  29.7 t/s  46.9s
+  FAIL deepswe2/e2-lru-eviction           0/1  29.3 t/s  27.9s  [check-fail: SyntaxError: invalid syntax]
+  PASS deepswe2/e3-retry-idempotent       1/1  29.1 t/s  63.2s
+  PASS deepswe2/e4-session-store-split    1/1  29.3 t/s  90.5s
+  PASS deepswe2/e5-validate-pipeline      1/1  28.0 t/s  105.9s
+  PASS deepswe2/e6-index-rebuild          1/1  28.7 t/s  133.9s
+  PASS deepswe2/e7-money-rounding         1/1  28.3 t/s  162.6s
+  PASS deepswe2/e8-event-sourcing         1/1  28.8 t/s  53.9s
+  PASS deepswe2/e9-parallel-dedup         1/1  28.8 t/s  49.1s
+  FAIL deepswe2/e10-csv-dialect           0/1  28.5 t/s  91.4s  [check-fail: ValueError: I/O operation on closed ]
+  FAIL deepswe2/e11-scheduler-priority    0/1  28.3 t/s  106.8s  [check-fail: AssertionError: [{'ok': True, 'resul]
+  PASS deepswe2/e12-schema-migration      1/1  29.9 t/s  58.6s
+  PASS deepswe2/e13-stream-window         1/1  29.1 t/s  50.6s
+  PASS deepswe2/e14-parser-precedence     1/1  28.9 t/s  126.1s
+  PASS deepswe2/e15-backpressure-queue    1/1  29.2 t/s  65.8s
+  PASS deepswe2/e16-trie-autocomplete     1/1  29.3 t/s  86.5s
+  PASS deepswe2/e17-batch-chunking        1/1  29.6 t/s  31.6s
+  PASS deepswe2/e18-ttl-cache             1/1  29.2 t/s  79.2s
+  PASS deepswe2/e19-idempotent-http       1/1  29.8 t/s  38.9s
+  PASS deepswe2/e20-iter-drain            1/1  28.4 t/s  63.7s
+  PASS deepswe2/e21-index-invalidation    1/1  28.2 t/s  147.6s
+  PASS deepswe2/e22-multiprocess-shard    1/1  29.3 t/s  98.5s
+  PASS deepswe2/e23-config-layers         1/1  29.1 t/s  82.3s
+  PASS deepswe2/e24-fsm-parallel          1/1  27.9 t/s  298.7s
+  target wall: 2161.5s
+
+================ SUMMARY ================
+matched-qwen27b-medium: 21/24 checks | 21/24 full | median decode 29.1 t/s | wall 2161.5s
+    t2    1/2 checks, 1/2 full
+    t3    8/8 checks, 8/8 full
+    t4    12/14 checks, 12/14 full
+results: /home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-41.json
