@@ -1,0 +1,25 @@
+{
+  "backup": "local preserved originals; excluded from Git",
+  "files": [
+    {
+      "note": "Model Benchmarks/2026-10-12 Matched Qwen 27B vs Flash DeepSWE2.md",
+      "original_sha256": "9a6f57009ef9d023e1cadbfc8b2da780f79e7587e48c5efe360fbd006bf98381"
+    },
+    {
+      "note": "Model Benchmarks/2026-10-12 Matched Qwen vs Flash \u2014 Methods and artifacts.md",
+      "original_sha256": "d2c82859a93042eff462af601de2d74b86e69686c3b95b4f6286e75410cf9127"
+    },
+    {
+      "note": "Strata RTX 3060 Optimization Showcase.md",
+      "original_sha256": "f3aed550fc1d4a921c766a910aaa1955ec9e84aea4324f33a958c0643d5dd5c0"
+    },
+    {
+      "note": "Strata RTX 3060 long-context tuning.md",
+      "original_sha256": "4cb93945fb8e67382bd1ba91d8d6e09240cacaa6cedc5b7fc8d4f9d1fb4125c5"
+    },
+    {
+      "note": "Strata Bench.md",
+      "original_sha256": "41cb69d783b820b253017d5d56afb5ba41fb9d4f79354bf949196ef5363d56b9"
+    }
+  ]
+}

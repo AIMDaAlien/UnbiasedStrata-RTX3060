@@ -6,42 +6,42 @@
     {
       "source": "Model Benchmarks/2026-10-12 Matched Qwen 27B vs Flash DeepSWE2.md",
       "export": "notes/2026-10-12 Matched Qwen 27B vs Flash DeepSWE2.md",
-      "original_sha256": "9a6f57009ef9d023e1cadbfc8b2da780f79e7587e48c5efe360fbd006bf98381",
-      "exported_sha256": "2a0fb5fe9c6a4e46bb56be2d2cc51f68f2b51177be45585f8c4a158a5155036c",
+      "original_sha256": "51f27973dbe1681c3ef66b728edd9321bbaa7585cbc98cad3cdf320cc6f103db",
+      "exported_sha256": "c58ebc3a09c3522bb40e7e43c46ff2a1e232d53e9857cadc26e42b64b2251fb6",
       "normalized": true,
-      "bytes": 7935
+      "bytes": 8379
     },
     {
       "source": "Model Benchmarks/2026-10-12 Matched Qwen vs Flash \u2014 Methods and artifacts.md",
       "export": "notes/2026-10-12 Matched Qwen vs Flash \u2014 Methods and artifacts.md",
-      "original_sha256": "d2c82859a93042eff462af601de2d74b86e69686c3b95b4f6286e75410cf9127",
-      "exported_sha256": "9e70281326963d0c79563fb59580364bee3dad433c8b9748a991822487cf05b4",
+      "original_sha256": "5b07c3789a21173fd53676fb5f2aa68a72ff2232f34911a1cf0d965d761a2efb",
+      "exported_sha256": "1e75073918bbb9a7bbe88dafa88118b9d405f2cbc8d2722a7775095d340cd552",
       "normalized": true,
-      "bytes": 19194
+      "bytes": 19638
     },
     {
       "source": "Strata RTX 3060 Optimization Showcase.md",
       "export": "notes/Strata RTX 3060 Optimization Showcase.md",
-      "original_sha256": "f3aed550fc1d4a921c766a910aaa1955ec9e84aea4324f33a958c0643d5dd5c0",
-      "exported_sha256": "f5f9b651637773f82c77441ccfff50528c58bf6e4f481ccae5da9ab52b7bcab1",
+      "original_sha256": "bfe6190465a4ba605347c503b681729def3d1b67f4faa92e07341fab44823b4b",
+      "exported_sha256": "b5c0b919eb7739354af84c53f9f43c47e15231cc83be4750dacc00128fb98336",
       "normalized": true,
-      "bytes": 6204
+      "bytes": 6648
     },
     {
       "source": "Strata RTX 3060 long-context tuning.md",
       "export": "notes/Strata RTX 3060 long-context tuning.md",
-      "original_sha256": "4cb93945fb8e67382bd1ba91d8d6e09240cacaa6cedc5b7fc8d4f9d1fb4125c5",
-      "exported_sha256": "d231488f2b2f110eb352e459a55c7ca5af5d1ddb7e3e283b5deb5752d610a11b",
+      "original_sha256": "db5ea8175d6e5cfb37c6e90f61ddf6826534c88a6d7c67907848aac9d1b8bdf4",
+      "exported_sha256": "40504dc41283ca6d3a361ebae4a0735c595e1fab570278d9815c8b2e4bd7a66a",
       "normalized": true,
-      "bytes": 17509
+      "bytes": 17953
     },
     {
       "source": "Strata Bench.md",
       "export": "notes/Strata Bench.md",
-      "original_sha256": "41cb69d783b820b253017d5d56afb5ba41fb9d4f79354bf949196ef5363d56b9",
-      "exported_sha256": "44cf6cde47f449755734ee723a32de43c9569a1d59fe5dda1ac8e8dbda2310a4",
+      "original_sha256": "c2122e0f49cb167ab4911d3624dc8bae6aa6859e2979bd2f37838315053541fe",
+      "exported_sha256": "03af3174ae5228f57466e1b5f97b42c527a8f76fe439e2e6bedbd4b4e3261f22",
       "normalized": true,
-      "bytes": 2237
+      "bytes": 2681
     },
     {
       "source": "assets/qwen27b-flash-matched-20261012-165802/inventory.json",

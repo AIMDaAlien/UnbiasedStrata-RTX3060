@@ -67,3 +67,8 @@ The independent mode 5 microbenchmark measured a 1.47% reduction in sampled comb
 - Benchmark history: [Strata Bench](Strata%20Bench.md)
 - Expert campaign report: [REPORT.md](../assets/strata-expert-20261011T161207Z/REPORT.md) · [Independent microbenchmark report](../assets/strata-expert-20261011T161207Z/mode5-independent-report.json) · [Final response gate](../assets/strata-expert-20261011T161207Z/profile-gate.json) · [Final profiles](../assets/strata-expert-20261011T161207Z/final-profile-summary.json)
 - Benchmark index: Model Benchmarks
+
+
+## Public snapshot — 2026-10-12
+
+[Full-source RTX 3060 fork](https://github.com/AIMDaAlien/UnbiasedStrata-RTX3060) · [Dated release and patch](https://github.com/AIMDaAlien/UnbiasedStrata-RTX3060/releases/tag/rtx3060-2026-10-12). Exported documentation version: `rtx3060-2026-10-12`. On-demand, one-way export of the five selected project notes; originals and local evidence remain preserved. No automatic publishing or upstream tracking.

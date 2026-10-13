@@ -21,3 +21,8 @@ topic: Strata Bench
 ## 2026-10-10 — RTX 3060 long-context tuning
 
 [Strata RTX 3060 Optimization Showcase](Strata%20RTX%203060%20Optimization%20Showcase.md) is the project hub for the accepted result, evidence figures and later expert-kernel campaign. [Strata RTX 3060 long-context tuning](Strata%20RTX%203060%20long-context%20tuning.md) retains the detailed applied profile, verification and rollback. Five alternating pairs found **16.58% less time overall** at 100 W: fresh requests improved 20–23%, growing conversations 11–12%. All quality checks passed. AMD decode-only missed the 10% improvement gate and remains disabled.
+
+
+## Public snapshot — 2026-10-12
+
+[Full-source RTX 3060 fork](https://github.com/AIMDaAlien/UnbiasedStrata-RTX3060) · [Dated release and patch](https://github.com/AIMDaAlien/UnbiasedStrata-RTX3060/releases/tag/rtx3060-2026-10-12). Exported documentation version: `rtx3060-2026-10-12`. On-demand, one-way export of the five selected project notes; originals and local evidence remain preserved. No automatic publishing or upstream tracking.

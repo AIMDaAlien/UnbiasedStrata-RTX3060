@@ -90,3 +90,8 @@ Audit probe revisions: early e1/e8 assumptions and final e3/e20 input assumption
 [Trade-off chart SVG](../assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802.tradeoff.svg)
 
 Completion verified: six campaigns with 24 unique rows each; identical task/message/check fingerprints; 144/144 independent regrades agree. All requests returned final content without errors or truncation. Benchmark servers are stopped and Ornith is inactive. Controller wall time was 208.2 minutes, including launch/readiness, cleanup and the initial audit/chart generation.
+
+
+## Public snapshot — 2026-10-12
+
+[Full-source RTX 3060 fork](https://github.com/AIMDaAlien/UnbiasedStrata-RTX3060) · [Dated release and patch](https://github.com/AIMDaAlien/UnbiasedStrata-RTX3060/releases/tag/rtx3060-2026-10-12). Exported documentation version: `rtx3060-2026-10-12`. On-demand, one-way export of the five selected project notes; originals and local evidence remain preserved. No automatic publishing or upstream tracking.

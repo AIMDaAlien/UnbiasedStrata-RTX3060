@@ -1,9 +1,21 @@
 {
-  "status": "initial checks passed; clean committed checkout rebuild pending",
+  "status": "passed",
   "build": "fresh separate checkout; documented CUDA recipe; passed",
   "existing_control_tests": "7 passed",
   "smoke": "readiness, medium reasoning, final content, exact prompt token count and tool call/response round trip passed; temporary unit stopped",
   "evidence": "139 exported files; original/exported SHA-256 recorded; scored campaigns not rerun",
   "preserved": "installation, dirty source, model files, persistent config and binaries; Ornith inactive",
-  "known_limit": "MTP immutable source revision not retained in original fetch; parent upstream documents contain historical unresolved links and are excluded from link validation"
+  "known_limit": "MTP immutable source revision not retained in original fetch; parent upstream documents contain historical unresolved links and are excluded from link validation",
+  "clean_checkout_build": "Passed at initial source commit ff81481 (later rewritten to use public noreply author); source/build flags unchanged. Fresh build directory, no prebuilt binary or object reuse.",
+  "links": "Packaged README, quick start, model/experiment docs and exported notes/assets passed local destination checks; original inherited docs/upstream excluded.",
+  "charts": "PNG signatures and SVG roots checked; source chart data retained and checksummed.",
+  "benchmark_summaries": "Six existing campaigns: 21/21/21 Qwen, 23/22/23 Flash; 144 rows; existing five-pair 16.58044952052049% decision confirmed.",
+  "portable_paths": "Launcher generated exact argv for artifact paths with spaces; unset placeholders rejected; build uses script-relative root.",
+  "publication": "AIMDaAlien/UnbiasedStrata-RTX3060 public fork, default rtx3060-snapshot; release rtx3060-2026-10-12",
+  "limits": {
+    "MemoryMax": 60129542144,
+    "MemorySwapMax": 0,
+    "smoke_MemoryPeak": 60057665536,
+    "smoke_MemorySwapPeak": 0
+  }
 }

@@ -1,0 +1,20 @@
+[
+  {
+    "source": "/home/USER/opt/Strata-data/mtp/mtp-manifest.json",
+    "export": "snapshot/mtp-manifest.json",
+    "original_sha256": "1ad281ed87ad9cd42f9c048e9c49172165ea714a600d15f1d80cd0a02db12328",
+    "exported_sha256": "1ad281ed87ad9cd42f9c048e9c49172165ea714a600d15f1d80cd0a02db12328"
+  },
+  {
+    "source": "/home/USER/opt/Strata-data/mtp/mtp-inventory.json",
+    "export": "snapshot/mtp-inventory.json",
+    "original_sha256": "4d1e3b6318e9f7ba08b934587303703fee2c8b3dc4289b3b4d221fdf1f9537d6",
+    "exported_sha256": "4d1e3b6318e9f7ba08b934587303703fee2c8b3dc4289b3b4d221fdf1f9537d6"
+  },
+  {
+    "source": "/home/USER/opt/Strata-data/mtp/mtp-q2_0.gguf.report.json",
+    "export": "snapshot/mtp-q2_0.gguf.report.json",
+    "original_sha256": "136497b74f172501d2fe4cd6d2b3c37273560d16fb073e7bbf02c12e80b9d325",
+    "exported_sha256": "136497b74f172501d2fe4cd6d2b3c37273560d16fb073e7bbf02c12e80b9d325"
+  }
+]
