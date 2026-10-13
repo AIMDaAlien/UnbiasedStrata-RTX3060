@@ -1,0 +1,82 @@
+{
+  "started_utc": "2026-10-11T03:19:06.459373+00:00",
+  "automatic_wake_scheduled": false,
+  "fan_controls_changed": false,
+  "rgb_off": {
+    "command": [
+      "timeout",
+      "25",
+      "openrgb",
+      "--noautoconnect",
+      "--device",
+      "ENE DRAM",
+      "--mode",
+      "Off",
+      "--device",
+      "ASUS TUF GAMING X670E-PLUS WIFI",
+      "--mode",
+      "Off"
+    ],
+    "exit_code": 0,
+    "stdout": "<h2>Warning:</h2><p>One or more I2C/SMBus interfaces failed to initialize.</p><p>Depending on which interfaces failed to initialize, some RGB DRAM modules, some motherboards' onboard RGB lighting, and RGB graphics cards may not be available in OpenRGB.</p><p>On Linux, this is usually because the i2c-dev module is not loaded.</p><p>For OpenRGB to access these devices, you must load the i2c-dev module along with the correct I2C driver module for your motherboard. This is usually i2c-piix4 for AMD systems and i2c-i801 for Intel systems.</p><p>If you are not using any of the devices listed above, you can safely ignore this message.</p>\n",
+    "stderr": ""
+  },
+  "rgb_after": {
+    "command": [
+      "timeout",
+      "25",
+      "openrgb",
+      "--noautoconnect",
+      "--list-devices"
+    ],
+    "exit_code": 0,
+    "stdout": "<h2>Warning:</h2><p>One or more I2C/SMBus interfaces failed to initialize.</p><p>Depending on which interfaces failed to initialize, some RGB DRAM modules, some motherboards' onboard RGB lighting, and RGB graphics cards may not be available in OpenRGB.</p><p>On Linux, this is usually because the i2c-dev module is not loaded.</p><p>For OpenRGB to access these devices, you must load the i2c-dev module along with the correct I2C driver module for your motherboard. This is usually i2c-piix4 for AMD systems and i2c-i801 for Intel systems.</p><p>If you are not using any of the devices listed above, you can safely ignore this message.</p>\n0: ENE DRAM\n  Type:           DRAM\n  Description:    ENE SMBus Device\n  Version:        I2C: SMBus PIIX4 adapter port 0 at 0b00 (/dev/i2c-17), address 0x71\n  Location:       I2C: SMBus PIIX4 adapter port 0 at 0b00 (/dev/i2c-17), address 0x71\n  Modes: Direct [Off] Static Breathing Flashing 'Spectrum Cycle' Rainbow 'Chase Fade' Chase 'Random Flicker'\n  Zones: DRAM\n  LEDs: 'DRAM LED 1' 'DRAM LED 2' 'DRAM LED 3' 'DRAM LED 4' 'DRAM LED 5' 'DRAM LED 6' 'DRAM LED 7' 'DRAM LED 8'\n\n1: ENE DRAM\n  Type:           DRAM\n  Description:    ENE SMBus Device\n  Version:        I2C: SMBus PIIX4 adapter port 0 at 0b00 (/dev/i2c-17), address 0x73\n  Location:       I2C: SMBus PIIX4 adapter port 0 at 0b00 (/dev/i2c-17), address 0x73\n  Modes: Direct [Off] Static Breathing Flashing 'Spectrum Cycle' Rainbow 'Chase Fade' Chase 'Random Flicker'\n  Zones: DRAM\n  LEDs: 'DRAM LED 1' 'DRAM LED 2' 'DRAM LED 3' 'DRAM LED 4' 'DRAM LED 5' 'DRAM LED 6' 'DRAM LED 7' 'DRAM LED 8'\n\n2: ASUS TUF GAMING X670E-PLUS WIFI\n  Type:           Motherboard\n  Description:    ASUS Aura USB Mainboard Device\n  Version:        HID: /dev/hidraw3\n  Location:       HID: /dev/hidraw3\n  Serial:         9876543210\n  Modes: [Direct] Off Static Breathing Flashing 'Spectrum Cycle' Rainbow 'Chase Fade' Chase\n  Zones: 'Aura Mainboard' 'Aura Addressable 1' 'Aura Addressable 2' 'Aura Addressable 3'\n  LEDs: 'Aura Mainboard, LED 1' 'Aura Mainboard, RGB Header 1' 'Aura Mainboard, RGB Header 2'\n\n",
+    "stderr": ""
+  },
+  "rgb_verified_off": true,
+  "unsupported_lights": "OpenRGB discovered only two ENE RAM devices and ASUS TUF X670E motherboard. Any other case, fan or GPU lights were not detected and were not written to. I2C initialization warnings preserved in the discovery output.",
+  "rgb_verification_method": "SDK-only query with --nodetect after Off applied via the localhost OpenRGB server; no new hardware discovery after applying Off",
+  "rgb_sdk_final_log": "/home/USER/opt/UnbiasedStrata/local/benchmarks/qsa-20261011-screen/rgb-sdk-final.log",
+  "motherboard_verification_note": "A separate hardware enumeration reported Direct, so supported Static black then Off were applied via OpenRGB SDK and verified without redetection. No raw controller writes or fan controls used.",
+  "power_action": "hibernation requested",
+  "power_state": {
+    "/sys/power/state": "freeze mem disk",
+    "/sys/power/disk": "[platform] shutdown reboot suspend test_resume",
+    "/sys/power/mem_sleep": "s2idle [deep]",
+    "/sys/power/resume": "253:0",
+    "/sys/power/resume_offset": "1966814",
+    "/sys/power/image_size": "26435571712"
+  },
+  "swap_before_sleep": {
+    "command": [
+      "swapon",
+      "--show",
+      "--bytes"
+    ],
+    "exit_code": 0,
+    "stdout": "NAME           TYPE             SIZE       USED PRIO\n/swap/swapfile file      33350946816          0    0\n/dev/zram0     partition 66506977280 4184068096  100\n",
+    "stderr": ""
+  },
+  "hibernate_availability": {
+    "command": [
+      "busctl",
+      "call",
+      "org.freedesktop.login1",
+      "/org/freedesktop/login1",
+      "org.freedesktop.login1.Manager",
+      "CanHibernate"
+    ],
+    "exit_code": 0,
+    "stdout": "s \"yes\"\n",
+    "stderr": ""
+  },
+  "hibernate_request": {
+    "command": [
+      "systemctl",
+      "hibernate"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+}

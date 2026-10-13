@@ -1,101 +1,30 @@
-# UnbiasedStrata
+# UnbiasedStrata RTX 3060 snapshot — 2026-10-12
 
-A cut-down fork of [Strata](https://github.com/Niko1221/Strata), an inference engine for the
-Qwen3.8-Flash-Next model. The engine source is unchanged from upstream. Everything around it has been
-removed or is being replaced, so that building and running work the way they do for llama.cpp: clone,
-build, copy one binary, run. Nothing is downloaded during the build or at start-up.
+A personal hardware-constrained experiment on one RTX 3060 (12 GiB, 100 W), Ryzen 9 7950X and 64 GB RAM. This is a full-source patch snapshot of existing runtimes, not a new engine or a claim of general model superiority. No ongoing upstream tracking, new-model support or maintenance commitment is offered.
 
-## Status
+Ancestry: [Strata](https://github.com/Niko1221/Strata) → [UnbiasedStrata](https://github.com/robertkarl/UnbiasedStrata) → this snapshot. Niko1221 and the Strata contributors authored the engine; robertkarl authored the UnbiasedStrata frontend and packaging. AIMDaAlien's local work adds hardware profiles, frontend reasoning/token-count handling, prefill tuning and instrumentation, safety guards, opt-in AMD/kernel experiments, and evidence/documentation packaging. AI agents assisted implementation and packaging. MIT licenses and attribution are retained; model licenses are separate.
 
-Work in progress. What works today, checked on RTX 3090 pods:
+Pinned base: `d0a44ea7e757c59fa35a78b4b98d0c4bb44ce2cf`; llama.cpp: `3cf03257f219afbe7334045ff7c6a06ac68c627d`. The default branch is `rtx3060-snapshot`, release `rtx3060-2026-10-12`. Parent branch history is preserved. No newer upstream source is merged.
 
-- Clone, `git submodule update --init`, `make build`, with no network access during the build.
-- One binary, `build/unbiased-strata`, that loads the model and serves an OpenAI-style chat API: streaming
-  and non-streaming replies, the model's reasoning separated from its answer, and tool calls.
-- A coding agent (pi) completed a multi-step task against it: it wrote a program, ran it through its tools
-  and reported the result.
+## What was measured
 
-Not done yet:
+- The combined fused-prefill/chunk/ring profile reduced response time by **16.58%** across six saved long-context buckets, after five alternating pairs. Candidate/control paired 95% interval: **0.83366–0.83473**. This describes repeatability on these fixtures and this machine.
+- AMD assistance, native expert-kernel candidates and the QSA active-bound candidate failed their rollout gates. They remain opt-in; no accepted end-to-end improvement is attributed to them.
+- The corrected matched comparison averaged **22.67/24 Flash versus 21/24 Qwen**, with paired task-bootstrap difference interval **[-2.33, +5.67]**. Quantization, runtime, context, KV, speculation and device allocation differ; these tasks do not resolve general model superiority.
 
-- **No speed is claimed.** The only end-to-end runs so far were on a pod whose network volume the engine
-  could not load experts from in its normal way (see Known problems), so it ran in a fallback mode. In that
-  mode it generated at 21 to 61 tokens per second. A run in the normal mode on a machine with a local disk
-  is still to do.
-- The prepared model files (below) are not published yet.
-- The engine source is still upstream's in full. 85 of its 272 source files are not compiled into the binary
-  at all; removing those, and then the multi-GPU, AMD, Windows and other-model code, is the next piece of work.
-- Image input is not supported.
+[Quick start](docs/QUICKSTART.md) · [Models and preparation](docs/MODELS.md) · [Experiments and rollback](docs/EXPERIMENTS.md) · [Verification](snapshot/verification.json) · [Export provenance](docs/export-manifest.json) · [Upstream ancestry](UPSTREAM.md)
 
-## Known problems
+## Evidence and notes
 
-- **RunPod network volumes.** With the model on a RunPod network volume (`/workspace`), the engine fails at
-  start with "short read or unreadable shard": once it has pinned its expert arena, reads from the volume
-  return "cannot allocate memory". The cause is not known. Keeping the model on local disk avoids it. On a
-  pod without enough local disk, a working fallback was shard 1 in `/dev/shm`, shard 2 on local disk, and
-  `-- --mmap-experts` at the end of the command line.
+The five selected Obsidian notes and relevant small evidence archives are exported under [docs/notes](docs/notes). Their original measurements and executable identities remain authoritative; rebuilding this snapshot does not repeat a benchmark. The scored campaigns are not rerun for packaging.
 
-## What it supports
+An on-demand, one-way export is available:
 
-One configuration, on purpose:
-
-| | |
-| --- | --- |
-| Model | Qwen3.8-Flash-Next, GSQ-RCO IQ3_XXS, with the draft (MTP) head |
-| GPU | One NVIDIA card with 24 GB or more, RTX 30 series or newer |
-| RAM | 128 GB |
-| CPU | x86-64 with AVX2 |
-| OS | Linux |
-
-Tested so far:
-
-| Machine | What was checked |
-| --- | --- |
-| RTX 3090 pods, CUDA 12.8, g++ 13.3 | `git submodule update --init` and `make build` complete with network access blocked for the build. The model loads and answers chat requests, in the fallback mode described under Known problems. |
-
-## Build
-
-Needs CMake 3.24 or newer, a C++20 compiler and the CUDA toolkit (12.8 or newer; 13.0 or newer for RTX 50
-cards).
-
-```
-git clone <this repo>
-cd UnbiasedStrata
-git submodule update --init
-make build
+```sh
+python3 scripts/export-notes.py --vault "$OBSIDIAN_VAULT"
+python3 scripts/check-docs.py
 ```
 
-The result is `build/unbiased-strata`, a single file you can copy to another machine. It needs the NVIDIA
-driver and the CUDA runtime libraries there, as llama.cpp does.
+This reads the five selected notes, converts wiki links/embeds, copies relevant assets and records original/exported checksums. It normalizes personal home paths and omits the unrelated desktop handoff. References outside the export become plain text. No background synchronization, automatic publishing or edits to vault originals occur. Evidence scripts under `docs/assets` are historical snapshots, not relocated runnable benchmarks.
 
-## Run
-
-```
-./unbiased-strata --model /models/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf \
-                  --pack /models/pack-iq3-xxs --mtp /models/mtp
-```
-
-It listens on `127.0.0.1:8080` and serves `POST /v1/chat/completions` (with streaming), `GET /v1/models` and
-`GET /health`. Loading takes a few minutes. Options: `--ctx N` (default 32768), `--threads N`, `--host`,
-`--port`. Inside a container set `--threads` yourself: the default is every physical core of the host.
-
-Requests are greedy unless they set a `temperature` above zero. The model thinks before it answers; send
-`"reasoning_effort": "none"` to turn that off. Tool calling follows the OpenAI format (`tools`, `tool_calls`).
-
-## Model files
-
-The engine needs three things on disk before it starts. It never fetches them.
-
-1. The two IQ3_XXS GGUF shards from
-   [ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF](https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF),
-   side by side in one directory.
-2. The prepared "pack" for those shards (about 1.5 GB): `index.txt`, `dense.bin`, `native_experts.txt`,
-   `conversions.json`, `expert-profile.bin`.
-3. The prepared draft head (about 0.8 GB): `experts.bin`, `dense.bin`, `dense.txt`, `draft_vocab.bin`.
-
-Items 2 and 3 are made once with upstream Strata's tools and will be published; see [UPSTREAM.md](UPSTREAM.md).
-
-## Credits and licence
-
-MIT, as upstream. The engine is the work of Niko1221 and the Strata contributors; see [LICENSE](LICENSE)
-and [UPSTREAM.md](UPSTREAM.md). llama.cpp and ggml (MIT) are used as a pinned submodule. The model files
-have their own licences.
+Weights, prepared packs, executables, caches and bulk experiment output are excluded. Download the patch against the pinned base from the [release](https://github.com/AIMDaAlien/UnbiasedStrata-RTX3060/releases/tag/rtx3060-2026-10-12). Future work, if any, receives a separate dated snapshot.

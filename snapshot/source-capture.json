@@ -1,0 +1,252 @@
+{
+  "base": "d0a44ea7e757c59fa35a78b4b98d0c4bb44ce2cf",
+  "files": [
+    {
+      "path": "CMakeLists.txt",
+      "original_sha256": "7b54c7937ae71ac72d1bb2494f6f7b2be84339680649299627739aafe4038d7e",
+      "snapshot_sha256": "7b54c7937ae71ac72d1bb2494f6f7b2be84339680649299627739aafe4038d7e",
+      "packaging_modified": false
+    },
+    {
+      "path": "frontend/main.cpp",
+      "original_sha256": "c5c94b76b462448f3cd8efaf195da5f580fa8a15c98f460938fb6c2aa26c17a0",
+      "snapshot_sha256": "c5c94b76b462448f3cd8efaf195da5f580fa8a15c98f460938fb6c2aa26c17a0",
+      "packaging_modified": false
+    },
+    {
+      "path": "include/strata/core/remote_experts.hpp",
+      "original_sha256": "780824df485869b16483d2b3de9c5a948cdb0b93b18bc65d00f412b4dace9119",
+      "snapshot_sha256": "780824df485869b16483d2b3de9c5a948cdb0b93b18bc65d00f412b4dace9119",
+      "packaging_modified": false
+    },
+    {
+      "path": "include/strata/prefill/prefill.hpp",
+      "original_sha256": "163c2b28a28c337e87e7d0d4626f9399b5f7e137cb8aba46a04fdffed73da803",
+      "snapshot_sha256": "163c2b28a28c337e87e7d0d4626f9399b5f7e137cb8aba46a04fdffed73da803",
+      "packaging_modified": false
+    },
+    {
+      "path": "src/core/expert_source.cpp",
+      "original_sha256": "db6d98a52085ba70028cfa75e6bd9718344a595148a89680c38d60fc400dcb74",
+      "snapshot_sha256": "db6d98a52085ba70028cfa75e6bd9718344a595148a89680c38d60fc400dcb74",
+      "packaging_modified": false
+    },
+    {
+      "path": "src/kernels/cuda/qsa_select.cu",
+      "original_sha256": "cf5d3cb4d2666134e38ffd721d728a02c9401413cd1320fe673af8b79dac2b4c",
+      "snapshot_sha256": "cf5d3cb4d2666134e38ffd721d728a02c9401413cd1320fe673af8b79dac2b4c",
+      "packaging_modified": false
+    },
+    {
+      "path": "src/kernels/qsa_topk_active_parity.cpp",
+      "original_sha256": "2422d378883fe0f7c4a41b09c79a619217784f4b4def78658fe442ab4cb9d17b",
+      "snapshot_sha256": "2422d378883fe0f7c4a41b09c79a619217784f4b4def78658fe442ab4cb9d17b",
+      "packaging_modified": false
+    },
+    {
+      "path": "src/prefill/moe_fused_iq.cu",
+      "original_sha256": "271fc25eecc5e793781677269e7ddfd917df9d34e01d4d9696bacb8b356e084f",
+      "snapshot_sha256": "271fc25eecc5e793781677269e7ddfd917df9d34e01d4d9696bacb8b356e084f",
+      "packaging_modified": false
+    },
+    {
+      "path": "src/prefill/prefill.cpp",
+      "original_sha256": "6e8b03fe738d9cf98bc00327a5a96bcd2e4ea003a3c1b466d73a851d9e96db4c",
+      "snapshot_sha256": "6e8b03fe738d9cf98bc00327a5a96bcd2e4ea003a3c1b466d73a851d9e96db4c",
+      "packaging_modified": false
+    },
+    {
+      "path": "src/program/generate.cpp",
+      "original_sha256": "c3f027e357cb91ecb3935dd448acd0b96c26fcc019f5791a8a316332cb83a65d",
+      "snapshot_sha256": "c3f027e357cb91ecb3935dd448acd0b96c26fcc019f5791a8a316332cb83a65d",
+      "packaging_modified": false
+    },
+    {
+      "path": "include/strata/core/amd_experts.hpp",
+      "original_sha256": "d33b0a6e1631a86e64a649d8b7150e8496aab0c46578a84795a50bb30e3815b1",
+      "snapshot_sha256": "d33b0a6e1631a86e64a649d8b7150e8496aab0c46578a84795a50bb30e3815b1",
+      "packaging_modified": false
+    },
+    {
+      "path": "include/strata/core/amd_protocol.hpp",
+      "original_sha256": "38e930a0d7e6c8e8c972fd5a7ceeeea814f9fe52828a7720caf1256c8455175f",
+      "snapshot_sha256": "38e930a0d7e6c8e8c972fd5a7ceeeea814f9fe52828a7720caf1256c8455175f",
+      "packaging_modified": false
+    },
+    {
+      "path": "include/strata/prefill/moe_fused_iq_dispatch.hpp",
+      "original_sha256": "4f618147447d59a46fa0f0981c5a58d69cd3b08487f8a36ad40e71c2ebc48adc",
+      "snapshot_sha256": "4f618147447d59a46fa0f0981c5a58d69cd3b08487f8a36ad40e71c2ebc48adc",
+      "packaging_modified": false
+    },
+    {
+      "path": "include/strata/prefill/moe_fused_iq_lab.hpp",
+      "original_sha256": "ee0d481af7abba6b42ebb0476879a1702d3c948407897941424ed4a7518f9141",
+      "snapshot_sha256": "ee0d481af7abba6b42ebb0476879a1702d3c948407897941424ed4a7518f9141",
+      "packaging_modified": false
+    },
+    {
+      "path": "src/core/amd_experts.cpp",
+      "original_sha256": "7daf16228e65909748e28547dbe05a7d4f1ce31c388f83591295b319599969da",
+      "snapshot_sha256": "7daf16228e65909748e28547dbe05a7d4f1ce31c388f83591295b319599969da",
+      "packaging_modified": false
+    },
+    {
+      "path": "src/core/amd_helper_check.cpp",
+      "original_sha256": "b2ba853104d16d152d09ffb3fdb38491ff5f6c74c67c79cf9851b434df2d3f3d",
+      "snapshot_sha256": "b2ba853104d16d152d09ffb3fdb38491ff5f6c74c67c79cf9851b434df2d3f3d",
+      "packaging_modified": false
+    },
+    {
+      "path": "src/kernels/native_expert_lab.cpp",
+      "original_sha256": "d1086c7af2818087ea11759a2a9771a73d91e0e13e7e9a69016ca3da327ee304",
+      "snapshot_sha256": "d1086c7af2818087ea11759a2a9771a73d91e0e13e7e9a69016ca3da327ee304",
+      "packaging_modified": false
+    },
+    {
+      "path": "src/program/amd_worker.cpp",
+      "original_sha256": "c262b74e7b598c1cc5b1d508f4caa48ea302629cfb91594ecc46e9744deba9a3",
+      "snapshot_sha256": "c262b74e7b598c1cc5b1d508f4caa48ea302629cfb91594ecc46e9744deba9a3",
+      "packaging_modified": false
+    },
+    {
+      "path": "local/launch.py",
+      "original_sha256": "0b70105c900838f2544371cd9c85037e1a92481e3af649b4910c03cc1e95fe66",
+      "snapshot_sha256": "3c264858455c1c0910cd98812a0a45f4292147325fb3947da022eaf4a4754133",
+      "packaging_modified": true
+    },
+    {
+      "path": "local/build.sh",
+      "original_sha256": "c050ae56202713722bffd178a548e066fdbaffcd60bfa6937ec364b6eb1e0d08",
+      "snapshot_sha256": "a2064352afef670e2b8783dbfaebfa380df0b5774e796defff4e41818fbfe9f8",
+      "packaging_modified": true
+    },
+    {
+      "path": "local/benchmark.py",
+      "original_sha256": "6e6dd5c35f9fe96d46bf77689e5bbdf8bef1f2782b0ff167042ed632e50e28e5",
+      "snapshot_sha256": "6e6dd5c35f9fe96d46bf77689e5bbdf8bef1f2782b0ff167042ed632e50e28e5",
+      "packaging_modified": false
+    },
+    {
+      "path": "local/HARDWARE.md",
+      "original_sha256": "aa7035d0e041c3f771beaf146a6f2a1752624a96435becdd32e3a431bd4c5af9",
+      "snapshot_sha256": "aa7035d0e041c3f771beaf146a6f2a1752624a96435becdd32e3a431bd4c5af9",
+      "packaging_modified": false
+    },
+    {
+      "path": "local/build-amd.sh",
+      "original_sha256": "608d8da57090ae844a46ad4552bb560a62a9d2805c4f52b4015ad629842717a4",
+      "snapshot_sha256": "836b8305cbf1e85961a4b1ca74b527603d7dafcd38bf9328a83466f62b0209d0",
+      "packaging_modified": true
+    },
+    {
+      "path": "local/AMD.md",
+      "original_sha256": "3750915aaa66367004c740b911d821ebc62047036e52b9e62134a813c010ccdc",
+      "snapshot_sha256": "3750915aaa66367004c740b911d821ebc62047036e52b9e62134a813c010ccdc",
+      "packaging_modified": false
+    },
+    {
+      "path": "local/config-amd.json",
+      "original_sha256": "769cfb481e6cb55ed63854e5071428b27f4c65cb75a3ac396f9786c8ea6065c8",
+      "snapshot_sha256": "62b4b598b9ce2e16d07d0a6ec151592a762aab78069ddcd755b5bb1d4ab0b07b",
+      "packaging_modified": true
+    },
+    {
+      "path": "local/long_context.py",
+      "original_sha256": "8911575f9330f3bc047eb8ab8a701fd488ed5db815b9c4634b3852ad0e442657",
+      "snapshot_sha256": "8911575f9330f3bc047eb8ab8a701fd488ed5db815b9c4634b3852ad0e442657",
+      "packaging_modified": false
+    },
+    {
+      "path": "local/amd-worker.sh",
+      "original_sha256": "20de0534dab96bab019bdcf03ecaf7d1f1f1bf3c535aca7f34fc99e92b188b8d",
+      "snapshot_sha256": "f28382001859c72814b9a9ca8d49e43bf12bd38c8a9ae261caf73a584ec721d3",
+      "packaging_modified": true
+    },
+    {
+      "path": "local/config-amd-helper.json",
+      "original_sha256": "49cfa66dcc0dfbdc94a2d49e1b665f3fad5a4618ce8a9674ffd9d8e2bb717bc4",
+      "snapshot_sha256": "79542c0f52672d3c57bb19b22d2a4a6f21dc92e39cd6d7e0019ace32e4b1bf86",
+      "packaging_modified": true
+    },
+    {
+      "path": "local/paired_report.py",
+      "original_sha256": "c5b7520d9fea990cfe6d36ff70b1452946587b14ed8bbd593fdcdd05691a9bb1",
+      "snapshot_sha256": "c5b7520d9fea990cfe6d36ff70b1452946587b14ed8bbd593fdcdd05691a9bb1",
+      "packaging_modified": false
+    },
+    {
+      "path": "local/long_experiment.py",
+      "original_sha256": "467f760577e790081df909ae6e00130af566974d05d0c396d5200f43a70dfb0e",
+      "snapshot_sha256": "467f760577e790081df909ae6e00130af566974d05d0c396d5200f43a70dfb0e",
+      "packaging_modified": false
+    },
+    {
+      "path": "local/check_generated_code.py",
+      "original_sha256": "aee03274abbb7065700ae7e536c8dac74b0b17bd0b90cac4416c77a0a46515fc",
+      "snapshot_sha256": "aee03274abbb7065700ae7e536c8dac74b0b17bd0b90cac4416c77a0a46515fc",
+      "packaging_modified": false
+    },
+    {
+      "path": "local/LONG_CONTEXT.md",
+      "original_sha256": "8012866bf149d52f2a4246a3b207e5f660b23b131f1de5a350c6b50729e0cd49",
+      "snapshot_sha256": "2dc91d9655e5ecb470adf574f75355cd989c4bd2cde307d8eaf45924fa92d5ab",
+      "packaging_modified": true
+    },
+    {
+      "path": "local/prefill_experiment.py",
+      "original_sha256": "ee11d4a49a2ca36702f05fc555dc2c61f86af38029a0fb2d6e0f103e4ed856c4",
+      "snapshot_sha256": "ee11d4a49a2ca36702f05fc555dc2c61f86af38029a0fb2d6e0f103e4ed856c4",
+      "packaging_modified": false
+    },
+    {
+      "path": "local/test_optimization.py",
+      "original_sha256": "0e14b7e0b4ca666fe4a43493aeb5a47c3571385fcd9717355728ce969d56ba27",
+      "snapshot_sha256": "0e14b7e0b4ca666fe4a43493aeb5a47c3571385fcd9717355728ce969d56ba27",
+      "packaging_modified": false
+    },
+    {
+      "path": "local/PREFILL_RESEARCH.md",
+      "original_sha256": "6c02a1f2f4a7eda64d279bdbc11bc41355172b781b2ce0dc19b9f79eb270a5ca",
+      "snapshot_sha256": "6c02a1f2f4a7eda64d279bdbc11bc41355172b781b2ce0dc19b9f79eb270a5ca",
+      "packaging_modified": false
+    },
+    {
+      "path": "local/PREFILL_RESULTS.md",
+      "original_sha256": "739e3a109be08b3a672b5885c5fb433ad2c4eaced51acffe5e863527196ac289",
+      "snapshot_sha256": "e5d761dce9125897ecff1b43552d2fb28d8ea00afdc6bd82bfde7cc835178063",
+      "packaging_modified": true
+    },
+    {
+      "path": "local/plot_prefill_results.py",
+      "original_sha256": "3c75c5105b944b828500ff00e45d21f40e27821084878185c6f0dedd59c4d2cd",
+      "snapshot_sha256": "3c75c5105b944b828500ff00e45d21f40e27821084878185c6f0dedd59c4d2cd",
+      "packaging_modified": false
+    },
+    {
+      "path": "local/qsa_screen.py",
+      "original_sha256": "00cc64911828dd7a3e666295e2d93fe0d065350099857220cd31bc5aedc5f388",
+      "snapshot_sha256": "00cc64911828dd7a3e666295e2d93fe0d065350099857220cd31bc5aedc5f388",
+      "packaging_modified": false
+    },
+    {
+      "path": "local/expert_campaign.py",
+      "original_sha256": "0bcb0e87b55f679195f899724cdd5ba4a7d9764a19ac51970d3f052aedd5c72d",
+      "snapshot_sha256": "0bcb0e87b55f679195f899724cdd5ba4a7d9764a19ac51970d3f052aedd5c72d",
+      "packaging_modified": false
+    },
+    {
+      "path": "local/expert_select.py",
+      "original_sha256": "448c571a448f85c931391b9246edd3a8f89a9ec2961aaac22bcbe9dad9d36c57",
+      "snapshot_sha256": "448c571a448f85c931391b9246edd3a8f89a9ec2961aaac22bcbe9dad9d36c57",
+      "packaging_modified": false
+    },
+    {
+      "path": "local/expert_final_gate.py",
+      "original_sha256": "724c53e5aa2d24bb8f6c708f566ec1fa06d9b34259a7369133ae4f719655b0ce",
+      "snapshot_sha256": "724c53e5aa2d24bb8f6c708f566ec1fa06d9b34259a7369133ae4f719655b0ce",
+      "packaging_modified": false
+    }
+  ],
+  "excluded": "Generated local packs, fixtures, binaries, caches, benchmark directories and logs. Selected evidence is exported separately."
+}

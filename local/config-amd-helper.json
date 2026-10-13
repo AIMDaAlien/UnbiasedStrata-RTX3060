@@ -1,0 +1,13 @@
+{
+  "model": "/home/USER/opt/Strata-data/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf",
+  "pack": "/home/USER/opt/UnbiasedStrata/local/pack-iq3_xxs",
+  "mtp": "/home/USER/opt/Strata-data/mtp/rt",
+  "port": 8081,
+  "context": 32768,
+  "threads": 15,
+  "ple_io": "direct",
+  "spec": 4,
+  "amd_helper": "/home/USER/opt/UnbiasedStrata/local/amd-worker.sh",
+  "amd_device": "GPU-8140af32fe338274",
+  "amd_vram_mib": 12288
+}

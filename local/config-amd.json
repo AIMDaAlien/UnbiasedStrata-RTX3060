@@ -1,0 +1,11 @@
+{
+  "model": "/home/USER/opt/Strata-data/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf",
+  "pack": "/home/USER/opt/UnbiasedStrata/local/pack-iq3_xxs",
+  "mtp": "/home/USER/opt/Strata-data/mtp/rt",
+  "port": 18082,
+  "context": 32768,
+  "threads": 15,
+  "ple_io": "direct",
+  "spec": 4,
+  "binary": "/home/USER/opt/UnbiasedStrata/build-amd/unbiased-strata"
+}

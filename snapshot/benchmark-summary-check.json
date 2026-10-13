@@ -1,0 +1,22 @@
+{
+  "campaign_passes": {
+    "qwen27b": [
+      21,
+      21,
+      21
+    ],
+    "flash": [
+      23,
+      22,
+      23
+    ]
+  },
+  "distinct_tasks_per_campaign": 24,
+  "six_campaign_rows": 144,
+  "prefill_improvement_percent": 16.58044952052049,
+  "paired_95_ci_ratio": [
+    0.8336635206943339,
+    0.8347278283692481
+  ],
+  "method": "read existing saved results only; no scored inference rerun"
+}

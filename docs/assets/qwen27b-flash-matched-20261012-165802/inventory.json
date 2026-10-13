@@ -1,0 +1,540 @@
+{
+  "comparison": "qwen27b-flash-matched-20261012-165802",
+  "copied_at_utc": "2026-10-13T00:43:49.120889+00:00",
+  "files": [
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/matched-probe-selftest.json",
+      "bytes": 9667,
+      "sha256": "495cd081aec3f058130f800d327bafd6248de2e0ca2a7717e5d70401d101cbb6",
+      "original_path": "/home/USER/bench/results/matched-probe-selftest.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/matched-probe-selftest.log",
+      "bytes": 660,
+      "sha256": "5ef1420afb579c5bc221a1b86f29a0d3ef642f44cfaa108501e25628b61005c4",
+      "original_path": "/home/USER/bench/results/matched-probe-selftest.log"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/oct1-dsw2-med.json",
+      "bytes": 46851,
+      "sha256": "51715a13e56ed4e080bfdbb768a6560cff62071adf14e524fd71b22bffe8ad69",
+      "original_path": "/home/USER/bench/results/oct1-dsw2-med.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165741.manifest.json",
+      "bytes": 10435,
+      "sha256": "f06c4996e1283b4331f68961f83071a8de0bf71086454f2b0bebac2814919b6a",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165741.manifest.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-flash-40.answers.jsonl",
+      "bytes": 61776,
+      "sha256": "beb1c0a70ca8ab8dee54e5b3812aef1a7327660868b62d69e5320ad69768efd9",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-40.answers.jsonl"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-flash-40.audit.json",
+      "bytes": 33787,
+      "sha256": "77d82dd294d2f18e9e4dc9e701ebd77e4a924e87e372242b302fa1f13b0ca4b8",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-40.audit.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-flash-40.json",
+      "bytes": 463520,
+      "sha256": "dcc87209585463bb655103fb1a9b803a7b6143336ed48bcab946b2cde9eef2de",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-40.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-flash-40.log",
+      "bytes": 2266,
+      "sha256": "3ffd0a80c00bc9f75f7176d38a134b4c82257101984cca2902830d59978f5378",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-40.log"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-flash-40.readiness.json",
+      "bytes": 731,
+      "sha256": "a7e9545f8cc331323bfa9ceb09794f48a8642508fafbe8ec6d13115455ff641e",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-40.readiness.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-flash-40.server.log",
+      "bytes": 31519,
+      "sha256": "437bb0877b650e2285b9419821ff480a17251959b44caa4e28ab29128d4643a0",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-40.server.log"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-flash-41.answers.jsonl",
+      "bytes": 60161,
+      "sha256": "61b842e0c9e2b118b314f4b390345d83e35f0609f383742d10449ed430600a2a",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-41.answers.jsonl"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-flash-41.audit.json",
+      "bytes": 5901,
+      "sha256": "63c79365cd1c0a3ab269a3d441ac0e6bd8fcc2a84b33e5b28328e2f77479bf08",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-41.audit.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-flash-41.json",
+      "bytes": 473659,
+      "sha256": "6b18c6b88bead26a10835a4962db19cad50eb404114982f37cffe8753baf0033",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-41.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-flash-41.log",
+      "bytes": 2319,
+      "sha256": "b7e1a2b7a13d712d85e53116e02e379f6a3bab83f1936d9f32a3ea835d331ee0",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-41.log"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-flash-41.readiness.json",
+      "bytes": 731,
+      "sha256": "356406465585e945654f18b3c29e3758df820c5501cee4ee97ff5505c4ca26f0",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-41.readiness.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-flash-41.server.log",
+      "bytes": 31459,
+      "sha256": "bdf846a47f54b59ef98152c89ef0a9ccd14990c3d8b600e42cee5ae3f78d3b62",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-41.server.log"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-flash-42.answers.jsonl",
+      "bytes": 59538,
+      "sha256": "abcb6bac799b9637f36eb1139005d27668ce2d278e31e795305ba3b507bfd07a",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-42.answers.jsonl"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-flash-42.json",
+      "bytes": 471157,
+      "sha256": "3b33e57eaf62cc8ad3e9865475aeea065c8801b8591d9870862ceb9c6c5f1756",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-42.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-flash-42.log",
+      "bytes": 2266,
+      "sha256": "fd29d6920d08290849b91bb0a888eb9478a2d35baa149f83a3fabaada7389e93",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-42.log"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-flash-42.process-tree.json",
+      "bytes": 1982,
+      "sha256": "973c0c991f727a61baf133cdb8a4ee0b338fe4364afbb49558af22b2746db267",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-42.process-tree.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-flash-42.readiness.json",
+      "bytes": 731,
+      "sha256": "353eae3797b87da321c2e35422e718411b7c4d9f3a2c45a9b9430c2bb85333c9",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-42.readiness.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-flash-42.server.log",
+      "bytes": 31458,
+      "sha256": "c2e13924090d93520e6d3fa188b7761af96f4ec43a8a0c8541cb377946820412",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-42.server.log"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-flash-metadata.json",
+      "bytes": 10426,
+      "sha256": "cee9cfb098f75560cc379a550993167db0987650f54158d3394b8916fe222870",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-metadata.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-flash-source.patch",
+      "bytes": 68950,
+      "sha256": "e480e1b618038d7b898e76a72751f86938d1b6ab106145c95ba6189172ab88b6",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-flash-source.patch"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-medium-template.json",
+      "bytes": 91,
+      "sha256": "52b1734491059da064e34f13268d3b0c92294c2f6f74106dd53b73281720c12e",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-medium-template.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen-metadata.json",
+      "bytes": 9355,
+      "sha256": "9057ffba5e2eb52944bbb9e9fd384b681e063fce0849c22f371960d039ddd7b3",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen-metadata.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen-props.json",
+      "bytes": 11643,
+      "sha256": "93b86069c2d23fe119e09cc8c715b16af38bd1227e41fc8fcbf1571a46bd901a",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen-props.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen27b-40.answers.jsonl",
+      "bytes": 54201,
+      "sha256": "c76de3ad052d652d8c0ec086f4130d58eb706974c23c12de6581abe3f33ec358",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-40.answers.jsonl"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen27b-40.audit.json",
+      "bytes": 124246,
+      "sha256": "11b97d85c61ad488c1671e439bb167277bf2d1324e157d9f55e852fd01f6d99e",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-40.audit.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen27b-40.early-probes.json",
+      "bytes": 813,
+      "sha256": "9485399af9d0f600b8f146d880c75b134f8252379d86a09535008da5d4c5ef21",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-40.early-probes.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen27b-40.early-probes.v2.json",
+      "bytes": 1151,
+      "sha256": "426fe2cdab27bf03092b95da6c314c7e116c66e6da9915cf406515d33c6adb7d",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-40.early-probes.v2.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen27b-40.early-probes.v3.json",
+      "bytes": 1991,
+      "sha256": "fe042b2f6c41363aa69a777a03426bdcec2ea0e10bc0b4cfa84c0c1c11c9eb89",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-40.early-probes.v3.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen27b-40.json",
+      "bytes": 391705,
+      "sha256": "02e8cf96bee06e74beb174d7c500e9003b937228d92b22d41d55e5d8c5228d18",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-40.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen27b-40.log",
+      "bytes": 2361,
+      "sha256": "5a23a93a57446c98aaefdd085627a2b07f3852bcca89040eaca302cfdb6601d5",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-40.log"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen27b-40.readiness.json",
+      "bytes": 2324,
+      "sha256": "5abf4ef22d696a1d6b8f6d919c705fb75457e170037527b32bcdd504aed17ef0",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-40.readiness.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen27b-40.server.log",
+      "bytes": 133134,
+      "sha256": "0860aea77e65aee03e70226e00b1182d8d397d8620507bd2f1329546f16430c0",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-40.server.log"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen27b-41.answers.jsonl",
+      "bytes": 54201,
+      "sha256": "c76de3ad052d652d8c0ec086f4130d58eb706974c23c12de6581abe3f33ec358",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-41.answers.jsonl"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen27b-41.json",
+      "bytes": 391700,
+      "sha256": "29091b8295e54b4a9dd5459c4978c2deabd2465777431f1a26c7fe3624fa1356",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-41.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen27b-41.log",
+      "bytes": 2361,
+      "sha256": "73848b12b6b5d6397a654125ad987d10932b412691f932f7be65593e2cd2a93e",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-41.log"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen27b-41.readiness.json",
+      "bytes": 2324,
+      "sha256": "41122764304f58e501fc1c9adb98ba9b5f4213befb35f964e56971bd46a5997b",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-41.readiness.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen27b-41.server.log",
+      "bytes": 132271,
+      "sha256": "da00af59da00ac95aae02025f69b130a08f7b4c8f2c694bf0c431caa7f1eeedc",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-41.server.log"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen27b-42.answers.jsonl",
+      "bytes": 54201,
+      "sha256": "c76de3ad052d652d8c0ec086f4130d58eb706974c23c12de6581abe3f33ec358",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-42.answers.jsonl"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen27b-42.json",
+      "bytes": 391705,
+      "sha256": "afb54e7163d00b1821c8fb90bd53cbba072c2cc49d871961fd08e82062648973",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-42.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen27b-42.log",
+      "bytes": 2361,
+      "sha256": "f1a07ca39ab9eecdadc0162193f01b7a259a482d22ad6608372cfb6b667e6320",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-42.log"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen27b-42.readiness.json",
+      "bytes": 2324,
+      "sha256": "64788e6225057e3bde6834b436908f1bdd72655caa62e3fc31b929a87a1c6ee9",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-42.readiness.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-qwen27b-42.server.log",
+      "bytes": 133132,
+      "sha256": "d426dd09567c694975e081c448167cce7e71ab606768e80b171158fb9dfccb16",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-qwen27b-42.server.log"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802-reasoning-verification.json",
+      "bytes": 732,
+      "sha256": "a681ac499636caff94e98ed51e6635111609025bdb709118120979a92e6c4717",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802-reasoning-verification.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802.chart-data.json",
+      "bytes": 2100,
+      "sha256": "ed5787b3a57404a73e210ca277827cf20a483e4f701dea1cbff954ffc90f28b5",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802.chart-data.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802.deltas.png",
+      "bytes": 249021,
+      "sha256": "24852859c074b37880046c2a8d568f58a309aa811df91a7d1ff44c91eaf2434d",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802.deltas.png"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802.deltas.svg",
+      "bytes": 139956,
+      "sha256": "e125c7bdeba1fd16c6aca9a80efbd3587ce2e2b1cc41662eed2554a716e86275",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802.deltas.svg"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802.engine-metadata.json",
+      "bytes": 1508,
+      "sha256": "e6d2aa46dbd41c3e9a2fb46d9695eeb573b8507cf85d4679bb9d2a8f974b648a",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802.engine-metadata.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802.hardware.json",
+      "bytes": 239,
+      "sha256": "b9ac90d1c982f2c38101a99abcfb7b6c3bef4fdc4f1204866d69d1cd4ac6203c",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802.hardware.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802.manifest.json",
+      "bytes": 20488,
+      "sha256": "57e313819b663f902a35a3f0791f469136a56303c025f478d14514d33ed97f1f",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802.manifest.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802.probes.json",
+      "bytes": 71117,
+      "sha256": "bfd047cec0cceb89f6c767c9aed585a1d86098cb9748c585910f02555487762d",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802.probes.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802.probes.v1.json",
+      "bytes": 71501,
+      "sha256": "aef494bafa391a3334513cc82b4617737e299034b589835a89958e7dd6b59f2d",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802.probes.v1.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802.provenance.json",
+      "bytes": 17378,
+      "sha256": "af3020c4c1d45b90b218c43dea2fb7acd15fd16aeac3d8d8d1cc8b1ce677136b",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802.provenance.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802.regrade.json",
+      "bytes": 26569,
+      "sha256": "d065afc9496e6c42139a8023dc4cd679fcb9f86c179f4119baa55019f9ec440e",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802.regrade.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802.report.md",
+      "bytes": 6866,
+      "sha256": "2addbc828b139cc9ac71cf0c710d568d96301f7a3da7cf00ab945fe0021a7902",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802.report.md"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802.suite.json",
+      "bytes": 131561,
+      "sha256": "51a42d56dfac63d98eae8b7cf9d92614df115be16f80db5f84d05ebfb93bfeef",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802.suite.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802.tradeoff.png",
+      "bytes": 133615,
+      "sha256": "e2d511fef4bede342f7e53a0e8789039da97543e0f91663b6fab4755cc458b22",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802.tradeoff.png"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802.tradeoff.svg",
+      "bytes": 88420,
+      "sha256": "2c56fd591f90b8c636e7f4db858fa7face357e7351b164eef43480a9bedfd448",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802.tradeoff.svg"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-20261012-165802.verification.json",
+      "bytes": 1506,
+      "sha256": "d62b41704f1753f69f1a63e5689d37354ead406763d14ac5f14d69eeb6437388",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-20261012-165802.verification.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-launch-plan.json",
+      "bytes": 1719,
+      "sha256": "95915586dc551f9d155171d9f31a64c616ae511f46b7d2720f7de8e5e128c971",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-launch-plan.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-preflight-selftest.log",
+      "bytes": 817,
+      "sha256": "4294ac1716b56a7f514372eabce25fdc5689078e1ae2324b4b6d519ff1f509b6",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-preflight-selftest.log"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/qwen27b-flash-matched-strata-config.json",
+      "bytes": 576,
+      "sha256": "901f692d3f3309c34cb6d1cc521c83e9c2e8b96cb69404c3a13d839a8719bb55",
+      "original_path": "/home/USER/bench/results/qwen27b-flash-matched-strata-config.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/strata-20261011-deepswe2-r1.json",
+      "bytes": 567433,
+      "sha256": "1cb513574064dad0d5f0e8f65209e353a9e291b2252f5b064e8b2222e8cf6b72",
+      "original_path": "/home/USER/bench/results/strata-20261011-deepswe2-r1.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/strata-20261011-deepswe2-r2.json",
+      "bytes": 597987,
+      "sha256": "6907d572abc4379650470a0d6ec0252236f8c6e98530b5c954351c8efc367eac",
+      "original_path": "/home/USER/bench/results/strata-20261011-deepswe2-r2.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/strata-20261012-contract-v2-frozen.json",
+      "bytes": 54957,
+      "sha256": "c91f3e6cb7303ee25281c8b987c1afe88cfa9acb1361a40de661afa42e8f2740",
+      "original_path": "/home/USER/bench/results/strata-20261012-contract-v2-frozen.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/results/strata-20261012-contract-v2-selftests.json",
+      "bytes": 68287,
+      "sha256": "58c0ac8971f5d5499310cfd18c2332aa3cf9dbc9d50f6113d866cc52560ca48a",
+      "original_path": "/home/USER/bench/results/strata-20261012-contract-v2-selftests.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/source/MATCHED_COMPARISON.md",
+      "bytes": 2540,
+      "sha256": "bb9793e48a88fa00313ba02220b71ed5275719175e34f141c0970a0d54446b10",
+      "original_path": "/home/USER/bench/MATCHED_COMPARISON.md"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/source/README.md",
+      "bytes": 8073,
+      "sha256": "4e26c76df0c783e332ec5b9d169a078ed1ff24f487ad6cf94a65de836ff0c322",
+      "original_path": "/home/USER/bench/README.md"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/source/bench-run.py",
+      "bytes": 16925,
+      "sha256": "56de09eb9416babcfabf87e6050ce0f63b4145f1f9c97b480ed9c000574398f9",
+      "original_path": "/home/USER/bench/bench-run.py"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/source/bench_lib.py",
+      "bytes": 18878,
+      "sha256": "d1b7d73331afa83982b73861a49596aa7c56b7f7f97214fc435264a1b9962f71",
+      "original_path": "/home/USER/bench/bench_lib.py"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/source/packs/deepswe2/pack.json",
+      "bytes": 127563,
+      "sha256": "91e0483101980627bf9db25a87a625e6cdd71ad85151d061d78fe1c62da38aa2",
+      "original_path": "/home/USER/bench/packs/deepswe2/pack.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/source/selftest-deepswe2.py",
+      "bytes": 59154,
+      "sha256": "a6beaeb77005dcd08476ec795de391aa8b3203dcf9c449d4e0241e7c48ab7f2b",
+      "original_path": "/home/USER/bench/selftest-deepswe2.py"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/source/targets.json",
+      "bytes": 9037,
+      "sha256": "9cc0fee727f70627c64c107dbb074398bd278a0b62ea621f200553ab1ba02e19",
+      "original_path": "/home/USER/bench/targets.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/source/tools/bench_contract_v2.py",
+      "bytes": 13377,
+      "sha256": "84e886d92914cac2feedf52608b164ff14cae18ecbd99e5d92dd1e2ea992c41a",
+      "original_path": "/home/USER/bench/tools/bench_contract_v2.py"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/source/tools/bench_corrected_suite.py",
+      "bytes": 7013,
+      "sha256": "2f1628b6b4ebbffeb8b1102f5ff9813414ce01fd7e697101a25983bf64923343",
+      "original_path": "/home/USER/bench/tools/bench_corrected_suite.py"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/source/tools/corrected_code_refs.json",
+      "bytes": 97352,
+      "sha256": "eb8f0058306af7c91dee80aaf50a3195318feacaf0a27f11c90ea907a739f7c6",
+      "original_path": "/home/USER/bench/tools/corrected_code_refs.json"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/source/tools/gguf_template.py",
+      "bytes": 1016,
+      "sha256": "6bd0766184776a69b244ece9224f7d45bef3a543a10844f1d5e930685c54d4f8",
+      "original_path": "/home/USER/bench/tools/gguf_template.py"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/source/tools/matched_analysis.py",
+      "bytes": 13320,
+      "sha256": "7ee3842b30b57ded62213d33c61a32d5fd25e2e143e739e7e6a24fd14e44d1a6",
+      "original_path": "/home/USER/bench/tools/matched_analysis.py"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/source/tools/matched_charts.py",
+      "bytes": 7906,
+      "sha256": "09c72f07a96ed6a9a6ebaba17709145cd0e7f36bb5c7460226aef98b20243dcc",
+      "original_path": "/home/USER/bench/tools/matched_charts.py"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/source/tools/matched_monitor.py",
+      "bytes": 2086,
+      "sha256": "d6b6ca40058c121a21dc4aad7e0b94440e4680368a03879a744c2aa8c332f4b5",
+      "original_path": "/home/USER/bench/tools/matched_monitor.py"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/source/tools/matched_probes.py",
+      "bytes": 9073,
+      "sha256": "9cbfe61b17f3fba081def42dbf2783ff97e3e81e2c56258267a07f7996b32746",
+      "original_path": "/home/USER/bench/tools/matched_probes.py"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/source/tools/run_matched_qwen_flash.py",
+      "bytes": 9394,
+      "sha256": "e3516b81b3b137a7816b7afecfda41de9144fd578363a30e1dab7c4339ff47ca",
+      "original_path": "/home/USER/bench/tools/run_matched_qwen_flash.py"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/source/tools/selftest_contract_v2.py",
+      "bytes": 11663,
+      "sha256": "35edfc4f292eaaf901dc0df66d6ae10e97ec2c1ac217f83dfc8fb733ba5a1c68",
+      "original_path": "/home/USER/bench/tools/selftest_contract_v2.py"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/source/tools/selftest_corrected_suite.py",
+      "bytes": 5500,
+      "sha256": "2e39dd7730115e93e2aecee87b4972ad150939c8eebccd8b16c38566c42a5565",
+      "original_path": "/home/USER/bench/tools/selftest_corrected_suite.py"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/source/tools/strata_corrected.py",
+      "bytes": 3321,
+      "sha256": "2afc56a4d33d5f94803e7fbfced8d2febb35eeaebab49a05a404759872691f38",
+      "original_path": "/home/USER/bench/tools/strata_corrected.py"
+    },
+    {
+      "vault_path": "assets/qwen27b-flash-matched-20261012-165802/source/tools/strata_research_audit.py",
+      "bytes": 4234,
+      "sha256": "322b23884ca60704ba31df456ba536a972cca01ebb558d2bffe7ecac967bc023",
+      "original_path": "/home/USER/bench/tools/strata_research_audit.py"
+    }
+  ]
+}

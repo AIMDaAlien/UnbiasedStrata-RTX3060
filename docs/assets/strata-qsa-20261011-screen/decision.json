@@ -1,0 +1,29 @@
+{
+  "paired_repetitions": 1,
+  "declared_treatment_fields": [
+    "environment"
+  ],
+  "wall_time_improvement_percent": 0.11239659542162661,
+  "paired_95_ci_ratio": null,
+  "bucket_ratios": {
+    "fresh-80000": 0.9982491614052588,
+    "fresh-128000": 0.9985544082826409,
+    "fresh-180000": 0.9988347401134001,
+    "growing-80000": 0.9987326342312518,
+    "growing-128000": 0.998498681592202,
+    "growing-180000": 1.000388052905528
+  },
+  "treatment_control_geomean_ratio": 0.9988760340457837,
+  "preliminary": true,
+  "promising": false,
+  "rollout_approved": false,
+  "confidence_interval": null,
+  "actual_treatment_environment": [
+    "STRATA_TOPK_ACTIVE_ANY"
+  ],
+  "minimum_geomean_improvement_percent": 2,
+  "maximum_bucket_slowdown_percent": 5,
+  "profiling_excluded_from_speed_results": true,
+  "all_quality_checks_passed": true,
+  "screening_decision": "rejected for rollout"
+}

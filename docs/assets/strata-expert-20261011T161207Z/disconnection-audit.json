@@ -1,0 +1,428 @@
+{
+  "completed_micro_runs": [
+    {
+      "run": "mode1-v2",
+      "complete": true,
+      "samples": 600,
+      "pair_count": 300,
+      "state_mtime_utc": "2026-10-11T16:41:51.968526+00:00",
+      "paired_ratio_spread_over_3_percent": [
+        {
+          "layer": 1,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            0.9496590610135025,
+            1.0337431355181577,
+            0.9939386557572023,
+            0.9680566750095448,
+            0.9799960205227327
+          ],
+          "ratio_cv": 0.03216935945213318
+        },
+        {
+          "layer": 5,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.0392171191250443,
+            1.0029697343737587,
+            0.9694147684487951,
+            0.961285817424341,
+            0.9917403738250093
+          ],
+          "ratio_cv": 0.031037706885437607
+        },
+        {
+          "layer": 35,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.036151528389171,
+            0.9714118954974987,
+            0.9492270261776135,
+            0.9792885418957554,
+            1.0015248074441883
+          ],
+          "ratio_cv": 0.033412185459271306
+        },
+        {
+          "layer": 36,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.0228238733311725,
+            0.9388558592653181,
+            0.9309223746483436,
+            0.9360377815451684,
+            0.9416481746055871
+          ],
+          "ratio_cv": 0.0405062633974043
+        },
+        {
+          "layer": 28,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.0337647749610681,
+            0.9445079214336237,
+            0.9727456207351802,
+            1.0047339085286706,
+            0.9671036865439151
+          ],
+          "ratio_cv": 0.03546336925178601
+        },
+        {
+          "layer": 8,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.0268533508672086,
+            0.9333245298383458,
+            0.9262492751738227,
+            0.9412886133340617,
+            0.9572310065561127
+          ],
+          "ratio_cv": 0.04255027584244137
+        },
+        {
+          "layer": 12,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.007809143818889,
+            0.9575976684558193,
+            0.939627249139349,
+            0.9295379145577862,
+            0.9686185041409375
+          ],
+          "ratio_cv": 0.03168873084096146
+        }
+      ],
+      "use": "candidate selection only; new final checks and fresh same-binary response comparisons required"
+    },
+    {
+      "run": "mode2-v2",
+      "complete": true,
+      "samples": 600,
+      "pair_count": 300,
+      "state_mtime_utc": "2026-10-11T16:47:52.532833+00:00",
+      "paired_ratio_spread_over_3_percent": [
+        {
+          "layer": 31,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.0262047467592532,
+            0.9563600141221567,
+            0.9554989949780016,
+            0.951923437793207,
+            0.9509085927088393
+          ],
+          "ratio_cv": 0.03358789930831692
+        },
+        {
+          "layer": 35,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.0372789884583633,
+            0.932609663955656,
+            0.9211835445775837,
+            0.9421155611910279,
+            0.9672576858332594
+          ],
+          "ratio_cv": 0.048299762222206354
+        },
+        {
+          "layer": 36,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.045556668050502,
+            0.9486349503811916,
+            0.9404697962545207,
+            0.9405913169145541,
+            0.950899836393383
+          ],
+          "ratio_cv": 0.046773996747373696
+        },
+        {
+          "layer": 28,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.018784541561114,
+            0.9184000395540283,
+            0.9489191029942234,
+            0.9575566288554616,
+            0.9491331682225185
+          ],
+          "ratio_cv": 0.03841108230113803
+        },
+        {
+          "layer": 8,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.0256210923285587,
+            0.9429428441388235,
+            0.940153372236805,
+            0.9548924775254801,
+            0.966425305087258
+          ],
+          "ratio_cv": 0.036149870462491754
+        }
+      ],
+      "use": "candidate selection only; new final checks and fresh same-binary response comparisons required"
+    },
+    {
+      "run": "mode3-base0",
+      "complete": true,
+      "samples": 600,
+      "pair_count": 300,
+      "state_mtime_utc": "2026-10-11T16:57:20.073550+00:00",
+      "paired_ratio_spread_over_3_percent": [
+        {
+          "layer": 31,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.10884187039318,
+            1.040797055366056,
+            1.0251251251251252,
+            1.01777108623481,
+            1.0224608388074785
+          ],
+          "ratio_cv": 0.036249599843125216
+        },
+        {
+          "layer": 0,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.0860411140583555,
+            1.004203777433038,
+            0.9991219280950687,
+            1.0413225848735088,
+            1.0450386045181583
+          ],
+          "ratio_cv": 0.034091634024829176
+        },
+        {
+          "layer": 5,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.0839289423206147,
+            1.0233339646966095,
+            0.9900950522287602,
+            0.9955979196620338,
+            1.0284929709238042
+          ],
+          "ratio_cv": 0.03642448025979402
+        },
+        {
+          "layer": 35,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.0821381424384133,
+            1.0038885539336346,
+            0.9876061860161184,
+            1.0259467156789694,
+            1.038668236685994
+          ],
+          "ratio_cv": 0.03529185914367093
+        },
+        {
+          "layer": 36,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.0851666625606662,
+            1.0176483999975352,
+            0.9873204774586268,
+            0.9862193215849571,
+            1.0135235147682164
+          ],
+          "ratio_cv": 0.03954692637302725
+        },
+        {
+          "layer": 28,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.082003172999913,
+            0.9779581388195724,
+            1.0062386380323982,
+            1.0241008490360168,
+            0.998878833987347
+          ],
+          "ratio_cv": 0.03880717722203823
+        },
+        {
+          "layer": 8,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.072639278935275,
+            0.9935720441558299,
+            0.9879814496287748,
+            1.0206659770671478,
+            1.023150427984131
+          ],
+          "ratio_cv": 0.03291115514656019
+        },
+        {
+          "layer": 29,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.0836473409266079,
+            0.9866616012323577,
+            1.0038129386069288,
+            1.0415679299639489,
+            1.0159445389033064
+          ],
+          "ratio_cv": 0.0367999742943427
+        },
+        {
+          "layer": 12,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.0727024684996955,
+            1.0127396369642763,
+            0.9810427344625097,
+            1.0079687221912839,
+            1.0315214403116464
+          ],
+          "ratio_cv": 0.03327375153833683
+        }
+      ],
+      "use": "candidate selection only; new final checks and fresh same-binary response comparisons required"
+    },
+    {
+      "run": "mode4-base0",
+      "complete": true,
+      "samples": 600,
+      "pair_count": 300,
+      "state_mtime_utc": "2026-10-11T20:47:32.833680+00:00",
+      "paired_ratio_spread_over_3_percent": [
+        {
+          "layer": 0,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.0820896768627013,
+            1.0025852080190638,
+            0.9955626985286558,
+            1.0353371421052053,
+            1.0460564859337866
+          ],
+          "ratio_cv": 0.03393883716888757
+        },
+        {
+          "layer": 5,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.0747801480722552,
+            1.0190436661498832,
+            0.9824442983588854,
+            0.9887633147630666,
+            1.0170645360749746
+          ],
+          "ratio_cv": 0.03592199098316714
+        },
+        {
+          "layer": 35,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.0967696856885727,
+            1.0107733192188517,
+            1.00036489989761,
+            1.0399676939332083,
+            1.0434232012530409
+          ],
+          "ratio_cv": 0.03618072584997581
+        },
+        {
+          "layer": 36,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.1127411029611518,
+            1.0275741085051053,
+            0.9940818547883445,
+            0.9932131837642612,
+            1.01613709824968
+          ],
+          "ratio_cv": 0.04781803821162325
+        },
+        {
+          "layer": 28,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.1027206851793179,
+            0.99753624047083,
+            1.0373524858513312,
+            1.0489350448562769,
+            1.01261589073871
+          ],
+          "ratio_cv": 0.0389861204387122
+        },
+        {
+          "layer": 8,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.0994487148757797,
+            1.0164914903909583,
+            1.0062997005060415,
+            1.03928168742953,
+            1.0454968428049185
+          ],
+          "ratio_cv": 0.03476617823542999
+        },
+        {
+          "layer": 29,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.085402471726087,
+            0.9932459855761726,
+            1.0139949715495569,
+            1.0525967440619164,
+            1.0211269824598255
+          ],
+          "ratio_cv": 0.034935427807729555
+        },
+        {
+          "layer": 12,
+          "class": 0,
+          "phase": 0,
+          "paired_ratios": [
+            1.0822369770453761,
+            1.0159542091956175,
+            0.9857865724381625,
+            1.0066577208918248,
+            1.0353498478414513
+          ],
+          "ratio_cv": 0.03563615066021747
+        }
+      ],
+      "use": "candidate selection only; new final checks and fresh same-binary response comparisons required"
+    }
+  ],
+  "exclusions": [
+    "parity/mode1: harness layout preflight failure, no GPU kernel comparisons",
+    "sanitizer/mode1-racecheck: deliberately interrupted broad fixture; later compact racecheck clean",
+    "micro/mode1 and micro/mode2: missing relative routing path produced zero timing samples",
+    "parity/mode4-base0: foreign llama-server.service rejected before measurement"
+  ],
+  "disconnection_note": "Completed runs contain all expected alternating pairs and final completion markers. Original runs lack explicit boot-id/per-sample timestamps, so they cannot establish absence of a disconnect-related environmental transition. Final candidate decisions require fresh verification; no samples deleted based on being slow or fast."
+}

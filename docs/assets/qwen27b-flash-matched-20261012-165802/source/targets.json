@@ -1,0 +1,223 @@
+{
+  "comment": "Rebench roster: every config that earned a 'strong' verdict AND is still in service (ornith-iq2m + unraid-laguna were dropped 2026-09-23: weakest configs on the coherent rebench, 86% and 82%) in the earlier swe40 / LCB-60 campaigns, expressed as a bench target. Local targets are mutually exclusive (one GPU workload at a time) and are switched with llama-switch, which stops the whole fleet, verifies VRAM drained, then starts the one asked for. expect_model guards the stale-server trap: an endpoint already answering with a DIFFERENT model is switched instead of trusted. Unraid targets are endpoint-only and were unreachable on 2026-09-22 (ssh reset, :18006 silent).",
+  "targets": [
+    {
+      "id": "qwen38-27b-q5-mtp-low",
+      "host": "rig",
+      "base_url": "http://127.0.0.1:8080/v1",
+      "model": null,
+      "expect_model": "Swift-Qwen3.8-27B-Q5_K_M",
+      "start": {
+        "type": "llama-switch",
+        "arg": "mtp"
+      },
+      "thinking": "low",
+      "max_tokens": 12288,
+      "gpu": true,
+      "notes": "Daily Qwen3.8-27B Q5_K_M, MTP n=2, 128K ctx, q8_0 KV. Prior: LCB-60 48/60 (best local), swe40 107/112 @27.5 t/s. Thinking LOW is its measured sweet spot."
+    },
+    {
+      "id": "qwen38-27b-q5-mtp-off",
+      "host": "rig",
+      "base_url": "http://127.0.0.1:8080/v1",
+      "model": null,
+      "expect_model": "Swift-Qwen3.8-27B-Q5_K_M",
+      "start": {
+        "type": "llama-switch",
+        "arg": "mtp"
+      },
+      "thinking": "off",
+      "max_tokens": 12288,
+      "gpu": true,
+      "notes": "Same weights/regime as -low, thinking disabled per request. Prior LCB-60 33/59: the policy costs this model ~15 points. Kept in the roster to measure that gap on the new suite, not to recommend it."
+    },
+    {
+      "id": "flashnext-ad384-131k",
+      "host": "rig",
+      "base_url": "http://127.0.0.1:8080/v1",
+      "model": null,
+      "expect_model": "qwen38flash-ad384",
+      "start": {
+        "type": "llama-switch",
+        "arg": "flash"
+      },
+      "thinking": null,
+      "max_tokens": 12288,
+      "gpu": true,
+      "notes": "Qwen3.8-Flash-Next 176B AD384 IQ4_XS, -ngl 99 with expert FFN on CPU, 131072 ctx. Thinking is pinned server-side to reasoning_effort=low, so thinking=null inherits it. Prior: LCB-60 54/60 (quality king) @16.9 t/s, swe40 105/112."
+    },
+    {
+      "id": "ornith-23g-131k",
+      "host": "rig",
+      "base_url": "http://127.0.0.1:8097/v1",
+      "model": null,
+      "expect_model": "ornith-23g",
+      "start": {
+        "type": "llama-switch",
+        "arg": "ornith23g"
+      },
+      "thinking": null,
+      "max_tokens": 12288,
+      "gpu": true,
+      "notes": "Ornith-1.5-35B-A3B MTPv2-23G-ICE, dual-GPU layer split, 128K ctx. Prior: swe40 110/112 39/40 @~61 t/s (best swe40 of any config). LCB-60 never measured \u2014 this campaign fills that gap."
+    },
+    {
+      "id": "unraid-flashnext-iq3xxs-262k",
+      "host": "unraid",
+      "base_url": "http://192.168.0.120:18006/v1",
+      "model": null,
+      "expect_model": "qwen38flash",
+      "start": {
+        "type": "none"
+      },
+      "thinking": null,
+      "max_tokens": 12288,
+      "gpu": false,
+      "notes": "Qwen3.8-Flash-Next UD-IQ3_XXS on the Unraid box (container llm-qwen38-flash, -ncmoe 48 experts on DDR4, 262K ctx). Prior: LCB-60 47/60 @15.6 t/s. Unreachable 2026-09-22 \u2014 verify before queueing."
+    },
+    {
+      "id": "flashnext-ad384-131k-med",
+      "host": "rig",
+      "base_url": "http://127.0.0.1:8080/v1",
+      "model": null,
+      "expect_model": "qwen38flash-ad384",
+      "start": {
+        "type": "llama-switch",
+        "arg": "flash"
+      },
+      "thinking": "medium",
+      "max_tokens": 12288,
+      "gpu": true,
+      "notes": "Qwen3.8-Flash-Next AD384, reasoning_effort=medium sent PER-REQUEST via chat_template_kwargs (verified 2026-09-23: request overrides the unit's low pin; template supports low/medium/xhigh only, no off). Effort sweep variant of flashnext-ad384-131k."
+    },
+    {
+      "id": "flashnext-ad384-131k-xhigh",
+      "host": "rig",
+      "base_url": "http://127.0.0.1:8080/v1",
+      "model": null,
+      "expect_model": "qwen38flash-ad384",
+      "start": {
+        "type": "llama-switch",
+        "arg": "flash"
+      },
+      "thinking": "xhigh",
+      "max_tokens": 12288,
+      "gpu": true,
+      "notes": "Qwen3.8-Flash-Next AD384, reasoning_effort=xhigh sent PER-REQUEST via chat_template_kwargs (verified 2026-09-23: request overrides the unit's low pin; template supports low/medium/xhigh only, no off). Effort sweep variant of flashnext-ad384-131k."
+    },
+    {
+      "id": "dsw2-daily-med",
+      "host": "rig",
+      "base_url": "http://127.0.0.1:8080/v1",
+      "model": null,
+      "expect_model": "Swift-Qwen3.8-27B-Q5_K_M",
+      "start": {
+        "type": "llama-switch",
+        "arg": "mtp"
+      },
+      "thinking": "medium",
+      "max_tokens": 32768,
+      "gpu": true,
+      "notes": "deepswe2 at MEDIUM. Daily Swift-Qwen3.8-27B Q5_K_M, MTP n=2, 128K ctx, q4_0 KV, both 3060s (-ts 12,11). reasoning_effort=medium per-request overrides the unit pin; the Qwen3.8 template accepts low|medium|xhigh. xhigh was tried first (2026-10-01) and abandoned: 26k tokens on a task that still failed, plus two 40-minute client timeouts."
+    },
+    {
+      "id": "dsw2-flash-med",
+      "host": "rig",
+      "base_url": "http://127.0.0.1:8080/v1",
+      "model": null,
+      "expect_model": "qwen38flash-ad384",
+      "start": {
+        "type": "llama-switch",
+        "arg": "flash"
+      },
+      "thinking": "medium",
+      "max_tokens": 32768,
+      "gpu": true,
+      "notes": "deepswe2 at MEDIUM. Qwen3.8-Flash-Next AD384 IQ4_XS on ONE 3060 (expert FFN on CPU; a 2-card split measured worse at every matched config), ctx 65536 (cut from 98304 for the 12GB card). Per-request effort overrides the unit's server-side low pin."
+    },
+    {
+      "id": "dsw2-coder-high",
+      "host": "rig",
+      "base_url": "http://127.0.0.1:8081/v1",
+      "model": null,
+      "expect_model": "qwen3.8-flash-next-coder",
+      "start": {
+        "type": "none"
+      },
+      "thinking": "high",
+      "max_tokens": 32768,
+      "gpu": false,
+      "notes": "deepswe2 run. ISTA-DASLab Qwen3.8-Flash-Next Coder IQ1_M on the Strata CUDA engine: 256 of 512 experts kept (the code/tool/vision ones), 3.5-bit storage, arena 23.4 GB (vs the base IQ3_XXS's 42.9) so it sits in 61 GB RAM with room to spare. reasoning_effort=high is Strata's ceiling; the per-request value overrides the unit's shared setting. NOT speed-comparable to the llama.cpp lanes (Vulkan vs CUDA) - capability only."
+    },
+    {
+      "id": "strata-iq3-default",
+      "host": "rig",
+      "base_url": "http://127.0.0.1:8081/v1",
+      "model": "qwen3.8-flash-next-iq3_xxs",
+      "expect_model": "qwen3.8-flash-next-iq3_xxs",
+      "start": {
+        "type": "none"
+      },
+      "thinking": "medium",
+      "max_tokens": 12288,
+      "gpu": false,
+      "notes": "Strata IQ3_XXS ctx=196608 KV=int8 spec=4 threads=12; loaded configuration preserved; 2026-10-12: explicitly medium; former null inherited GGUF xhigh."
+    },
+    {
+      "id": "strata-iq3-medium",
+      "host": "rig",
+      "base_url": "http://127.0.0.1:8081/v1",
+      "model": "qwen3.8-flash-next-iq3_xxs",
+      "expect_model": "qwen3.8-flash-next-iq3_xxs",
+      "start": {
+        "type": "none"
+      },
+      "thinking": "medium",
+      "max_tokens": 32768,
+      "gpu": false,
+      "notes": "Strata IQ3_XXS ctx=196608 KV=int8 spec=4 threads=12; loaded configuration preserved"
+    },
+    {
+      "id": "strata-iq3-low",
+      "host": "rig",
+      "base_url": "http://127.0.0.1:8081/v1",
+      "model": "qwen3.8-flash-next-iq3_xxs",
+      "expect_model": "qwen3.8-flash-next-iq3_xxs",
+      "start": {
+        "type": "none"
+      },
+      "thinking": "low",
+      "max_tokens": 32768,
+      "gpu": false,
+      "notes": "Strata IQ3_XXS ctx=196608 KV=int8 spec=4 threads=12; loaded configuration preserved; explicit low reasoning"
+    },
+    {
+      "id": "matched-qwen27b-medium",
+      "host": "rig",
+      "base_url": "http://127.0.0.1:18080/v1",
+      "model": "matched-qwen38-27b-q5",
+      "expect_model": "matched-qwen38-27b-q5",
+      "start": {
+        "type": "none"
+      },
+      "thinking": "medium",
+      "max_tokens": 32768,
+      "gpu": true,
+      "notes": "Direct contract-v2 DeepSWE2 comparison. Q5_K_M; dedicated transient launch on current RX9060XT16GB+RTX3060 12GB. Launch manifest records actual arguments."
+    },
+    {
+      "id": "matched-strata-iq3-medium",
+      "host": "rig",
+      "base_url": "http://127.0.0.1:18081/v1",
+      "model": "qwen3.8-flash-next-iq3_xxs",
+      "expect_model": "qwen3.8-flash-next-iq3_xxs",
+      "start": {
+        "type": "none"
+      },
+      "thinking": "medium",
+      "max_tokens": 32768,
+      "gpu": false,
+      "notes": "Direct contract-v2 DeepSWE2 comparison. Original IQ3_XXS configuration via private config with dedicated port18081; no global configuration changes."
+    }
+  ]
+}

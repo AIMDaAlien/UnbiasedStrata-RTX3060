@@ -1,0 +1,79 @@
+{
+  "assessment_utc": "2026-10-11T14:42:17.643767+00:00",
+  "upstream_commit": "83cf4dd1a4dc97852b22970cf379ee689be89a93",
+  "upstream_commit_verified": true,
+  "pull_request": 743,
+  "pull_request_state": "closed",
+  "pull_request_merged": false,
+  "upstream_parent": "99f3dbd0b21d1401b3769e0c0d963913607f380b",
+  "upstream_commit_url": "https://github.com/Niko1221/Strata/commit/83cf4dd1a4dc97852b22970cf379ee689be89a93",
+  "upstream_pr_url": "https://github.com/Niko1221/Strata/pull/743",
+  "current_head": "d0a44ea7e757c59fa35a78b4b98d0c4bb44ce2cf",
+  "frozen_control_active_any": "0",
+  "current_capacity_cells": 196608,
+  "capacity_score_stride": 49154,
+  "register_fit_blocks": 33792,
+  "control_dispatch_128k_180k": "block_topk_wide_kernel (verified in prior control profiling)",
+  "normalized_radix_equal_after_local_variable_and_comment_normalization": true,
+  "full_kernel_source_equal": false,
+  "emission_difference": "Current wide emits ascending warp-owned contiguous regions using warp scans; upstream stream emits ascending CTA-wide chunks using block scans. Both intend weighted-threshold selection and lowest-index ties. No new parity assertion.",
+  "decision": "Stop targeted PR743 port branch: its coalesced radix capability already exists and is already dispatched in frozen control. A duplicate emission implementation has no demonstrated benefit here.",
+  "new_source_edits": false,
+  "new_builds": 0,
+  "new_gpu_workloads": 0,
+  "new_parity_tests": 0,
+  "new_performance_measurements": 0,
+  "production_changed": false,
+  "production_service_observed": "inactive",
+  "unrelated_gpu_process_observed": {
+    "pid": 12096,
+    "executable": "/usr/bin/llama-server",
+    "vram_mib": 9314,
+    "stopped_by_worker": false
+  },
+  "next_measured_bottleneck": [
+    {
+      "target_tokens": 128000,
+      "prefill_seconds": 150.20579999999998,
+      "fused_expert_compute_seconds": 35.364,
+      "fused_expert_compute_prefill_share": 0.23543698046280506,
+      "qsa_selection_prefill_share": 0.07497713137575247,
+      "qsa_selection_contains_scoring_and_topk": true
+    },
+    {
+      "target_tokens": 180000,
+      "prefill_seconds": 217.5899,
+      "fused_expert_compute_seconds": 49.838,
+      "fused_expert_compute_prefill_share": 0.2290455577211994,
+      "qsa_selection_prefill_share": 0.10266561085785691,
+      "qsa_selection_contains_scoring_and_topk": true
+    }
+  ],
+  "future_scope": "No expert-kernel, GDN, KV overlap or power-state changes were performed.",
+  "artifact_sha256": {
+    "current-source/CMakeLists.txt": "35d3a81cbcec6a53c8161971a317f8f33ee6f24ff1bddb6aba56e1a0f863f195",
+    "current-source/src/kernels/cuda/qsa_select.cu": "cf5d3cb4d2666134e38ffd721d728a02c9401413cd1320fe673af8b79dac2b4c",
+    "current-source/src/kernels/qsa_topk_active_parity.cpp": "2422d378883fe0f7c4a41b09c79a619217784f4b4def78658fe442ab4cb9d17b",
+    "current-wide-kernel.cu": "dddb8170ef0d8ea2a2adb1f79ce0e3f7ed4e844f38396df570b4f0fb945818f5",
+    "normalized-radix.txt": "cff808de7d3c07cec4dda8476de89d4365cab8addc793cd65d2eaba3c5da3832",
+    "obsidian-note.before.md": "ecb7f41471f9a73c0f96f09820b130c695e04adcdbca823d585011f6dc1aa458",
+    "prior-screen/decision.json": "193885582fc8d0eca547edd9b7f6689b93d23f03db78401a814cbc50b78c43a6",
+    "prior-screen/parity.json": "5866254fc3fd806a402e90d5e3df49c59f44987d33f0f468d3c3188d9e016568",
+    "prior-screen/profile-summary.json": "3a3fe5d4449d993e63cb27b4427fe9036745bb9d0a02064fce2b4fd6a53d6370",
+    "prior-screen/state.json": "f65fcb644bb9f3b844632d0b9425c7eaf09dcfdde2a31b2be621959f87d3307f",
+    "upstream-83cf4dd.patch": "bb4a4913fb50bb8915c7d4684447c164c8eed44b4763fc86dfd1cbd6c454881a",
+    "upstream-comments.json": "090d64455e2b20bcd36292cce8ee8a9920d0f7e7a7da53fa0912268ebf83edec",
+    "upstream-commit.json": "f7c92496fd39fe92be5abb8d049396859e2fb2d545450dcefb9260057dbba403",
+    "upstream-pr.json": "06d21c593210def833c3ac0e11db6835147feee8eb1549ef258bef899bb4f64c",
+    "upstream-qsa_select.cu": "3854bdca600357ebb4528752b60c3eee4f60f5e5d636428eaae9162893643dfb",
+    "upstream-stream-kernel.cu": "6329be84d408607728968285677707320cd6c63d9a9beaca8c9beef508bd38cc"
+  },
+  "current_source_sha256": "cf5d3cb4d2666134e38ffd721d728a02c9401413cd1320fe673af8b79dac2b4c",
+  "all_frozen_night_sources_unchanged": true,
+  "prior_evidence_directory": "/home/USER/opt/UnbiasedStrata/local/benchmarks/qsa-20261011-screen",
+  "prior_profile_engine_log_sha256": {
+    "control": "70b03219e490d2e23fbad8a2419a5b284ebd1a8bbc4fa6335569a5624d87f7af",
+    "treatment": "25abcf77e243f567a19176a9a05e1797d33098a7d818e61b2b099bdffc870410"
+  },
+  "independent_main_review_radix_equality_confirmed": true
+}

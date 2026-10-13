@@ -1,0 +1,115 @@
+{
+  "files": [
+    {
+      "path": "/home/USER/opt/Strata-data/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf",
+      "bytes": 47039860096,
+      "sha256": "219ea929900dfa9ef091f3aa473fdba6874b65fcb36526d7d851ac9e95856d15",
+      "verification": "locally read 2026-10-12"
+    },
+    {
+      "path": "/home/USER/opt/Strata-data/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf",
+      "bytes": 28800138432,
+      "sha256": "316b46f3a2dbd68c900f43136ab9449f9dcc3725dfd8c794847c204bc161e113",
+      "verification": "locally read 2026-10-12"
+    },
+    {
+      "path": "/home/USER/opt/Strata-data/packs/iq3_xxs/dense.bin",
+      "bytes": 1538035200,
+      "sha256": "d2af3d8331e5c7a1985d1d589747230f9d56719a6d33c7cddc9ee6b81cde6b13",
+      "verification": "locally read 2026-10-12"
+    },
+    {
+      "path": "/home/USER/opt/Strata-data/packs/iq3_xxs/index.txt",
+      "bytes": 93687,
+      "sha256": "1afe12b36cd2d13bf122b741fa0e81e1f751319cc3c451e54ba75524d825f148",
+      "verification": "locally read 2026-10-12"
+    },
+    {
+      "path": "/home/USER/opt/Strata-data/packs/iq3_xxs/native_experts.txt",
+      "bytes": 3296,
+      "sha256": "ae28cf7a2a1c9063c4b55d6c8cf86d4d079dcddcf597f9e8697c9157d462c0ee",
+      "verification": "locally read 2026-10-12"
+    },
+    {
+      "path": "/home/USER/opt/Strata-data/packs/iq3_xxs/tokenizer/vocab.json",
+      "bytes": 5737005,
+      "sha256": "4ba64f0332abcfb0b600b7df1537d1e836e68009d5fb7cdb77339738dc6365c4",
+      "verification": "locally read 2026-10-12"
+    },
+    {
+      "path": "/home/USER/opt/Strata-data/packs/iq3_xxs/tokenizer/merges.txt",
+      "bytes": 3353258,
+      "sha256": "4ba698529766c7a2f5052083ea10cdf2485577f5237a332ee291054eb11e3332",
+      "verification": "locally read 2026-10-12"
+    },
+    {
+      "path": "/home/USER/opt/Strata-data/packs/iq3_xxs/tokenizer/token_type.json",
+      "bytes": 744960,
+      "sha256": "5088c8c298fc06af8382ddb3b76c888703ac2634e82263b97eedcc2ad202738b",
+      "verification": "locally read 2026-10-12"
+    },
+    {
+      "path": "/home/USER/opt/Strata-data/packs/iq3_xxs/tokenizer/tokenizer.json",
+      "bytes": 541,
+      "sha256": "c0bd435efbc6c3b28964b47999afe16c4ad268c7c7c4e8cb3af410796a6f30bf",
+      "verification": "locally read 2026-10-12"
+    },
+    {
+      "path": "/home/USER/opt/Strata-data/packs/iq3_xxs/tokenizer/chat_template.jinja",
+      "bytes": 9993,
+      "sha256": "12827f24b742ea4e80cdc12dbcf9622227056b9f797252a3149263d4f9aaadce",
+      "verification": "locally read 2026-10-12"
+    },
+    {
+      "path": "/home/USER/opt/Strata-data/mtp/rt/experts.bin",
+      "bytes": 707788800,
+      "sha256": "09398406be61f1f54c93861f449e48b8df0bfccbc9ec9b2b7636775a6ea9244f",
+      "verification": "locally read 2026-10-12"
+    },
+    {
+      "path": "/home/USER/opt/Strata-data/mtp/rt/dense.bin",
+      "bytes": 116099072,
+      "sha256": "c724dc0b0822ada5d2977bf5bde821605feabaa64ea2e0045b67ca656329070a",
+      "verification": "locally read 2026-10-12"
+    },
+    {
+      "path": "/home/USER/opt/Strata-data/mtp/rt/dense.txt",
+      "bytes": 1851,
+      "sha256": "991456cf4eb266eb8a888c349e548d11bc640f5dbd9149439aa9786af0f732fd",
+      "verification": "locally read 2026-10-12"
+    },
+    {
+      "path": "/home/USER/opt/Strata-data/mtp/rt/draft_vocab.bin",
+      "bytes": 425196,
+      "sha256": "b1e1d3a7a9e4bf862dcd5923ce661fb59bbd07907e594df5cf86a62ac235cb91",
+      "verification": "locally read 2026-10-12"
+    },
+    {
+      "path": "/home/USER/opt/Strata-data/mtp/mtp-inventory.json",
+      "bytes": 7478,
+      "sha256": "4d1e3b6318e9f7ba08b934587303703fee2c8b3dc4289b3b4d221fdf1f9537d6",
+      "verification": "locally read 2026-10-12"
+    },
+    {
+      "path": "/home/USER/opt/Strata-data/mtp/mtp-manifest.json",
+      "bytes": 11643,
+      "sha256": "1ad281ed87ad9cd42f9c048e9c49172165ea714a600d15f1d80cd0a02db12328",
+      "verification": "locally read 2026-10-12"
+    },
+    {
+      "path": "/home/USER/opt/Strata-data/mtp/mtp-q2_0.gguf.report.json",
+      "bytes": 3589,
+      "sha256": "136497b74f172501d2fe4cd6d2b3c37273560d16fb073e7bbf02c12e80b9d325",
+      "verification": "locally read 2026-10-12"
+    },
+    {
+      "path": "/home/USER/opt/UnbiasedStrata/local/pack-iq3_xxs/expert-profile.bin",
+      "bytes": 196632,
+      "sha256": "8f59b4aa8873209dff11c11e37bcda9529a1335b724a1afeea37bf6388975baf",
+      "verification": "locally read 2026-10-12"
+    }
+  ],
+  "gguf_revision": "ed59f92082b1e93c0e96d60a8b11aab089b52f09 (parent documentation; compare local hashes)",
+  "mtp_revision": "main at original fetch; immutable source revision not retained locally. Tensor hashes retained in mtp-manifest.json.",
+  "pack_tools_local_commit": "a79080535d1b2a71a3419a0d97d8e7dca194b0f1"
+}

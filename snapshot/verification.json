@@ -1,0 +1,9 @@
+{
+  "status": "initial checks passed; clean committed checkout rebuild pending",
+  "build": "fresh separate checkout; documented CUDA recipe; passed",
+  "existing_control_tests": "7 passed",
+  "smoke": "readiness, medium reasoning, final content, exact prompt token count and tool call/response round trip passed; temporary unit stopped",
+  "evidence": "139 exported files; original/exported SHA-256 recorded; scored campaigns not rerun",
+  "preserved": "installation, dirty source, model files, persistent config and binaries; Ornith inactive",
+  "known_limit": "MTP immutable source revision not retained in original fetch; parent upstream documents contain historical unresolved links and are excluded from link validation"
+}

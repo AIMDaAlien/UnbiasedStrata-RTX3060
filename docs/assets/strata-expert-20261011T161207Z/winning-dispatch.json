@@ -1,0 +1,802 @@
+{
+  "inputs": [
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode1-v2",
+      "variant": 1,
+      "base": null,
+      "prefetch_base": null,
+      "standalone_sha256": "f9611d3b969d7e3dceecdeb97f270624459620671643ee1c6937d5a182bfe422"
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode2-v2",
+      "variant": 2,
+      "base": null,
+      "prefetch_base": null,
+      "standalone_sha256": "f9611d3b969d7e3dceecdeb97f270624459620671643ee1c6937d5a182bfe422"
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode3-base0",
+      "variant": 3,
+      "base": "0",
+      "prefetch_base": null,
+      "standalone_sha256": "c8dfbdd55c50d57ddeb5b65bd70151ea67bbba3d6e2f23b61d098ae51d1380ca"
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode4-base0",
+      "variant": 4,
+      "base": "0",
+      "prefetch_base": null,
+      "standalone_sha256": "c8dfbdd55c50d57ddeb5b65bd70151ea67bbba3d6e2f23b61d098ae51d1380ca"
+    }
+  ],
+  "unavailable_specialization_fallbacks": [],
+  "ratios": [
+    {
+      "format": 16,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 1,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9418430774135083,
+      "pairs": 10
+    },
+    {
+      "format": 20,
+      "phase": 2,
+      "row_class": 0,
+      "mode": 1,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.1149915306291291,
+      "pairs": 25
+    },
+    {
+      "format": 16,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 1,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9856004291316409,
+      "pairs": 10
+    },
+    {
+      "format": 20,
+      "phase": 2,
+      "row_class": 2,
+      "mode": 1,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.1268209270184284,
+      "pairs": 25
+    },
+    {
+      "format": 42,
+      "phase": 2,
+      "row_class": 0,
+      "mode": 1,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9745172944985467,
+      "pairs": 25
+    },
+    {
+      "format": 42,
+      "phase": 2,
+      "row_class": 2,
+      "mode": 1,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0120136833090458,
+      "pairs": 25
+    },
+    {
+      "format": 17,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 1,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9944704766003469,
+      "pairs": 10
+    },
+    {
+      "format": 17,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 1,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0243820799113077,
+      "pairs": 10
+    },
+    {
+      "format": 18,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 1,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9273091658696336,
+      "pairs": 10
+    },
+    {
+      "format": 18,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 1,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9914923955352508,
+      "pairs": 10
+    },
+    {
+      "format": 21,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 1,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.933225427046859,
+      "pairs": 10
+    },
+    {
+      "format": 21,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 1,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0036191324719295,
+      "pairs": 10
+    },
+    {
+      "format": 22,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 1,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9531482983146843,
+      "pairs": 10
+    },
+    {
+      "format": 22,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 1,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9922221024468849,
+      "pairs": 10
+    },
+    {
+      "format": 16,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 2,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9547435070382383,
+      "pairs": 10
+    },
+    {
+      "format": 20,
+      "phase": 2,
+      "row_class": 0,
+      "mode": 2,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9459668097161811,
+      "pairs": 25
+    },
+    {
+      "format": 16,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 2,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9992763191672285,
+      "pairs": 10
+    },
+    {
+      "format": 20,
+      "phase": 2,
+      "row_class": 2,
+      "mode": 2,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9862781738174208,
+      "pairs": 25
+    },
+    {
+      "format": 42,
+      "phase": 2,
+      "row_class": 0,
+      "mode": 2,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9948783524065492,
+      "pairs": 25
+    },
+    {
+      "format": 42,
+      "phase": 2,
+      "row_class": 2,
+      "mode": 2,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0223944976671866,
+      "pairs": 25
+    },
+    {
+      "format": 17,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 2,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0205017068119848,
+      "pairs": 10
+    },
+    {
+      "format": 17,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 2,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0527503078896883,
+      "pairs": 10
+    },
+    {
+      "format": 18,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 2,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.937544131030036,
+      "pairs": 10
+    },
+    {
+      "format": 18,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 2,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9987755911671302,
+      "pairs": 10
+    },
+    {
+      "format": 21,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 2,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.94683922122748,
+      "pairs": 10
+    },
+    {
+      "format": 21,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 2,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0141239619202909,
+      "pairs": 10
+    },
+    {
+      "format": 22,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 2,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9679922423742074,
+      "pairs": 10
+    },
+    {
+      "format": 22,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 2,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0069660989822862,
+      "pairs": 10
+    },
+    {
+      "format": 16,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 3,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0628584575878834,
+      "pairs": 10
+    },
+    {
+      "format": 20,
+      "phase": 2,
+      "row_class": 0,
+      "mode": 3,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9994335778429415,
+      "pairs": 25
+    },
+    {
+      "format": 16,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 3,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0302940261486127,
+      "pairs": 10
+    },
+    {
+      "format": 20,
+      "phase": 2,
+      "row_class": 2,
+      "mode": 3,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9996180974423562,
+      "pairs": 25
+    },
+    {
+      "format": 42,
+      "phase": 2,
+      "row_class": 0,
+      "mode": 3,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0005835463793729,
+      "pairs": 25
+    },
+    {
+      "format": 42,
+      "phase": 2,
+      "row_class": 2,
+      "mode": 3,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9998162823724769,
+      "pairs": 25
+    },
+    {
+      "format": 17,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 3,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0334937764239063,
+      "pairs": 10
+    },
+    {
+      "format": 17,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 3,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0182932126275444,
+      "pairs": 10
+    },
+    {
+      "format": 18,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 3,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.020443299297085,
+      "pairs": 10
+    },
+    {
+      "format": 18,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 3,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0143008983335136,
+      "pairs": 10
+    },
+    {
+      "format": 21,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 3,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.007126367182906,
+      "pairs": 10
+    },
+    {
+      "format": 21,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 3,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0058149359618793,
+      "pairs": 10
+    },
+    {
+      "format": 22,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 3,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0287207646453387,
+      "pairs": 10
+    },
+    {
+      "format": 22,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 3,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.008099352523035,
+      "pairs": 10
+    },
+    {
+      "format": 16,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 4,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0256038246099757,
+      "pairs": 10
+    },
+    {
+      "format": 20,
+      "phase": 2,
+      "row_class": 0,
+      "mode": 4,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0122345558974384,
+      "pairs": 25
+    },
+    {
+      "format": 16,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 4,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0040039173710775,
+      "pairs": 10
+    },
+    {
+      "format": 20,
+      "phase": 2,
+      "row_class": 2,
+      "mode": 4,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.018764716867596,
+      "pairs": 25
+    },
+    {
+      "format": 42,
+      "phase": 2,
+      "row_class": 0,
+      "mode": 4,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0000360995784523,
+      "pairs": 25
+    },
+    {
+      "format": 42,
+      "phase": 2,
+      "row_class": 2,
+      "mode": 4,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0109347919939558,
+      "pairs": 25
+    },
+    {
+      "format": 17,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 4,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0250337877651687,
+      "pairs": 10
+    },
+    {
+      "format": 17,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 4,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0075634860368177,
+      "pairs": 10
+    },
+    {
+      "format": 18,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 4,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0268691180102996,
+      "pairs": 10
+    },
+    {
+      "format": 18,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 4,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0157494780155774,
+      "pairs": 10
+    },
+    {
+      "format": 21,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 4,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0318701992266315,
+      "pairs": 10
+    },
+    {
+      "format": 21,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 4,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.021555911860056,
+      "pairs": 10
+    },
+    {
+      "format": 22,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 4,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0300052004486675,
+      "pairs": 10
+    },
+    {
+      "format": 22,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 4,
+      "base": 0,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 1.0113480946604256,
+      "pairs": 10
+    }
+  ],
+  "combined_ratio_by_mode": {
+    "1": 1.0017639398885512,
+    "2": 0.9921560353004885,
+    "3": 1.0198557503262655,
+    "4": 1.0224133212482462
+  },
+  "dispatch_table": [
+    {
+      "format": 16,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 1,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9418430774135083,
+      "pairs": 10,
+      "reason": "fastest qualifying mode; ties within 1% prefer simpler mode"
+    },
+    {
+      "format": 16,
+      "phase": 1,
+      "row_class": 1,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 16,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 17,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 17,
+      "phase": 1,
+      "row_class": 1,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 17,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 18,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 1,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9273091658696336,
+      "pairs": 10,
+      "reason": "fastest qualifying mode; ties within 1% prefer simpler mode"
+    },
+    {
+      "format": 18,
+      "phase": 1,
+      "row_class": 1,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 18,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 21,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 1,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.933225427046859,
+      "pairs": 10,
+      "reason": "fastest qualifying mode; ties within 1% prefer simpler mode"
+    },
+    {
+      "format": 21,
+      "phase": 1,
+      "row_class": 1,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 21,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 22,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 22,
+      "phase": 1,
+      "row_class": 1,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 22,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 20,
+      "phase": 2,
+      "row_class": 0,
+      "mode": 2,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9459668097161811,
+      "pairs": 25,
+      "reason": "fastest qualifying mode; ties within 1% prefer simpler mode"
+    },
+    {
+      "format": 20,
+      "phase": 2,
+      "row_class": 1,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 20,
+      "phase": 2,
+      "row_class": 2,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 42,
+      "phase": 2,
+      "row_class": 0,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 42,
+      "phase": 2,
+      "row_class": 1,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 42,
+      "phase": 2,
+      "row_class": 2,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    }
+  ],
+  "microbenchmark_only": true,
+  "unobserved_classes_keep_control": true
+}

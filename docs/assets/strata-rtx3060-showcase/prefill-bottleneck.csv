@@ -1,0 +1,29 @@
+component,context_tokens,seconds,prefill_gpu_timeline_percent,aggregation_note
+QSA indexer,128000,0.005,0.0,reported component
+Gather,128000,0.284,0.2,reported component
+Ple,128000,0.586,0.4,reported component
+Copy wait,128000,3.361,2.2,reported component
+Embedding + steps,128000,3.593,2.4,reported component
+Router + shared,128000,4.354,2.9,reported component
+Combine,128000,6.611,4.4,reported component
+KV staging,128000,6.817,4.5,reported component
+QSA projection,128000,10.179,6.8,reported component
+QSA attention,128000,13.925,9.3,reported component
+Host-cache read,128000,14.353,9.6,reported component
+QSA selection,128000,11.222,7.5,reported component
+GDN component group,128000,20.395,13.6,"sum of conv+gates, recurrence, output projection; overlapping aggregate gdn timer excluded"
+Expert GEMM · gate/up,128000,35.405,23.6,reported component
+QSA indexer,180000,0.007,0.0,reported component
+Gather,180000,0.399,0.2,reported component
+Ple,180000,0.825,0.4,reported component
+Copy wait,180000,3.613,1.7,reported component
+Embedding + steps,180000,5.013,2.3,reported component
+Router + shared,180000,6.166,2.8,reported component
+Combine,180000,9.263,4.3,reported component
+KV staging,180000,10.173,4.7,reported component
+QSA projection,180000,14.315,6.6,reported component
+QSA attention,180000,19.807,9.1,reported component
+Host-cache read,180000,20.219,9.3,reported component
+QSA selection,180000,22.252,10.2,reported component
+GDN component group,180000,28.943,13.3,"sum of conv+gates, recurrence, output projection; overlapping aggregate gdn timer excluded"
+Expert GEMM · gate/up,180000,49.849,22.9,reported component

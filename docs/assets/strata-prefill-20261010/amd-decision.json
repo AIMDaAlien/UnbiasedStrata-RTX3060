@@ -1,0 +1,68 @@
+{
+  "paired_repetitions": 1,
+  "amd_on_off_geomean_ratio": 1.0098642954462862,
+  "declared_treatment_fields": [
+    "environment",
+    "amd_helper",
+    "amd_device",
+    "amd_vram_mib",
+    "amd_decode_only"
+  ],
+  "wall_time_improvement_percent": -0.9864295446286198,
+  "paired_95_ci_ratio": null,
+  "bucket_ratios": {
+    "fresh-80000": 1.0106349045332665,
+    "fresh-128000": 1.0026268623765366,
+    "fresh-180000": 1.0021886432769913,
+    "growing-80000": 1.0136813626074188,
+    "growing-128000": 1.0161690850995972,
+    "growing-180000": 1.0139757283224133
+  },
+  "eligible_to_enable": false,
+  "profiles": {
+    "baseline": {
+      "model": "/home/USER/opt/Strata-data/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf",
+      "pack": "/home/USER/opt/UnbiasedStrata/local/pack-iq3_xxs",
+      "mtp": "/home/USER/opt/Strata-data/mtp/rt",
+      "port": 18081,
+      "context": 196608,
+      "threads": 12,
+      "ple_io": "direct",
+      "spec": 4,
+      "kv": "int8",
+      "kv_resident": 32768,
+      "environment": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "STRATA_RESIDENT_HEADROOM_GIB": "8",
+        "OMP_NUM_THREADS": "1",
+        "STRATA_PF_FUSED": "1",
+        "STRATA_PREFILL_AUTO_MAX": "16384",
+        "STRATA_PREFILL_RING": "512"
+      }
+    },
+    "decode-only": {
+      "model": "/home/USER/opt/Strata-data/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf",
+      "pack": "/home/USER/opt/UnbiasedStrata/local/pack-iq3_xxs",
+      "mtp": "/home/USER/opt/Strata-data/mtp/rt",
+      "port": 18081,
+      "context": 196608,
+      "threads": 12,
+      "ple_io": "direct",
+      "spec": 4,
+      "kv": "int8",
+      "kv_resident": 32768,
+      "environment": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "STRATA_RESIDENT_HEADROOM_GIB": "8",
+        "OMP_NUM_THREADS": "1",
+        "STRATA_PF_FUSED": "1",
+        "STRATA_PREFILL_AUTO_MAX": "16384",
+        "STRATA_PREFILL_RING": "512"
+      },
+      "amd_helper": "/home/USER/opt/UnbiasedStrata/local/amd-worker.sh",
+      "amd_device": "GPU-8140af32fe338274",
+      "amd_vram_mib": 12288,
+      "amd_decode_only": true
+    }
+  }
+}

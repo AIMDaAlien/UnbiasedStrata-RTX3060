@@ -1,0 +1,1298 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -91,6 +91,7 @@
+ endif()
+ option(STRATA_BUILD_TESTS "Build the test suite" ${_strata_tests_default})
+ option(STRATA_PARITY_TOPK_ACTIVE "Build standalone active-bound top-k parity without upstream tests" OFF)
++option(STRATA_EXPERT_LAB "Build standalone native fused expert parity/benchmark campaign" OFF)
+ option(STRATA_BUILD_CONVERSATION_TESTS "Build standalone conversation cache tests" OFF)
+ option(STRATA_WERROR "Treat compiler warnings as errors" OFF)
+ 
+@@ -1073,6 +1074,11 @@
+       target_compile_options(strata_mmq PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler=/bigobj>)
+     endif()
+     target_link_libraries(strata_mmq PUBLIC ggml-base ${_strata_gpu_runtime_target})
++  if(STRATA_EXPERT_LAB)
++    target_compile_options(strata_mmq PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-lineinfo --ptxas-options=-v>)
++    add_executable(native_expert_lab src/kernels/native_expert_lab.cpp)
++    target_link_libraries(native_expert_lab PRIVATE strata_mmq ${_strata_gpu_runtime_target})
++  endif()
+     if(STRATA_MMQ_KQUANTS)
+       target_compile_definitions(strata_mmq PRIVATE STRATA_MMQ_KQUANTS=1)
+     endif()
+--- a/src/prefill/moe_fused_iq.cu
++++ b/src/prefill/moe_fused_iq.cu
+@@ -20,6 +20,8 @@
+ // ldmatrix.  The products are mma.sync m16n8k32 (m16n8k16 for the formats with a scale per 16 values); the epilogues
+ // (SwiGLU, H to int8 per 32 features; down into the per-slot rows) are moe_fused.cu's.
+ #include "strata/prefill/moe_fused_iq.hpp"
++#include "strata/prefill/moe_fused_iq_lab.hpp"
++#include "strata/prefill/moe_fused_iq_dispatch.hpp"
+ 
+ #include <cuda_fp16.h>
+ #include <cuda_runtime.h>
+@@ -34,6 +36,7 @@
+ #include <cstdio>
+ #include <cstdlib>
+ #include <mutex>
++#include <vector>
+ 
+ namespace strata::prefill::fused {
+ namespace {
+@@ -53,7 +56,7 @@
+ // per launch by the rows per expert (pick_ww)
+ constexpr int THREADS = 512;
+ constexpr int WLD = 80;                 // bytes per decoded weight row of a stage: 64 int8 + 16 (no bank conflicts)
+-__host__ __device__ constexpr int tile_rows(int ww) { return 256 / ww; }
++__host__ __device__ constexpr int tile_rows(int ww, int threads = THREADS) { return (threads / 32) * 16 / ww; }
+ __host__ __device__ constexpr int weight_rows(int ww) { return 64 * ww; }
+ constexpr int ASTAGES = 4;              // cp.async depth of the activations (64 values of K a stage)
+ constexpr int GU_ROWS_K = 2560, D_ROWS_K = 640;   // K of gate/up (n_embd) and of down (n_ff)
+@@ -62,6 +65,9 @@
+ constexpr int T_IQ2_XXS = GGML_TYPE_IQ2_XXS, T_IQ2_XS = GGML_TYPE_IQ2_XS, T_IQ2_S = GGML_TYPE_IQ2_S,
+               T_IQ3_XXS = GGML_TYPE_IQ3_XXS, T_IQ3_S = GGML_TYPE_IQ3_S, T_IQ4_XS = GGML_TYPE_IQ4_XS,
+               T_IQ4_NL = GGML_TYPE_IQ4_NL, T_Q2_0 = GGML_TYPE_Q2_0;
++static_assert(T_IQ2_XXS == 16 && T_IQ2_XS == 17 && T_IQ3_XXS == 18 && T_IQ4_NL == 20 &&
++              T_IQ3_S == 21 && T_IQ2_S == 22 && T_Q2_0 == 42,
++              "frozen expert dispatch uses these pack format ids");
+ static_assert(sizeof(block_iq2_xxs) == 66 && sizeof(block_iq2_xs) == 74 && sizeof(block_iq2_s) == 82 &&
+               sizeof(block_iq3_xxs) == 98 && sizeof(block_iq3_s) == 110 && sizeof(block_iq4_xs) == 136 &&
+               sizeof(block_iq4_nl) == 18 && sizeof(block_q2_0) == 18, "the block layouts this file decodes");
+@@ -76,9 +82,9 @@
+     return t == T_IQ2_XXS ? 256 * 8 : t == T_IQ2_XS ? 512 * 8 : t == T_IQ2_S ? 1024 * 8 : t == T_IQ3_XXS ? 256 * 4
+          : t == T_IQ3_S ? 512 * 4 : 0;
+ }
+-__host__ __device__ constexpr size_t smem_bytes(int t, int ww) {
+-    return (size_t) 2 * weight_rows(ww) * (WLD + 16) + (size_t) ASTAGES * tile_rows(ww) * AB +
+-           (size_t) tile_rows(ww) * 4 + grid_bytes(t);
++__host__ __device__ constexpr size_t smem_bytes(int t, int ww, int threads = THREADS, int stages = ASTAGES) {
++    return (size_t) 2 * weight_rows(ww) * (WLD + 16) + (size_t) stages * tile_rows(ww, threads) * AB +
++           (size_t) tile_rows(ww, threads) * 4 + grid_bytes(t);
+ }
+ 
+ // moe_fused.cu's grouping tables (the same layout: fused::group writes them)
+@@ -287,12 +293,12 @@
+ // tokens' activations, SwiGLU, H to int8 per 32 features into `out`.  !GU: down rows (format WT) against H, FP32 into
+ // `dm`.  Warp (wf, wt): weight rows 64 wf.. as four m16 tiles (GU: a tile = 8 features, gate rows as mma rows 0-7 and
+ // up rows as 8-15, so a lane holds gate and up of one feature), routed rows 16 wt.. as two n8.
+-template <int WT, bool GU, int WW>
+-__global__ void __launch_bounds__(THREADS, 1)
++template <int WT, bool GU, int WW, int NT = THREADS, int AS = ASTAGES, int PREFETCH = 2>
++__global__ void __launch_bounds__(NT, 1)
+ native_kernel(const Batch b, const NativeGeom geo, const Tables tb, const uint8_t* __restrict__ act,
+               const int32_t* __restrict__ src, uint8_t* __restrict__ out, float* __restrict__ dm) {
+ #if defined(__CUDA_ARCH__) && __CUDA_ARCH__ >= 800
+-    constexpr int TR = tile_rows(WW), WR = weight_rows(WW);
++    constexpr int TR = tile_rows(WW, NT), WR = weight_rows(WW);
+     constexpr int WT_BYTES = WR * WLD, WS_FLOATS = WR * 4, ACT_STAGE = TR * AB;
+     constexpr int NS = (GU ? GU_ROWS_K : D_ROWS_K) / 64;   // 64-value stages along K
+     constexpr int NFB = (GU ? 1280 : 2560) / WR;          // weight-row blocks per tile
+@@ -302,15 +308,15 @@
+     extern __shared__ __align__(16) uint8_t smem[];
+     uint8_t* wt = smem;                                               // [2][WR][WLD] decoded int8 weights
+     float* ws = (float*) (smem + 2 * WT_BYTES);                       // [2][WR][4] their scales per 16 values
+-    uint8_t* stages = (uint8_t*) (ws + 2 * WS_FLOATS);                // [ASTAGES][TR][AB] activations
+-    int* srow = (int*) (stages + ASTAGES * ACT_STAGE);                // [TR] the activation row of each tile row
++    uint8_t* stages = (uint8_t*) (ws + 2 * WS_FLOATS);                // [AS][TR][AB] activations
++    int* srow = (int*) (stages + AS * ACT_STAGE);                // [TR] the activation row of each tile row
+     uint8_t* sgrid = (uint8_t*) (srow + TR);                          // the codebook
+ 
+     const int tid = threadIdx.x, lane = tid & 31, warp = tid >> 5, g = lane >> 2, tig = lane & 3;
+     const int wf = warp % WW, nb0 = 16 * (warp / WW);
+     if constexpr (grid_bytes(WT) > 0) {
+         const uint32_t* gs = (const uint32_t*) grid_src<WT>();
+-        for (int i = tid; i < grid_bytes(WT) / 4; i += THREADS) ((uint32_t*) sgrid)[i] = gs[i];
++        for (int i = tid; i < grid_bytes(WT) / 4; i += NT) ((uint32_t*) sgrid)[i] = gs[i];
+     }
+     uint32_t kv[4] = {0, 0, 0, 0};
+     if constexpr (WT == T_IQ4_XS || WT == T_IQ4_NL) {
+@@ -347,7 +353,7 @@
+         // the weight bytes into L2 ahead of the register loads (one stage ahead only - less than a DRAM round trip):
+         // gate/up PF super-blocks ahead (the row's two threads take a block's first and last line), down the whole row
+         // slice at once (180 or 360 bytes a row)
+-        constexpr int PF = 2;
++        constexpr int PF = PREFETCH;
+         auto prefetch_sb = [&](int sb) {
+             if (dec && sb < GU_ROWS_K / 256) pf_l2(wrow + sb * BS + (uj ? BS - 1 : 0));
+         };
+@@ -363,8 +369,8 @@
+         // the rows past the item's end are not loaded: a warp entirely past it skips the products, and the columns
+         // of a partial one are never written (no reduction mixes columns)
+         auto load_act = [&](int s) {
+-            uint8_t* st = stages + (s % ASTAGES) * ACT_STAGE;
+-            for (int c = tid; c < TR * 5; c += THREADS) {
++            uint8_t* st = stages + (s % AS) * ACT_STAGE;
++            for (int c = tid; c < TR * 5; c += NT) {
+                 const int r = c / 5, q = c % 5;
+                 if (r < nrows) cp16(st + r * AB + q * 16, act + (size_t) srow[r] * ACT_LD + s * AB + q * 16);
+             }
+@@ -380,7 +386,7 @@
+             *(float2*) (ws + buf * WS_FLOATS + ur * 4 + 2 * uj) = make_float2(s0, s1);
+         };
+ #pragma unroll
+-        for (int s = 0; s < ASTAGES - 1; ++s) {
++        for (int s = 0; s < AS - 1; ++s) {
+             if (s < NS) load_act(s);
+             cp_commit();
+         }
+@@ -398,15 +404,15 @@
+ #pragma unroll
+                 for (int q = 0; q < 4; ++q) acc[i][n][q] = 0.0f;
+         for (int s = 0; s < NS; ++s) {
+-            cp_wait<ASTAGES - 2>();
++            cp_wait<AS - 2>();
+             __syncthreads();
+-            if (s + ASTAGES - 1 < NS) load_act(s + ASTAGES - 1);
++            if (s + AS - 1 < NS) load_act(s + AS - 1);
+             cp_commit();
+             if (GU && (s & 3) == 0) prefetch_sb((s >> 2) + PF);
+             if (on0) {
+                 const uint8_t* W = wt + (s & 1) * WT_BYTES;
+                 const float* S = ws + (s & 1) * WS_FLOATS;
+-                const uint8_t* sa = stages + (s % ASTAGES) * ACT_STAGE;
++                const uint8_t* sa = stages + (s % AS) * ACT_STAGE;
+                 // the stage's scales: per weight row 4 (per 16 values), per routed row 2 (per 32)
+                 float2 dx[2][2];                                  // [n8 tile][column 2 tig + cc]
+ #pragma unroll
+@@ -512,6 +518,7 @@
+ struct DevInfo {
+     bool done = false, ok = false;
+     int sms = 0, occ = 1;
++    bool sm86 = false;
+ };
+ std::mutex g_mu;
+ DevInfo g_dev[32];
+@@ -545,8 +552,10 @@
+     // empty in a hipcc build: never available here (the prompt path keeps its own expert GEMMs)
+     return d;
+ #else
+-    int major = 0;
++    int major = 0, minor = 0;
+     cudaDeviceGetAttribute(&major, cudaDevAttrComputeCapabilityMajor, dev);
++    cudaDeviceGetAttribute(&minor, cudaDevAttrComputeCapabilityMinor, dev);
++    d.sm86 = major == 8 && minor == 6;
+     cudaDeviceGetAttribute(&d.sms, cudaDevAttrMultiProcessorCount, dev);
+     if (major < 8) return d;
+     int occ = 1 << 20;
+@@ -589,6 +598,200 @@
+     return avg > 56.0 && avg <= 112.0 ? 2 : 4;
+ }
+ 
++
++int requested_variant() {
++    const char* v = std::getenv("STRATA_PF_NATIVE_VARIANT");
++    if (!v) return 0;
++    char* end = nullptr;
++    const long mode = std::strtol(v, &end, 10);
++    return end != v && *end == '\0' && mode >= 0 && mode <= 5 ? (int) mode : 0;
++}
++
++// Candidates are configured per actual specialization and device; the control retains its historical
++// minimum-across-formats occupancy. No failed candidate setup can affect the original dispatch.
++template <int T, bool GU, int WW, int NT, int AS, int PF>
++NativeLabInfo specialization_info() {
++    NativeLabInfo info;
++    info.phase = GU ? 1 : 2;
++    info.format = T;
++    info.tile = tile_rows(WW, NT);
++    info.weight_rows = weight_rows(WW);
++    info.threads = NT;
++    info.activation_stages = AS;
++    info.prefetch = PF;
++    info.dynamic_shared = smem_bytes(T, WW, NT, AS);
++#if !defined(STRATA_HIP_GFX906)
++    struct Cached { bool done = false; NativeLabInfo info; };
++    static Cached cache[32];
++    int dev = 0;
++    ck(cudaGetDevice(&dev), "lab device");
++    std::lock_guard<std::mutex> lk(g_mu);
++    Cached& c = cache[dev & 31];
++    if (c.done) return c.info;
++    c.done = true;
++    cudaFuncAttributes attr{};
++    auto kernel = native_kernel<T, GU, WW, NT, AS, PF>;
++    if (cudaFuncGetAttributes(&attr, kernel) == cudaSuccess && attr.ptxVersion >= 80 &&
++        cudaFuncSetAttribute(kernel, cudaFuncAttributeMaxDynamicSharedMemorySize,
++                             (int) info.dynamic_shared) == cudaSuccess) {
++        int occ = 0;
++        if (cudaOccupancyMaxActiveBlocksPerMultiprocessor(&occ, kernel, NT, info.dynamic_shared) == cudaSuccess)
++            info.occupancy = occ;
++        info.registers = attr.numRegs;
++    }
++    cudaGetLastError(); // unavailable experimental specialization falls back to control
++    c.info = info;
++#endif
++    return info;
++}
++
++template <int T, bool GU>
++NativeLabInfo phase_info(int ww, int variant) {
++    NativeLabInfo info;
++    const DevInfo& d = dev_info();
++    if (!d.sm86 || variant < 0 || variant > 4) variant = 0;
++    int base = 2;
++    if (const char* v = std::getenv("STRATA_PF_NATIVE_BASE")) {
++        const int requested = std::atoi(v);
++        if (requested == 0 || requested == 1 || requested == 2 || (variant == 4 && requested == 3)) base = requested;
++    }
++    int prefetch_base = 2;
++    if (const char* v = std::getenv("STRATA_PF_NATIVE_PREFETCH_BASE")) {
++        const int requested = std::atoi(v);
++        if (requested >= 0 && requested <= 2) prefetch_base = requested;
++    }
++    const bool control_layout = (variant == 3 || variant == 4) &&
++                                (base == 0 || (base == 3 && prefetch_base == 0));
++    const int stages = control_layout || variant == 1 || ((variant == 3 || variant == 4) &&
++                       (base == 1 || (base == 3 && prefetch_base == 1))) ? 4 : 3;
++    const int prefetch = GU && (variant == 3 || (variant == 4 && base == 3)) ? 4 : 2;
++    if (variant != 0) {
++        if (control_layout && prefetch == 4)
++            info = ww == 4 ? specialization_info<T, GU, 4, 512, 4, 4>()
++                           : specialization_info<T, GU, 2, 512, 4, 4>();
++        else if (control_layout)
++            info = ww == 4 ? specialization_info<T, GU, 4, 512, 4, 2>()
++                           : specialization_info<T, GU, 2, 512, 4, 2>();
++        else if (stages == 4 && prefetch == 4)
++            info = ww == 4 ? specialization_info<T, GU, 2, 256, 4, 4>()
++                           : specialization_info<T, GU, 1, 256, 4, 4>();
++        else if (stages == 4)
++            info = ww == 4 ? specialization_info<T, GU, 2, 256, 4, 2>()
++                           : specialization_info<T, GU, 1, 256, 4, 2>();
++        else if (prefetch == 4)
++            info = ww == 4 ? specialization_info<T, GU, 2, 256, 3, 4>()
++                           : specialization_info<T, GU, 1, 256, 3, 4>();
++        else
++            info = ww == 4 ? specialization_info<T, GU, 2, 256, 3, 2>()
++                           : specialization_info<T, GU, 1, 256, 3, 2>();
++    }
++    if (variant == 0 || info.occupancy < 1) {
++        variant = 0;
++        info = ww == 4 ? specialization_info<T, GU, 4, 512, 4, 2>()
++                       : specialization_info<T, GU, 2, 512, 4, 2>();
++    }
++    info.variant = variant;
++    info.sms = d.sms;
++    return info;
++}
++
++template <int T, bool GU, int WW, int AS, int PF, int NT = 256>
++void launch_candidate(unsigned grid, const Batch& b, const NativeGeom& g, const Tables& tb,
++                      const void* act, const int32_t* src, void* out, float* dm, cudaStream_t stream) {
++    native_kernel<T, GU, WW, NT, AS, PF><<<grid, NT, smem_bytes(T, WW, NT, AS), stream>>>(
++        b, g, tb, (const uint8_t*) act, src, (uint8_t*) out, dm);
++}
++
++template <int T, bool GU>
++void phase_launch(const NativeLabInfo& i, const Batch& b, const NativeGeom& g, const Tables& tb,
++                  const void* act, const int32_t* src, void* out, float* dm, cudaStream_t stream) {
++    if (i.variant == 0) {
++        launch<T, GU>(i.tile == 64 ? 4 : 2, i.grid, b, g, tb, act, src, out, dm, stream);
++    } else if (i.threads == 512 && i.prefetch == 4) {
++        if (i.tile == 64) launch_candidate<T, GU, 4, 4, 4, 512>(i.grid, b, g, tb, act, src, out, dm, stream);
++        else launch_candidate<T, GU, 2, 4, 4, 512>(i.grid, b, g, tb, act, src, out, dm, stream);
++    } else if (i.threads == 512) {
++        launch<T, GU>(i.tile == 64 ? 4 : 2, i.grid, b, g, tb, act, src, out, dm, stream);
++    } else if (i.activation_stages == 4 && i.prefetch == 4) {
++        if (i.tile == 64) launch_candidate<T, GU, 2, 4, 4>(i.grid, b, g, tb, act, src, out, dm, stream);
++        else launch_candidate<T, GU, 1, 4, 4>(i.grid, b, g, tb, act, src, out, dm, stream);
++    } else if (i.activation_stages == 4) {
++        if (i.tile == 64) launch_candidate<T, GU, 2, 4, 2>(i.grid, b, g, tb, act, src, out, dm, stream);
++        else launch_candidate<T, GU, 1, 4, 2>(i.grid, b, g, tb, act, src, out, dm, stream);
++    } else if (i.prefetch == 4) {
++        if (i.tile == 64) launch_candidate<T, GU, 2, 3, 4>(i.grid, b, g, tb, act, src, out, dm, stream);
++        else launch_candidate<T, GU, 1, 3, 4>(i.grid, b, g, tb, act, src, out, dm, stream);
++    } else {
++        if (i.tile == 64) launch_candidate<T, GU, 2, 3, 2>(i.grid, b, g, tb, act, src, out, dm, stream);
++        else launch_candidate<T, GU, 1, 3, 2>(i.grid, b, g, tb, act, src, out, dm, stream);
++    }
++}
++
++struct ProfileRecord {
++    cudaEvent_t begin{}, end{}, ready{};
++    int32_t* counts = nullptr;
++    NativeLabInfo info;
++    int e0 = 0, e1 = 0, n_expert = 0;
++    int64_t rows = 0;
++};
++std::mutex g_profile_mu;
++std::vector<ProfileRecord> g_profile;
++constexpr size_t PROFILE_RECORD_CAPACITY = 65536;
++constexpr size_t PROFILE_COUNT_CAPACITY = PROFILE_RECORD_CAPACITY * 512; // diagnostic-only pinned pool
++std::vector<ProfileRecord> g_profile_slots;
++size_t g_profile_slot_used = 0;
++int32_t* g_profile_counts = nullptr;
++size_t g_profile_count_used = 0;
++
++bool profiling_requested() {
++    const char* v = std::getenv("STRATA_PF_NATIVE_PROFILE");
++    return v && v[0] == '1';
++}
++
++void dispatch_phase(const NativeLabInfo& info, const Batch& b, const NativeGeom& g, int n_expert, int64_t n,
++                    const Tables& tb, const void* xa, const int32_t* src, void* ha, float* dm, cudaStream_t stream) {
++    const bool profile = profiling_requested();
++    ProfileRecord record;
++    if (profile) {
++        record.info = info;
++        record.e0 = b.e0; record.e1 = b.e1; record.n_expert = n_expert; record.rows = n;
++        {
++            std::lock_guard<std::mutex> lk(g_profile_mu);
++            if (!g_profile_counts || g_profile_slot_used >= PROFILE_RECORD_CAPACITY ||
++                g_profile_count_used + (size_t) (b.e1 - b.e0) > PROFILE_COUNT_CAPACITY) {
++                std::fprintf(stderr, "native expert profiling pool unavailable/exhausted; call native_profile_prepare before prefill and collect after existing synchronization\n");
++                std::exit(1);
++            }
++            const ProfileRecord& slot = g_profile_slots[g_profile_slot_used++];
++            record.begin = slot.begin; record.end = slot.end; record.ready = slot.ready;
++            record.counts = g_profile_counts + g_profile_count_used;
++            g_profile_count_used += b.e1 - b.e0;
++        }
++        ck(cudaEventRecord(record.begin, stream), "profile begin record");
++    }
++    if (info.phase == 1) {
++        switch (g.gu_type) {
++            case T_IQ2_XXS: phase_launch<T_IQ2_XXS, true>(info, b, g, tb, xa, src, ha, nullptr, stream); break;
++            case T_IQ2_XS: phase_launch<T_IQ2_XS, true>(info, b, g, tb, xa, src, ha, nullptr, stream); break;
++            case T_IQ2_S: phase_launch<T_IQ2_S, true>(info, b, g, tb, xa, src, ha, nullptr, stream); break;
++            case T_IQ3_XXS: phase_launch<T_IQ3_XXS, true>(info, b, g, tb, xa, src, ha, nullptr, stream); break;
++            case T_IQ3_S: phase_launch<T_IQ3_S, true>(info, b, g, tb, xa, src, ha, nullptr, stream); break;
++            default: phase_launch<T_IQ4_XS, true>(info, b, g, tb, xa, src, ha, nullptr, stream); break;
++        }
++    } else {
++        if (g.d_type == T_Q2_0) phase_launch<T_Q2_0, false>(info, b, g, tb, ha, src, nullptr, dm, stream);
++        else phase_launch<T_IQ4_NL, false>(info, b, g, tb, ha, src, nullptr, dm, stream);
++    }
++    if (profile) {
++        ck(cudaEventRecord(record.end, stream), "profile end record");
++        ck(cudaMemcpyAsync(record.counts, tb.cnt + b.e0, (size_t) (b.e1 - b.e0) * sizeof(int32_t),
++                           cudaMemcpyDeviceToHost, stream), "profile counts copy");
++        ck(cudaEventRecord(record.ready, stream), "profile ready record");
++        std::lock_guard<std::mutex> lk(g_profile_mu);
++        g_profile.push_back(record);
++    }
++}
++
+ }  // namespace
+ 
+ bool native_supported(int gu_type, int d_type) {
+@@ -596,7 +799,9 @@
+         const char* v = std::getenv("STRATA_PF_FUSED_NATIVE");
+         return v != nullptr && v[0] == '0';
+     }();
+-    return !off && requested() && gu_covered(gu_type) && d_covered(d_type) && dev_info().ok;   // opt-in (=1)
++    const bool supported = !off && requested() && gu_covered(gu_type) && d_covered(d_type) && dev_info().ok;
++    if (supported && profiling_requested()) native_profile_prepare();
++    return supported;   // opt-in (=1)
+ }
+ 
+ void quantize_act_native(const float* x, int64_t rows, int64_t cols, void* xa, void* stream) {
+@@ -606,7 +811,58 @@
+     ck(cudaGetLastError(), "quantize_act_native");
+ }
+ 
+-void experts_native(const Batch& b, const NativeGeom& g, int n_expert, int64_t n, const void* scratch, const void* xa,
++
++NativeLabInfo native_lab_info(const Batch& b, const NativeGeom& g, int n_expert, int64_t n,
++                              int phase, int variant, int tile) {
++    const int ww = tile == 64 ? 4 : tile == 128 ? 2 : pick_ww(n, n_expert);
++    const int requested = variant;
++    if (variant == 5) {
++        const int64_t experts = std::max(n_expert, 1);
++        const int row_class = n <= 56 * experts ? 0 : n <= 112 * experts ? 1 : 2;
++        variant = dev_info().sm86 ? native_lab_dispatch::mode(phase, phase == 1 ? g.gu_type : g.d_type, row_class) : 0;
++    }
++    NativeLabInfo info;
++    if (phase == 1) {
++        switch (g.gu_type) {
++            case T_IQ2_XXS: info = phase_info<T_IQ2_XXS, true>(ww, variant); break;
++            case T_IQ2_XS: info = phase_info<T_IQ2_XS, true>(ww, variant); break;
++            case T_IQ2_S: info = phase_info<T_IQ2_S, true>(ww, variant); break;
++            case T_IQ3_XXS: info = phase_info<T_IQ3_XXS, true>(ww, variant); break;
++            case T_IQ3_S: info = phase_info<T_IQ3_S, true>(ww, variant); break;
++            default: info = phase_info<T_IQ4_XS, true>(ww, variant); break;
++        }
++    } else {
++        info = g.d_type == T_Q2_0 ? phase_info<T_Q2_0, false>(ww, variant)
++                                 : phase_info<T_IQ4_NL, false>(ww, variant);
++    }
++    info.requested_variant = requested;
++    const int64_t tiles = (n + kTileRows - 1) / kTileRows + (b.e1 - b.e0);
++    const int occ = info.variant ? info.occupancy : dev_info().occ;
++    const int multiple = info.variant == 4 ? 2 : 1;
++    info.grid = (unsigned) std::min<int64_t>(tiles * ((phase == 1 ? 1280 : 2560) / info.weight_rows),
++                                           (int64_t) info.sms * occ * multiple);
++    return info;
++}
++
++void experts_native_lab(const Batch& b, const NativeGeom& g, int n_expert, int64_t n, const void* scratch,
++                        const void* xa, const int32_t* src, void* ha, float* dm, void* stream,
++                        int phase, int variant, int tile) {
++    if (b.e1 <= b.e0 || n <= 0) return;
++    if (!dev_info().ok || !gu_covered(g.gu_type) || !d_covered(g.d_type) || phase < 0 || phase > 2) {
++        std::fprintf(stderr, "prefill fused experts (native): types %d / %d or phase %d are not covered here\n",
++                     g.gu_type, g.d_type, phase);
++        std::exit(1);
++    }
++    const Tables tb = tables(const_cast<void*>(scratch), n_expert);
++    const cudaStream_t s = (cudaStream_t) stream;
++    if (phase != 2) dispatch_phase(native_lab_info(b, g, n_expert, n, 1, variant, tile),
++                                  b, g, n_expert, n, tb, xa, src, ha, dm, s);
++    if (phase != 1) dispatch_phase(native_lab_info(b, g, n_expert, n, 2, variant, tile),
++                                  b, g, n_expert, n, tb, xa, src, ha, dm, s);
++    ck(cudaGetLastError(), "experts_native");
++}
++
++static void experts_native_control(const Batch& b, const NativeGeom& g, int n_expert, int64_t n, const void* scratch, const void* xa,
+                     const int32_t* src, void* ha, float* dm, void* stream) {
+     if (b.e1 <= b.e0 || n <= 0) return;
+     const DevInfo& d = dev_info();
+@@ -635,4 +891,67 @@
+     ck(cudaGetLastError(), "experts_native");
+ }
+ 
++
++void experts_native(const Batch& b, const NativeGeom& g, int n_expert, int64_t n, const void* scratch, const void* xa,
++                    const int32_t* src, void* ha, float* dm, void* stream) {
++    const int variant = requested_variant();
++    if (variant == 0 && !profiling_requested()) {
++        experts_native_control(b, g, n_expert, n, scratch, xa, src, ha, dm, stream);
++        return;
++    }
++    experts_native_lab(b, g, n_expert, n, scratch, xa, src, ha, dm, stream, 0, variant);
++}
++
++void native_profile_prepare() {
++    if (!profiling_requested()) return;
++    std::lock_guard<std::mutex> lk(g_profile_mu);
++    if (g_profile_counts) return;
++    ck(cudaMallocHost((void**) &g_profile_counts, PROFILE_COUNT_CAPACITY * sizeof(int32_t)), "profile pool allocate");
++    g_profile_slots.resize(PROFILE_RECORD_CAPACITY);
++    g_profile.reserve(PROFILE_RECORD_CAPACITY);
++    for (ProfileRecord& slot : g_profile_slots) {
++        ck(cudaEventCreate(&slot.begin), "profile begin create");
++        ck(cudaEventCreate(&slot.end), "profile end create");
++        ck(cudaEventCreateWithFlags(&slot.ready, cudaEventDisableTiming), "profile ready create");
++    }
++}
++
++void native_profile_collect() {
++    std::lock_guard<std::mutex> lk(g_profile_mu);
++    auto it = g_profile.begin();
++    while (it != g_profile.end()) {
++        const cudaError_t status = cudaEventQuery(it->ready);
++        if (status == cudaErrorNotReady) break;
++        ck(status, "profile query");
++        float ms = 0.0f;
++        ck(cudaEventElapsedTime(&ms, it->begin, it->end), "profile elapsed");
++        const NativeLabInfo& i = it->info;
++        int histogram[4] = {0, 0, 0, 0};
++        int64_t routed = 0, tile_count = 0, partial_tiles = 0;
++        for (int e = 0; e < it->e1 - it->e0; ++e) {
++            const int rows = it->counts[e];
++            ++histogram[rows == 0 ? 0 : rows < 64 ? 1 : rows < 128 ? 2 : 3];
++            routed += rows;
++            tile_count += (rows + i.tile - 1) / i.tile;
++            partial_tiles += rows % i.tile != 0;
++        }
++        std::fprintf(stderr, "native_expert_profile {\"phase\":\"%s\",\"format\":%d,\"requested_variant\":%d,\"variant\":%d,"
++                     "\"tile\":%d,\"weight_rows\":%d,\"threads\":%d,\"stages\":%d,\"prefetch\":%d,"
++                     "\"grid\":%u,\"registers\":%d,\"dynamic_shared\":%zu,\"occupancy\":%d,"
++                     "\"batch_start\":%d,\"batch_experts\":%d,\"total_experts\":%d,\"total_routed_rows\":%lld,"
++                     "\"batch_routed_rows\":%lld,\"tile_count\":%lld,\"partial_tiles\":%lld,"
++                     "\"row_histogram_0_1to63_64to127_128plus\":[%d,%d,%d,%d],\"elapsed_ms\":%.6f,\"expert_rows\":[",
++                     i.phase == 1 ? "gate_up_epilogue" : "down", i.format, i.requested_variant, i.variant, i.tile, i.weight_rows,
++                     i.threads, i.activation_stages, i.prefetch, i.grid, i.registers, i.dynamic_shared, i.occupancy,
++                     it->e0, it->e1 - it->e0, it->n_expert, (long long) it->rows, (long long) routed,
++                     (long long) tile_count, (long long) partial_tiles,
++                     histogram[0], histogram[1], histogram[2], histogram[3], ms);
++        for (int e = 0; e < it->e1 - it->e0; ++e) std::fprintf(stderr, "%s%d", e ? "," : "", it->counts[e]);
++        std::fprintf(stderr, "]}\n");
++        ++it;
++    }
++    g_profile.erase(g_profile.begin(), it);
++    if (g_profile.empty()) { g_profile_count_used = 0; g_profile_slot_used = 0; }
++}
++
+ }  // namespace strata::prefill::fused
+--- a/src/prefill/prefill.cpp
++++ b/src/prefill/prefill.cpp
+@@ -27,6 +27,7 @@
+ #include "strata/prefill/gemm.hpp"
+ #include "strata/prefill/moe_fused.hpp"
+ #include "strata/prefill/moe_fused_iq.hpp"
++#include "strata/prefill/moe_fused_iq_lab.hpp"
+ #include "strata/prefill/moe_mmq.hpp"
+ #include "strata/core/peer_experts.hpp"
+ #include "strata/prefill/kernels.hpp"
+@@ -1554,6 +1555,9 @@
+     const core::ModelGeometry& g = *m.g;
+     core::SessionState& ss = *m.ss;
+     const auto t_start = Clock::now();
++#ifdef STRATA_PREFILL_FUSED
++    fused::native_profile_prepare();
++#endif
+     const int64_t LB = stage_lb_, LE = stage_le_;
+     // The direct successor's future lives on the Prefill object. Intermediate
+     // stages therefore do not drain the complete remaining GPU chain here.
+@@ -3015,6 +3019,9 @@
+                 return false;
+             }
+             const auto toc2 = Clock::now();
++#ifdef STRATA_PREFILL_FUSED
++            fused::native_profile_collect();
++#endif
+             if (on_stage_chunk && !on_stage_chunk(p0 + T, err)) return false;
+             if (on_chunk && !on_chunk(m.R, T, p0, err)) return false;
+             host_sync_ms += std::chrono::duration<double, std::milli>(toc2 - toc).count();
+@@ -3053,6 +3060,9 @@
+         return false;
+     }
+     stats_.ms_total += ms_since(t_start);
++#ifdef STRATA_PREFILL_FUSED
++    fused::native_profile_collect();
++#endif
+     if (pt.on) {
+         pt.fold();
+         double total = 0.0;
+--- /dev/null
++++ b/src/kernels/native_expert_lab.cpp
+@@ -0,0 +1,482 @@
++// Standalone experiment. Real GGUF slices, frozen CPU grouping, independent
++// guarded outputs.
++#include "strata/prefill/moe_fused_iq_lab.hpp"
++#include <algorithm>
++#include <array>
++#include <chrono>
++#include <cstdint>
++#include <cstdio>
++#include <cstring>
++#include <cuda_runtime.h>
++#include <fcntl.h>
++#include <filesystem>
++#include <fstream>
++#include <iostream>
++#include <numeric>
++#include <random>
++#include <sstream>
++#include <stdexcept>
++#include <unistd.h>
++#include <vector>
++namespace f = strata::prefill::fused;
++void ck(cudaError_t e) {
++  if (e != cudaSuccess)
++    throw std::runtime_error(cudaGetErrorString(e));
++}
++struct Buffer {
++  uint8_t *base = nullptr, *p = nullptr;
++  size_t size;
++  explicit Buffer(size_t n) : size(std::max(n, size_t(16))) {
++    ck(cudaMalloc(&base, size + 512));
++    p = base + 256;
++    reset();
++  }
++  ~Buffer() { cudaFree(base); }
++  Buffer(const Buffer &) = delete;
++  void reset() { ck(cudaMemset(base, 0xa5, size + 512)); }
++  void put(const void *h, size_t n) {
++    ck(cudaMemcpy(p, h, n, cudaMemcpyHostToDevice));
++  }
++  std::vector<uint8_t> get() {
++    std::vector<uint8_t> h(size);
++    ck(cudaMemcpy(h.data(), p, size, cudaMemcpyDeviceToHost));
++    return h;
++  }
++  void guards() {
++    std::array<uint8_t, 512> h;
++    ck(cudaMemcpy(h.data(), base, 256, cudaMemcpyDeviceToHost));
++    ck(cudaMemcpy(h.data() + 256, p + size, 256, cudaMemcpyDeviceToHost));
++    for (auto x : h)
++      if (x != 0xa5)
++        throw std::runtime_error("buffer guard overwritten");
++  }
++};
++struct Layer {
++  int id, gu, down;
++  size_t blob, gurow, drow;
++  uint64_t go, uo, doo;
++  std::string shard;
++  f::NativeGeom geom() const {
++    return {gu, down, gurow, drow, 640 * gurow, 1280 * gurow};
++  }
++};
++int block(int t) {
++  switch (t) {
++  case 16:
++    return 66;
++  case 17:
++    return 74;
++  case 18:
++    return 98;
++  case 20:
++    return 18;
++  case 21:
++    return 110;
++  case 22:
++    return 82;
++  case 23:
++    return 136;
++  case 42:
++    return 18;
++  default:
++    throw std::runtime_error("unsupported real type");
++  }
++}
++std::vector<Layer> layers(const std::string &pack) {
++  std::ifstream in(pack + "/native_experts.txt");
++  if (!in)
++    throw std::runtime_error("layout missing");
++  std::vector<Layer> a;
++  std::string s;
++  while (std::getline(in, s)) {
++    if (s.empty() || s[0] == '#')
++      continue;
++    std::istringstream q(s);
++    Layer l{};
++    uint64_t offset;
++    q >> l.id >> l.gu >> l.down >> offset >> l.blob >> l.go >> l.uo >> l.doo;
++    q >> l.shard;
++    l.gurow = 10 * block(l.gu);
++    l.drow = l.down == 42 ? 10 * 18 : 20 * 18;
++    if (l.blob != 1280 * l.gurow + 2560 * l.drow)
++      throw std::runtime_error("layout size");
++    a.push_back(l);
++  }
++  if (a.size() != 48)
++    throw std::runtime_error("need all 48 layers");
++  return a;
++}
++void read_at(int fd, uint8_t *p, size_t n, uint64_t at) {
++  while (n) {
++    auto r = pread(fd, p, n, at);
++    if (r <= 0)
++      throw std::runtime_error("packed read failed");
++    p += r;
++    at += r;
++    n -= r;
++  }
++}
++struct Weights {
++  Buffer buf;
++  size_t stride;
++  int count;
++  Weights(const Layer &l, const std::string &model, int c)
++      : buf(c * (l.blob + 256)), stride(l.blob + 256), count(c) {
++    std::filesystem::path path(model);
++    if (!l.shard.empty())
++      path = path.parent_path() / l.shard;
++    int fd = open(path.c_str(), O_RDONLY);
++    if (fd < 0)
++      throw std::runtime_error("model open failed");
++    std::vector<uint8_t> h(l.blob);
++    for (int e = 0; e < c; e++) {
++      read_at(fd, h.data(), 640 * l.gurow, l.go + e * 640 * l.gurow);
++      read_at(fd, h.data() + 640 * l.gurow, 640 * l.gurow,
++              l.uo + e * 640 * l.gurow);
++      read_at(fd, h.data() + 1280 * l.gurow, 2560 * l.drow,
++              l.doo + e * 2560 * l.drow);
++      ck(cudaMemcpy(buf.p + e * stride + 2, h.data(), h.size(),
++                    cudaMemcpyHostToDevice));
++    }
++    close(fd);
++  }
++  f::Batch batch(int first, int end) {
++    f::Batch b;
++    b.e0 = first;
++    b.e1 = end;
++    for (int e = first; e < end; e++)
++      b.blob[e - first] = buf.p + (e % count) * stride + 2;
++    return b;
++  }
++  void guards() {
++    buf.guards();
++    auto h = buf.get();
++    for (int e = 0; e < count; e++) {
++      if (h[e * stride] != 0xa5 || h[e * stride + 1] != 0xa5)
++        throw std::runtime_error("weight prefix guard");
++      for (size_t j = stride - 254; j < stride; j++)
++        if (h[e * stride + j] != 0xa5)
++          throw std::runtime_error("weight suffix guard");
++    }
++  }
++};
++struct Case {
++  int n = 0, tokens = 37;
++  std::vector<int> counts, offsets, slots;
++  Buffer scratch, src, x, xa, h0, h1, d0, d1;
++  static int rows(const std::vector<int> &c) {
++    return std::accumulate(c.begin(), c.end(), 0);
++  }
++  Case(std::vector<int> c, bool zero, int ntokens = 37)
++      : n(rows(c)), tokens(ntokens), counts(c), offsets(513), slots(n),
++        scratch(f::group_bytes(n, 512)), src(n * 4), x(tokens * 2560 * 4),
++        xa(f::act_bytes(tokens, 2560)), h0(f::act_bytes(n, 640)),
++        h1(f::act_bytes(n, 640)), d0(size_t(n) * 2560 * 4),
++        d1(size_t(n) * 2560 * 4) {
++    auto sh = std::vector<uint8_t>(scratch.size, 0);
++    auto p = reinterpret_cast<int32_t *>(sh.data());
++    auto off = p + 512;
++    auto fill = p + 1025;
++    auto ts = p + 1537;
++    size_t ta = ((4 * 512 + 2) * 4 + 15) / 16 * 16;
++    auto tl = reinterpret_cast<int2 *>(sh.data() + ta);
++    std::vector<int32_t> sources(n);
++    int nt = 0;
++    for (int e = 0; e < 512; e++) {
++      p[e] = counts[e];
++      off[e] = offsets[e];
++      fill[e] = counts[e];
++      ts[e] = nt;
++      offsets[e + 1] = offsets[e] + counts[e];
++      for (int r = 0; r < counts[e]; r += 64)
++        tl[nt++] = make_int2(e, offsets[e] + r);
++    }
++    off[512] = n;
++    ts[512] = nt;
++    // Fixed shuffled grouping maps and repeated source tokens. The same tables
++    // serve every mode.
++    std::iota(slots.begin(), slots.end(), 0);
++    std::mt19937 rng(20261011);
++    std::shuffle(slots.begin(), slots.end(), rng);
++    for (int i = 0; i < n; i++)
++      sources[i] = (i * 17 + 3) % tokens;
++    scratch.put(sh.data(), sh.size());
++    src.put(sources.data(), sources.size() * 4);
++    std::vector<float> act(tokens * 2560);
++    for (size_t i = 0; i < act.size(); i++)
++      act[i] = zero ? 0.f
++                    : float(int(rng() % 20001) - 10000) *
++                          (.00001f * float(1 << (i % 7)));
++    x.put(act.data(), act.size() * 4);
++    f::quantize_act_native((float *)x.p, tokens, 2560, xa.p, nullptr);
++    ck(cudaDeviceSynchronize());
++  }
++  void run(Weights &w, const Layer &l, int mode, int tile, int phase, int batch,
++           int begin = 0, int end = 512, bool candidate = true) {
++    for (int e = begin; e < end; e += batch) {
++      auto b = w.batch(e, std::min(e + batch, end));
++      f::experts_native_lab(b, l.geom(), 512, n, scratch.p, xa.p,
++                            (int32_t *)src.p, candidate ? h1.p : h0.p,
++                            (float *)(candidate ? d1.p : d0.p), nullptr, phase,
++                            mode, tile);
++    }
++  }
++  void parity(Weights &w, const Layer &l, int mode, int tile, int batch,
++              int begin = 0, int end = 512) {
++    h0.reset();
++    h1.reset();
++    d0.reset();
++    d1.reset();
++    run(w, l, 0, tile, 0, batch, begin, end, false);
++    run(w, l, mode, tile, 0, batch, begin, end, true);
++    ck(cudaDeviceSynchronize());
++    auto a = h0.get(), b = h1.get(), d = d0.get(), e = d1.get();
++    for (int r = 0; r < n; r++)
++      for (int k = 0; k < 10; k++)
++        if (std::memcmp(a.data() + r * 800 + k * 80,
++                        b.data() + r * 800 + k * 80, 72))
++          throw std::runtime_error("hidden codes/scales parity row=" +
++                                   std::to_string(r));
++    if (d != e)
++      throw std::runtime_error("FP32 down parity");
++    // Restore the frozen grouped rows to original routed-slot order, compare
++    // all FP32 bits.
++    for (int slot : slots)
++      if (std::memcmp(d.data() + size_t(slot) * 10240,
++                      e.data() + size_t(slot) * 10240, 10240))
++        throw std::runtime_error("restored slot parity");
++    for (int r = 0; r < n; r++) {
++      int expert = std::upper_bound(offsets.begin(), offsets.end(), r) -
++                   offsets.begin() - 1;
++      if (expert >= begin && expert < end)
++        continue;
++      for (int j = 0; j < 800; j++)
++        if (a[r * 800 + j] != 0xa5 || b[r * 800 + j] != 0xa5)
++          throw std::runtime_error("hidden untouched sentinel");
++      for (int j = 0; j < 10240; j++)
++        if (d[size_t(r) * 10240 + j] != 0xa5 ||
++            e[size_t(r) * 10240 + j] != 0xa5)
++          throw std::runtime_error("down untouched sentinel");
++    }
++    h0.guards();
++    h1.guards();
++    d0.guards();
++    d1.guards();
++    scratch.guards();
++    src.guards();
++    x.guards();
++    xa.guards();
++    w.guards();
++    std::cout << "{\"kind\":\"parity\",\"layer\":" << l.id
++              << ",\"variant\":" << mode << ",\"tile\":" << tile
++              << ",\"batch\":" << batch << ",\"begin\":" << begin
++              << ",\"end\":" << end << ",\"rows\":" << n << ",\"passed\":true}"
++              << std::endl;
++  }
++};
++void info(const f::NativeLabInfo &i, int layer, int rowclass) {
++  std::cout << "{\"kind\":\"resource\",\"layer\":" << layer
++            << ",\"class\":" << rowclass << ",\"variant\":" << i.variant
++            << ",\"requested_variant\":" << i.requested_variant
++            << ",\"phase\":" << i.phase << ",\"format\":" << i.format
++            << ",\"threads\":" << i.threads
++            << ",\"stages\":" << i.activation_stages
++            << ",\"prefetch\":" << i.prefetch
++            << ",\"registers\":" << i.registers
++            << ",\"occupancy\":" << i.occupancy
++            << ",\"shared\":" << i.dynamic_shared << ",\"grid\":" << i.grid
++            << ",\"tile\":" << i.tile << "}" << std::endl;
++}
++std::string query(const char *command) {
++  FILE *pipe = popen(command, "r");
++  if (!pipe)
++    throw std::runtime_error("GPU preflight command failed");
++  std::string out;
++  char line[1024];
++  while (fgets(line, sizeof line, pipe))
++    out += line;
++  if (pclose(pipe) != 0)
++    throw std::runtime_error("GPU preflight query failed");
++  return out;
++}
++void gpu_preflight() {
++  if (std::stof(query("nvidia-smi --id=0 --query-gpu=power.limit "
++                      "--format=csv,noheader,nounits")) != 100.f)
++    throw std::runtime_error("100 W power limit changed before timing");
++  std::istringstream processes(
++      query("nvidia-smi --id=0 "
++            "--query-compute-apps=pid --format=csv,noheader"));
++  long pid;
++  while (processes >> pid)
++    if (pid != getpid())
++      throw std::runtime_error("foreign GPU process before timing");
++}
++float timing(Case &c, Weights &w, const Layer &l, int mode, int phase,
++             int iters) {
++  cudaEvent_t a, b;
++  ck(cudaEventCreate(&a));
++  ck(cudaEventCreate(&b));
++  ck(cudaEventRecord(a));
++  for (int k = 0; k < iters; k++)
++    c.run(w, l, mode, 0, phase, 128);
++  ck(cudaEventRecord(b));
++  ck(cudaEventSynchronize(b));
++  float ms;
++  ck(cudaEventElapsedTime(&ms, a, b));
++  ck(cudaEventDestroy(a));
++  ck(cudaEventDestroy(b));
++  return ms / iters;
++}
++int main(int argc, char **argv) {
++  try {
++    if (argc < 4)
++      throw std::runtime_error(
++          "usage: native_expert_lab PACK MODEL parity|compact|bench [variant] "
++          "[routing.jsonl]");
++    auto ls = layers(argv[1]);
++    std::string task = argv[3];
++    int mode = argc > 4 ? std::stoi(argv[4]) : 1;
++    std::array<int, 10> reps{31, 1, 0, 5, 35, 36, 28, 8, 29, 12};
++    if (task == "bench") {
++      // Routing profiles are real count vectors from frozen-control event
++      // profiling. Largest representative per row class.
++      if (argc < 6)
++        throw std::runtime_error("bench needs observed routing file");
++      std::ifstream in(argv[5]);
++      if (!in)
++        throw std::runtime_error("observed routing file missing");
++      std::vector<std::vector<int>> routes(3);
++      std::string line;
++      while (std::getline(in, line)) {
++        std::istringstream s(line);
++        int cl;
++        s >> cl;
++        std::vector<int> c(512);
++        for (int &v : c)
++          if (!(s >> v))
++            throw std::runtime_error("routing vector incomplete");
++        if (cl < 0 || cl > 2)
++          throw std::runtime_error("routing class");
++        if (Case::rows(c) > Case::rows(routes[cl]))
++          routes[cl] = c;
++      }
++      if (std::all_of(routes.begin(), routes.end(),
++                      [](const auto &r) { return r.empty(); }))
++        throw std::runtime_error("no observed routing vectors");
++      for (auto id : reps) {
++        auto &l = ls[id];
++        Weights w(l, argv[2], 512);
++        for (int cl = 0; cl < 3; cl++) {
++          if (routes[cl].empty())
++            continue;
++          Case c(routes[cl], false, std::max(37, Case::rows(routes[cl]) / 10));
++          c.parity(w, l, mode, 0, 128);
++          for (int phase = 1; phase <= 2; phase++)
++            info(f::native_lab_info(w.batch(0, 128), l.geom(), 512, c.n, phase,
++                                    mode),
++                 id, cl);
++          for (int p = 0; p < 3; p++) {
++            for (int k = 0; k < 10; k++) {
++              c.run(w, l, 0, 0, p, 128);
++              c.run(w, l, mode, 0, p, 128);
++            }
++            ck(cudaDeviceSynchronize());
++            for (int pair = 0; pair < 5; pair++)
++              for (int order = 0; order < 2; order++) {
++                int variant = ((pair + order) % 2) ? mode : 0;
++                gpu_preflight();
++                auto wall_start =
++                    std::chrono::system_clock::now().time_since_epoch();
++                auto monotonic_start =
++                    std::chrono::steady_clock::now().time_since_epoch();
++                float ms = timing(c, w, l, variant, p, 20);
++                auto wall_end =
++                    std::chrono::system_clock::now().time_since_epoch();
++                auto monotonic_end =
++                    std::chrono::steady_clock::now().time_since_epoch();
++                std::cout
++                    << "{\"kind\":\"timing\",\"layer\":" << id
++                    << ",\"class\":" << cl << ",\"phase\":" << p
++                    << ",\"variant\":" << variant << ",\"pair\":" << pair
++                    << ",\"order\":" << order
++                    << ",\"iterations\":20,\"ms\":" << ms
++                    << ",\"wall_start_ns\":"
++                    << std::chrono::duration_cast<std::chrono::nanoseconds>(
++                           wall_start)
++                           .count()
++                    << ",\"wall_end_ns\":"
++                    << std::chrono::duration_cast<std::chrono::nanoseconds>(
++                           wall_end)
++                           .count()
++                    << ",\"monotonic_start_ns\":"
++                    << std::chrono::duration_cast<std::chrono::nanoseconds>(
++                           monotonic_start)
++                           .count()
++                    << ",\"monotonic_end_ns\":"
++                    << std::chrono::duration_cast<std::chrono::nanoseconds>(
++                           monotonic_end)
++                           .count()
++                    << "}" << std::endl;
++              }
++          }
++        }
++      }
++    } else {
++      bool compact = task == "compact";
++      bool narrow = compact && argc > 5 && std::string(argv[5]) == "narrow";
++      if (task != "parity" && !compact)
++        throw std::runtime_error("unknown task");
++      std::vector<int> counts(512);
++      std::vector<int> edge{0,  1,  7,   8,   15,  16,  31,   32,  63,
++                            64, 65, 127, 128, 129, 257, 1025, 2049};
++      for (size_t j = 0; j < edge.size(); j++)
++        counts[7 + j] = compact ? ((j % 4 == 0)   ? 1
++                                   : (j % 4 == 1) ? 17
++                                   : (j % 4 == 2) ? 65
++                                                  : 129)
++                                : edge[j];
++      if (narrow) {
++        std::fill(counts.begin(), counts.end(), 0);
++        counts[7] = 1;
++        counts[8] = 65;
++      }
++      for (auto id : reps) {
++        if (narrow && id != 31 && id != 12)
++          continue;
++        auto &l = ls[id];
++        Weights w(l, argv[2], compact ? 1 : 512);
++        for (bool zero : {false, true}) {
++          if (narrow && zero)
++            continue;
++          Case c(counts, zero);
++          for (int tile : {64, 128}) {
++            c.parity(w, l, mode, tile, 17, 7, 24);
++            if (!compact)
++              for (int batch : {1, 127, 128})
++                c.parity(w, l, mode, tile, batch);
++          }
++        }
++        if (!compact) {
++          std::vector<int> uniform(512, 1);
++          Case c(uniform, false);
++          c.parity(w, l, mode, 0, 128);
++        }
++      }
++      if (!compact)
++        for (auto &l : ls) {
++          Weights w(l, argv[2], 1);
++          std::vector<int> c(512);
++          c[l.id * 7 % 512] = 65;
++          Case sample(c, false);
++          sample.parity(w, l, mode, 64, 128);
++          sample.parity(w, l, mode, 128, 128);
++        }
++    }
++    std::cout << "{\"kind\":\"complete\",\"task\":\"" << task
++              << "\",\"variant\":" << mode << ",\"passed\":true}" << std::endl;
++    return 0;
++  } catch (const std::exception &e) {
++    std::cerr << "FAILED: " << e.what() << std::endl;
++    return 1;
++  }
++}
+--- /dev/null
++++ b/include/strata/prefill/moe_fused_iq_lab.hpp
+@@ -0,0 +1,23 @@
++// Opt-in laboratory/diagnostic API. Production interfaces stay in moe_fused_iq.hpp.
++#pragma once
++#include "strata/prefill/moe_fused_iq.hpp"
++namespace strata::prefill::fused {
++struct NativeLabInfo {
++    int requested_variant = 0, variant = 0, phase = 0, format = -1, tile = 0, weight_rows = 0;
++    int threads = 512, activation_stages = 4, prefetch = 2;
++    int registers = 0, occupancy = 0, sms = 0;
++    size_t dynamic_shared = 0;
++    unsigned grid = 0;
++};
++// phase 1 gate/up including SwiGLU and quantization, 2 down; tile 0 automatic, 64 or 128 forced.
++NativeLabInfo native_lab_info(const Batch&, const NativeGeom&, int n_expert, int64_t n,
++                              int phase, int variant, int tile = 0);
++// phase 0 executes both projections. Explicit variant overrides the environment.
++void experts_native_lab(const Batch&, const NativeGeom&, int n_expert, int64_t n,
++                        const void* scratch, const void* xa, const int32_t* src,
++                        void* ha, float* dm, void* stream, int phase, int variant, int tile = 0);
++// Allocate the diagnostic-only pinned count pool before prefill starts. No-op when profiling is off.
++void native_profile_prepare();
++// Call after an existing stream synchronization. Only completed events are collected; never synchronizes.
++void native_profile_collect();
++}  // namespace strata::prefill::fused
+--- /dev/null
++++ b/include/strata/prefill/moe_fused_iq_dispatch.hpp
+@@ -0,0 +1,23 @@
++// Frozen native expert laboratory dispatch, generated from expert-20261011T161207Z/winning-dispatch.json.
++// Provenance: 600 timing records per mode, 2400 total across modes 1..4.
++// Microbenchmark selection only; no accepted total-response performance claim.
++// Row classes: <=56, 57..112, >112 average routed rows per expert.
++#pragma once
++namespace strata::prefill::fused::native_lab_dispatch {
++struct Cell { int phase, format, row_class, mode; };
++inline constexpr Cell cells[] = {
++    {1, 16, 0, 1}, {1, 16, 1, 0}, {1, 16, 2, 0}, // IQ2_XXS
++    {1, 17, 0, 0}, {1, 17, 1, 0}, {1, 17, 2, 0}, // IQ2_XS
++    {1, 18, 0, 1}, {1, 18, 1, 0}, {1, 18, 2, 0}, // IQ3_XXS
++    {1, 21, 0, 1}, {1, 21, 1, 0}, {1, 21, 2, 0}, // IQ3_S
++    {1, 22, 0, 0}, {1, 22, 1, 0}, {1, 22, 2, 0}, // IQ2_S
++    {2, 20, 0, 2}, {2, 20, 1, 0}, {2, 20, 2, 0}, // IQ4_NL
++    {2, 42, 0, 0}, {2, 42, 1, 0}, {2, 42, 2, 0}, // Q2_0
++};
++static_assert(sizeof(cells) / sizeof(cells[0]) == 21, "all format/phase/row-class cells frozen");
++constexpr int mode(int phase, int format, int row_class) {
++    for (const Cell& cell : cells)
++        if (cell.phase == phase && cell.format == format && cell.row_class == row_class) return cell.mode;
++    return 0; // unmeasured formats, including IQ4_XS, retain control
++}
++}  // namespace strata::prefill::fused::native_lab_dispatch
+--- /dev/null
++++ b/local/expert_campaign.py
+@@ -0,0 +1,122 @@
++#!/usr/bin/python3
++"""Isolated expert campaign stages; never changes or starts production."""
++import argparse,copy,datetime,fcntl,hashlib,json,os,signal,subprocess,threading,time
++import long_context
++from pathlib import Path
++from launch import ROOT,CONFIG,optimization_environment
++from long_context import run,CHECKPOINTS
++from paired_report import evaluate
++FIXTURES=ROOT/'local/benchmarks/long-20261010-v4/fixtures'
++def sha(p):
++ h=hashlib.sha256()
++ with Path(p).open('rb') as f:
++  while b:=f.read(8*1024**2):h.update(b)
++ return h.hexdigest()
++def save(p,v):
++ p.parent.mkdir(parents=True,exist_ok=True);tmp=p.with_suffix('.tmp');tmp.write_text(json.dumps(v,indent=2)+'\n');tmp.replace(p)
++def gpu(allowed=()):
++ cap=float(subprocess.check_output(['nvidia-smi','--id=0','--query-gpu=power.limit','--format=csv,noheader,nounits'],text=True).strip())
++ if cap!=100:raise RuntimeError('100 W frozen limit changed')
++ ps=subprocess.check_output(['nvidia-smi','--id=0','--query-compute-apps=pid,process_name','--format=csv,noheader'],text=True)
++ for line in ps.splitlines():
++  pid=int(line.split(',')[0]);cg=Path(f'/proc/{pid}/cgroup')
++  if pid in allowed:continue
++  if cg.exists() and any(x in cg.read_text() for x in (f'unbiasedstrata-long-{os.getpid()}-',f'strata-expert-{os.getpid()}-')):
++   group=Path('/sys/fs/cgroup')/cg.read_text().strip().split('::',1)[1].lstrip('/')
++   if (group/'memory.swap.current').exists() and int((group/'memory.swap.current').read_text())!=0:raise RuntimeError('workload swap detected')
++   continue
++  raise RuntimeError('unexpected GPU owner: '+line)
++ if subprocess.run(['systemctl','--user','is-active','--quiet','unbiasedstrata.service']).returncode==0:raise RuntimeError('production started')
++original_completion=long_context.completion
++def verified_completion(*args,**kwargs):
++ gpu()
++ return original_completion(*args,**kwargs)
++long_context.completion=verified_completion
++def moment():
++ return {'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'monotonic_ns':time.monotonic_ns(),'boot_id':Path('/proc/sys/kernel/random/boot_id').read_text().strip()}
++class Guard:
++ def __init__(self,allowed=()):self.allowed=allowed;self.stop=threading.Event();self.error=None
++ def __enter__(self):
++  def watch():
++   while not self.stop.wait(2):
++    try:gpu(self.allowed)
++    except Exception as e:self.error=str(e);os.kill(os.getpid(),signal.SIGINT);return
++  self.worker=threading.Thread(target=watch,daemon=True);self.worker.start();return self
++ def __exit__(self,*args):self.stop.set();self.worker.join(timeout=5)
++def measured(p,path,lengths=CHECKPOINTS,workloads=('fresh','growing')):
++ if path.exists():raise RuntimeError('fresh evidence directory required: '+str(path))
++ gpu()
++ with Guard() as guard:r=run(p,lengths,workloads,path,FIXTURES)
++ if guard.error:raise RuntimeError(guard.error)
++ if r['status']!='passed':raise RuntimeError('quality failed: '+str(path))
++ return r
++def profiling(r,path):
++ rows=[]
++ for line in (path/'engine.log').read_text().splitlines():
++  if line.startswith('native_expert_profile '):rows.append(json.loads(line.split(' ',1)[1]))
++ if not rows:raise RuntimeError('native phase diagnostics absent')
++ sums={}
++ for q in rows:
++  k=str(q['format'])+'/'+q['phase'];sums[k]=sums.get(k,0)+q['elapsed_ms']
++ return {'status':r['status'],'requests':[{'tokens':q['target_tokens'],'total_response_seconds':q['wall_seconds'],'timings':q['timings'],'checks':q['checks'],'prefill_diagnostics':q['prefill_diagnostics']} for q in r['runs']],'supplemental_phase_totals_ms':sums,'records':len(rows)}
++def routes(path,dest):
++ counts=[0]*512;seen=set();routes={0:[],1:[],2:[]}
++ for line in (path/'engine.log').read_text().splitlines():
++  if not line.startswith('native_expert_profile '):continue
++  q=json.loads(line.split(' ',1)[1])
++  if q['phase']!='gate_up_epilogue':continue
++  start=q['batch_start'];counts[start:start+q['batch_experts']]=q['expert_rows'];seen.update(range(start,start+q['batch_experts']))
++  if len(seen)==512:
++   avg=sum(counts)/512;cl=0 if avg<=56 else 1 if avg<=112 else 2;routes[cl].append(counts[:]);counts=[0]*512;seen=set()
++ chosen={cl:sorted(rs,key=sum)[len(rs)//2] for cl,rs in routes.items() if rs}
++ dest.write_text(''.join(str(cl)+' '+' '.join(map(str,c))+'\n' for cl,c in chosen.items()))
++ save(dest.with_suffix('.json'),{'observed_counts_by_class':{cl:len(rs) for cl,rs in routes.items()},'selected_counts':chosen})
++def main():
++ ap=argparse.ArgumentParser();ap.add_argument('--output',required=True,type=Path);ap.add_argument('--baseline-profile',required=True,type=Path);ap.add_argument('--stage',required=True,choices=['profile','parity','compact','bench','sanitizer','screen','accept']);ap.add_argument('--variant',type=int,default=0);ap.add_argument('--sanitizer-tool',choices=['memcheck','racecheck','synccheck'],default='memcheck');ap.add_argument('--base',type=int);ap.add_argument('--prefetch-base',type=int);a=ap.parse_args();out=a.output.resolve();out.mkdir(parents=True,exist_ok=True)
++ lock=open(ROOT/'local/long-context.lock','a');fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
++ p=json.loads(a.baseline_profile.read_text());p['environment']['STRATA_PF_NATIVE_VARIANT']=str(a.variant)
++ if a.base is not None:p['environment']['STRATA_PF_NATIVE_BASE']=str(a.base)
++ if a.prefetch_base is not None:p['environment']['STRATA_PF_NATIVE_PREFETCH_BASE']=str(a.prefetch_base)
++ if a.stage=='profile':p=copy.deepcopy(p);p['environment'].update(STRATA_PREFILL_TIMING='1',STRATA_PF_NATIVE_PROFILE='1')
++ gpu();started=moment()
++ source_files=[ROOT/x for x in ['src/prefill/moe_fused_iq.cu','src/kernels/native_expert_lab.cpp','include/strata/prefill/moe_fused_iq_lab.hpp','include/strata/prefill/moe_fused_iq_dispatch.hpp','local/expert_campaign.py','local/long_context.py','local/launch.py']]
++ identity=json.loads((a.baseline_profile.parent/'manifest.json').read_text())['model_pack_identity']
++ model_stats={f:{'size':Path(f).stat().st_size,'mtime_ns':Path(f).stat().st_mtime_ns,'inode':Path(f).stat().st_ino} for f in identity}
++ manifest={'started':started,'binary_sha256':sha(p['binary']),'standalone_sha256':sha(Path(p['binary']).parent/'native_expert_lab'),'source_sha256':{str(x):sha(x) for x in source_files},'model_file_stats':model_stats,'memory_max_bytes':56*1024**3,'memory_swap_max_bytes':0,'environment':optimization_environment(p),'fixture_sha256':{x.name:sha(x) for x in FIXTURES.glob('*.json')},'production_profile_sha256':sha(CONFIG),'baseline_profile_sha256':sha(a.baseline_profile)}
++ save(out/'profile.json',p);save(out/'stage-manifest.json',manifest)
++ state={'status':'running','stage':a.stage,'variant':a.variant,'production_changed':False};save(out/'state.json',state)
++ try:
++  if a.stage in ('parity','compact','bench','sanitizer'):
++   cmd=[str(Path(p['binary']).parent/'native_expert_lab'),p['pack'],p['model'],'compact' if a.stage=='sanitizer' else a.stage,str(a.variant)]
++   if a.stage=='sanitizer' and a.sanitizer_tool!='memcheck':cmd.append('narrow')
++   if a.stage=='sanitizer':cmd=['/opt/cuda/bin/compute-sanitizer','--tool',a.sanitizer_tool,'--error-exitcode','99',*cmd]
++   if a.stage=='bench':cmd.append(str((a.baseline_profile.parent/'observed-routing.txt').resolve()))
++   with (out/'raw.jsonl').open('w') as log:
++    env={k:v for k,v in os.environ.items() if not k.startswith('STRATA_')};env.update(optimization_environment(p));unit=f'strata-expert-{os.getpid()}-{time.time_ns()}';cmd=['systemd-run','--user','--pipe','--wait','--collect','--quiet',f'--unit={unit}','--property=MemoryMax=56G','--property=MemorySwapMax=0','--property=TimeoutStopSec=30','--property=KillMode=control-group','/usr/bin/env',*[f'{k}={v}' for k,v in optimization_environment(p).items()],*cmd];child=subprocess.Popen(cmd,stdout=log,stderr=subprocess.STDOUT,env=env)
++    try:
++     with Guard((child.pid,)) as guard:code=child.wait()
++    finally:
++     if child.poll() is None:subprocess.run(['systemctl','--user','stop',unit]);child.wait(timeout=35)
++    if guard.error:raise RuntimeError(guard.error)
++   if code:raise RuntimeError('standalone failed, exit '+str(code))
++   if a.stage=='bench':
++    data=[json.loads(s) for s in (out/'raw.jsonl').read_text().splitlines() if s.startswith('{')]
++    if not any(r['kind']=='timing' for r in data) or not any(r['kind']=='resource' for r in data):raise RuntimeError('benchmark produced no timing/resource samples')
++  elif a.stage=='profile':
++   r=measured(p,out/'run',(128000,180000),('fresh',));save(out/'summary.json',profiling(r,out/'run'))
++   if a.variant==0:routes(out/'run',a.baseline_profile.parent/'observed-routing.txt')
++  else:
++   control=json.loads(a.baseline_profile.read_text());pairs=[]
++   for i in range(1 if a.stage=='screen' else 5):
++    pair={};order=('control','candidate') if i%2==0 else ('candidate','control')
++    for name in order:pair[name]=measured(control if name=='control' else p,out/str(i)/name)
++    pairs.append((pair['control'],pair['candidate']));report=evaluate(pairs,treatment_fields=('environment',));ratio=report.pop('amd_on_off_geomean_ratio');report.pop('eligible_to_enable');ci=report['paired_95_ci_ratio'];report.update(total_response_ratio=ratio,screen_passed=ratio<=.95 and max(report['bucket_ratios'].values())<=1.05,accepted=len(pairs)==5 and ratio<=.95 and ci[1]<1 and max(report['bucket_ratios'].values())<=1.05,production_changed=False);save(out/'report.json',report)
++   if a.stage=='accept' and not report['accepted']:raise RuntimeError('acceptance thresholds not met')
++  ended=moment()
++  integrity={'same_boot':ended['boot_id']==started['boot_id'],'engine_binary_unchanged':sha(p['binary'])==manifest['binary_sha256'],'standalone_binary_unchanged':sha(Path(p['binary']).parent/'native_expert_lab')==manifest['standalone_sha256'],'source_unchanged':all(sha(x)==h for x,h in manifest['source_sha256'].items()),'fixtures_unchanged':all(sha(FIXTURES/name)==h for name,h in manifest['fixture_sha256'].items()),'production_config_unchanged':sha(CONFIG)==manifest['production_profile_sha256'],'baseline_profile_unchanged':sha(a.baseline_profile)==manifest['baseline_profile_sha256'],'model_files_unchanged':all({'size':Path(f).stat().st_size,'mtime_ns':Path(f).stat().st_mtime_ns,'inode':Path(f).stat().st_ino}==x for f,x in model_stats.items())}
++  save(out/'integrity.json',dict(checks=integrity,started=started,ended=ended))
++  if not all(integrity.values()):raise RuntimeError('stage integrity changed; exclude measurements')
++  state.update(status='passed',started=started,ended=ended)
++ except BaseException as e:state.update(status='failed_or_incomplete',error=str(e));raise
++ finally:save(out/'state.json',state)
++if __name__=='__main__':main()
+--- /dev/null
++++ b/local/expert_select.py
+@@ -0,0 +1,37 @@
++#!/usr/bin/python3
++"""Aggregate paired microbenchmarks; select only >=5% gains, ties within 1% prefer simpler modes."""
++import argparse,json,math,statistics
++from collections import defaultdict
++from pathlib import Path
++ap=argparse.ArgumentParser();ap.add_argument('--input',type=Path,action='append',required=True);ap.add_argument('--output',type=Path,required=True);a=ap.parse_args()
++groups=defaultdict(list);resources={};combined=defaultdict(list);inputs=[];fallbacks=[]
++for path in a.input:
++ state=json.loads((path/'state.json').read_text())
++ if state['status']!='passed':raise ValueError('incomplete benchmark excluded')
++ profile=json.loads((path/'profile.json').read_text());variant=int(profile['environment']['STRATA_PF_NATIVE_VARIANT']);base=profile['environment'].get('STRATA_PF_NATIVE_BASE');prefetchbase=profile['environment'].get('STRATA_PF_NATIVE_PREFETCH_BASE');records=[json.loads(s) for s in (path/'raw.jsonl').read_text().splitlines() if s.startswith('{')];samples=defaultdict(dict)
++ for r in records:
++  if r['kind']=='resource':resources[(path.name,r['layer'],r['class'],r['phase'])]=r
++  if r['kind']=='timing':samples[(r['layer'],r['class'],r['phase'],r['pair'])][r['variant']]=r['ms']
++ for (layer,cl,phase,pair),ms in samples.items():
++  if set(ms)!={0,variant}:raise ValueError('missing alternating timing pair')
++  ratio=ms[variant]/ms[0]
++  if phase==0:combined[variant].append(ratio);continue
++  info=resources[(path.name,layer,cl,phase)]
++  if info['variant']==0:
++   fallbacks.append(dict(path=str(path),layer=layer,row_class=cl,phase=phase,format=info['format'],requested_mode=variant));continue
++  if info['variant']!=variant and not (variant==5 and info.get('requested_variant')==5):raise ValueError('unexpected effective variant')
++  key=(info['format'],phase,cl,variant,str(base),str(prefetchbase));groups[key].append(ratio)
++ inputs.append({'path':str(path),'variant':variant,'base':base,'prefetch_base':prefetchbase,'standalone_sha256':json.loads((path/'stage-manifest.json').read_text()).get('standalone_sha256')})
++if not combined:raise ValueError('benchmark missing timing samples')
++ratios=[dict(format=k[0],phase=k[1],row_class=k[2],mode=k[3],base=None if k[4]=='None' else int(k[4]),prefetch_base=None if k[5]=='None' else int(k[5]),paired_geomean_ratio=math.exp(statistics.mean(map(math.log,rs))),pairs=len(rs)) for k,rs in groups.items()];bykey=defaultdict(list)
++for row in ratios:bykey[(row['format'],row['phase'],row['row_class'])].append(row)
++table=[]
++for fmt,phase in [(t,1) for t in [16,17,18,21,22]]+[(t,2) for t in [20,42]]:
++ for cl in range(3):
++  candidates=[r for r in bykey[(fmt,phase,cl)] if r['paired_geomean_ratio']<=.95]
++  winner={'format':fmt,'phase':phase,'row_class':cl,'mode':0,'base':None,'prefetch_base':None,'reason':'no measured >=5% improvement'}
++  if candidates:
++   best=min(r['paired_geomean_ratio'] for r in candidates);winner=min([r for r in candidates if r['paired_geomean_ratio']<=best*1.01],key=lambda r:r['mode']).copy();winner['reason']='fastest qualifying mode; ties within 1% prefer simpler mode'
++  table.append(winner)
++report={'inputs':inputs,'unavailable_specialization_fallbacks':fallbacks,'ratios':ratios,'combined_ratio_by_mode':{v:math.exp(statistics.mean(map(math.log,rs))) for v,rs in combined.items()},'dispatch_table':table,'microbenchmark_only':True,'unobserved_classes_keep_control':True}
++a.output.write_text(json.dumps(report,indent=2)+'\n');print(json.dumps({'combined_ratio_by_mode':report['combined_ratio_by_mode'],'candidate_entries':sum(r['mode']!=0 for r in table)},indent=2))
+--- /dev/null
++++ b/local/expert_final_gate.py
+@@ -0,0 +1,37 @@
++#!/usr/bin/python3
++"""Fresh final response gate, then authorized screening/acceptance only if qualified."""
++import argparse,hashlib,json,subprocess,sys
++from pathlib import Path
++ROOT=Path(__file__).resolve().parents[1]
++def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
++def save(p,obj):p.write_text(json.dumps(obj,indent=2)+'\n')
++def main():
++ ap=argparse.ArgumentParser();ap.add_argument('--output',type=Path,required=True);a=ap.parse_args();out=a.output.resolve();base=out/'final-profiles/baseline.json';frozen=json.loads((out/'final-build-manifest.json').read_text());binary=ROOT/'build-expert-lab/unbiased-strata'
++ assert sha(binary)==frozen['executable_sha256']['unbiased-strata']
++ for stage in ['parity/mode5','sanitizer/mode5-memcheck','sanitizer/mode5-racecheck','sanitizer/mode5-synccheck','micro/mode5-independent']:
++  p=out/stage;assert json.loads((p/'state.json').read_text())['status']=='passed';assert all(json.loads((p/'integrity.json').read_text())['checks'].values())
++ def run(stage,mode,path):
++  assert sha(binary)==frozen['executable_sha256']['unbiased-strata']
++  with (out/(path.replace('/','-')+'.log')).open('w') as log:
++   subprocess.run([sys.executable,str(ROOT/'local/expert_campaign.py'),'--output',str(out/path),'--baseline-profile',str(base),'--stage',stage,'--variant',str(mode)],cwd=ROOT,stdout=log,stderr=subprocess.STDOUT,check=True)
++  assert sha(binary)==frozen['executable_sha256']['unbiased-strata']
++ results={}
++ for name,mode in [('control',0),('candidate',5)]:
++  path='profile/final-'+name;run('profile',mode,path);record=json.loads((out/path/'run/results.json').read_text());assert record['status']=='passed';assert record['launch']['binary_sha256']==frozen['executable_sha256']['unbiased-strata'];results[name]=record
++  # Verify actual compiled dispatch, including control in every unmeasured row class.
++  entries={(x['format'],x['phase'],x['row_class']):x['mode'] for x in json.loads((out/'winning-dispatch.json').read_text())['dispatch_table']}
++  observed=set()
++  for line in (out/path/'run/engine.log').read_text().splitlines():
++   if not line.startswith('native_expert_profile '):continue
++   q=json.loads(line.split(' ',1)[1]);assert q['requested_variant']==mode
++   phase=1 if q['phase']=='gate_up_epilogue' else 2;n=q['total_routed_rows'];e=q['total_experts'];cl=0 if n<=56*e else 1 if n<=112*e else 2;expected=0 if mode==0 else entries[(q['format'],phase,cl)];assert q['variant']==expected;observed.add((q['format'],phase,cl,q['variant']))
++  save(out/path/'dispatch-observed.json',{'cells':[list(x) for x in sorted(observed)],'verified':True})
++ r0={r['target_tokens']:r for r in results['control']['runs']};r5={r['target_tokens']:r for r in results['candidate']['runs']};ratios={str(n):r5[n]['wall_seconds']/r0[n]['wall_seconds'] for n in [128000,180000]};passed=all(r<=.95 for r in ratios.values())
++ report={'status':'passed' if passed else 'rejected','profiled_total_response_ratios':ratios,'minimum_required_improvement_percent':5,'both_lengths_required':True,'same_binary_sha256':frozen['executable_sha256']['unbiased-strata'],'all_fresh_quality_checks_passed':True,'profiling_excluded_from_acceptance_statistics':True,'earlier_disconnected_runs_used_only_for_selection':True,'production_changed':False,'next_action':'one uninstrumented screening pair' if passed else 'stop this bounded kernel campaign; no screening or acceptance warranted'}
++ save(out/'profile-gate.json',report)
++ if not passed:return
++ run('screen',5,'screening');screen=json.loads((out/'screening/report.json').read_text())
++ if not screen['screen_passed']:
++  save(out/'campaign-decision.json',dict(status='rejected_screening',screening=screen,production_changed=False));return
++ run('accept',5,'acceptance');accept=json.loads((out/'acceptance/report.json').read_text());save(out/'campaign-decision.json',dict(status='accepted' if accept['accepted'] else 'rejected_acceptance',acceptance=accept,production_changed=False))
++if __name__=='__main__':main()

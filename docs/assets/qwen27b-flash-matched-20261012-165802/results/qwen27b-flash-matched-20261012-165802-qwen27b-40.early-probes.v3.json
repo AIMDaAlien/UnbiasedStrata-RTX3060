@@ -1,0 +1,105 @@
+{
+  "probe_version": "contract-reviewed-v2",
+  "records": [
+    {
+      "task": "e1-bounded-queue-close",
+      "probe_ok": true,
+      "detail": "ok"
+    },
+    {
+      "task": "e2-lru-eviction",
+      "probe_ok": false,
+      "detail": "SyntaxError: invalid syntax"
+    },
+    {
+      "task": "e3-retry-idempotent",
+      "probe_ok": true,
+      "detail": "ok"
+    },
+    {
+      "task": "e4-session-store-split",
+      "probe_ok": true,
+      "detail": "ok"
+    },
+    {
+      "task": "e5-validate-pipeline",
+      "probe_ok": true,
+      "detail": "ok"
+    },
+    {
+      "task": "e6-index-rebuild",
+      "probe_ok": true,
+      "detail": "ok"
+    },
+    {
+      "task": "e7-money-rounding",
+      "probe_ok": true,
+      "detail": "ok"
+    },
+    {
+      "task": "e8-event-sourcing",
+      "probe_ok": true,
+      "detail": "ok"
+    },
+    {
+      "task": "e9-parallel-dedup",
+      "probe_ok": true,
+      "detail": "ok"
+    },
+    {
+      "task": "e10-csv-dialect",
+      "probe_ok": true,
+      "detail": "ok"
+    },
+    {
+      "task": "e11-scheduler-priority",
+      "probe_ok": false,
+      "detail": "AssertionError"
+    },
+    {
+      "task": "e12-schema-migration",
+      "probe_ok": true,
+      "detail": "ok"
+    },
+    {
+      "task": "e13-stream-window",
+      "probe_ok": true,
+      "detail": "ok"
+    },
+    {
+      "task": "e14-parser-precedence",
+      "probe_ok": true,
+      "detail": "ok"
+    },
+    {
+      "task": "e15-backpressure-queue",
+      "probe_ok": true,
+      "detail": "ok"
+    },
+    {
+      "task": "e16-trie-autocomplete",
+      "probe_ok": true,
+      "detail": "ok"
+    },
+    {
+      "task": "e17-batch-chunking",
+      "probe_ok": true,
+      "detail": "ok"
+    },
+    {
+      "task": "e18-ttl-cache",
+      "probe_ok": true,
+      "detail": "ok"
+    },
+    {
+      "task": "e19-idempotent-http",
+      "probe_ok": true,
+      "detail": "ok"
+    },
+    {
+      "task": "e20-iter-drain",
+      "probe_ok": true,
+      "detail": "ok"
+    }
+  ]
+}

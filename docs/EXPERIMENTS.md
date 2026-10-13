@@ -1,0 +1,13 @@
+# Accepted profile and optional experiments
+
+The accepted change is a combined profile: fused prefill, 16,384 chunk ceiling, 512 ring and automatic tiles. See the five exported notes and their decision files for the exact recorded binaries, effective settings, hardware, limits and measurement methods. The 16.58% result is an existing measurement, not a packaging benchmark or independent attribution to any single setting.
+
+The native expert laboratory defaults to control (`STRATA_PF_NATIVE_VARIANT=0`). Mode 5 passed correctness/sanitizer checks and improved sampled kernel time by 1.47%, but final instrumented responses were 0.12%/0.18% slower at 128K/180K and failed the 5% gate. The QSA active-bound toggle (`STRATA_TOPK_ACTIVE_ANY=1`) passed parity but its single screening pair saved only 0.112%, below its 2% threshold. Streaming QSA port assessment found the principal approach already present in the control. No new port or accepted gain is claimed.
+
+AMD full-prefill assistance was about 43% slower in its feasibility pair. Decode-only assistance after NVIDIA tuning was about 0.99% slower, also failing its initial 10% improvement gate. These single feasibility pairs are not acceptance confidence intervals. `amd_helper`, `amd_device`, `amd_vram_mib` and `amd_decode_only` opt into the separate HIP worker; leaving them absent keeps it disabled. No model precision changes accompany these toggles.
+
+For research on an RX 9060 XT, configure the ROCm SDK/HIP compiler on PATH and run `sh local/build-amd.sh`. This builds a separate `build-amd` directory for gfx1200 and does not replace the CUDA build. The helper executable and `local/amd-worker.sh` require your own ROCm environment and device UUID. Example local AMD JSON files are archived configurations with normalized paths, not tested portable defaults. Inspect and adapt them before use. All such experiments remain unsupported/rejected for this snapshot's recommended profile.
+
+`local/` retains useful campaign, parity, report and plotting scripts plus historical operational notes. Only the build recipe, launcher, exporter and verifier are packaged as portable workflows. Campaign runners rely on original fixture directories, systemd units and local configuration; some offer `--apply`, which can modify an installation. They are retained for review, not invoked by packaging. GDN, KV overlap and further kernel work are parked/untested.
+
+Rollback: stop your temporary server and restore your saved binary and config together if you manually adopted changes. The snapshot itself installs no launcher aliases, persistent services, power settings or production configuration. There are no scheduled upstream updates. Future experimentation needs its own dated evidence and acceptance gates.

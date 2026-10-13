@@ -1,0 +1,31 @@
+{
+  "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+  "models": {
+    "object": "list",
+    "data": [
+      {
+        "id": "qwen3.8-flash-next-iq3_xxs",
+        "object": "model",
+        "owned_by": "local",
+        "context_length": 196608
+      }
+    ]
+  },
+  "reasoning": {
+    "low": {
+      "count": 42
+    },
+    "medium": {
+      "count": 12
+    },
+    "xhigh": {
+      "count": 54
+    }
+  },
+  "gpu": "name, driver_version, memory.total [MiB], memory.used [MiB]\nNVIDIA GeForce RTX 3060, 610.57.04, 12288 MiB, 11620 MiB\n",
+  "amd_memory": {
+    "/sys/class/drm/card3/device/mem_info_vram_used": "466268160",
+    "/sys/class/drm/card2/device/mem_info_vram_used": "59928576"
+  },
+  "medium_verified": true
+}

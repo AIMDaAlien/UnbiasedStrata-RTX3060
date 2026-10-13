@@ -1,0 +1,1419 @@
+{
+  "inputs": [
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "variant": 5,
+      "base": null,
+      "prefetch_base": null,
+      "standalone_sha256": "6f2ec34730451b8c965d1fe8dc090a9fb69ffa5b0ff86c5884de32dfda974aa3"
+    }
+  ],
+  "unavailable_specialization_fallbacks": [
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 31,
+      "row_class": 2,
+      "phase": 1,
+      "format": 16,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 31,
+      "row_class": 2,
+      "phase": 1,
+      "format": 16,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 31,
+      "row_class": 2,
+      "phase": 1,
+      "format": 16,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 31,
+      "row_class": 2,
+      "phase": 1,
+      "format": 16,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 31,
+      "row_class": 2,
+      "phase": 1,
+      "format": 16,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 31,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 31,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 31,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 31,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 31,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 1,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 1,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 1,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 1,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 1,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 1,
+      "row_class": 2,
+      "phase": 1,
+      "format": 16,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 1,
+      "row_class": 2,
+      "phase": 1,
+      "format": 16,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 1,
+      "row_class": 2,
+      "phase": 1,
+      "format": 16,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 1,
+      "row_class": 2,
+      "phase": 1,
+      "format": 16,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 1,
+      "row_class": 2,
+      "phase": 1,
+      "format": 16,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 1,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 1,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 1,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 1,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 1,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 0,
+      "row_class": 0,
+      "phase": 1,
+      "format": 17,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 0,
+      "row_class": 0,
+      "phase": 1,
+      "format": 17,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 0,
+      "row_class": 0,
+      "phase": 1,
+      "format": 17,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 0,
+      "row_class": 0,
+      "phase": 1,
+      "format": 17,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 0,
+      "row_class": 0,
+      "phase": 1,
+      "format": 17,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 0,
+      "row_class": 2,
+      "phase": 1,
+      "format": 17,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 0,
+      "row_class": 2,
+      "phase": 1,
+      "format": 17,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 0,
+      "row_class": 2,
+      "phase": 1,
+      "format": 17,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 0,
+      "row_class": 2,
+      "phase": 1,
+      "format": 17,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 0,
+      "row_class": 2,
+      "phase": 1,
+      "format": 17,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 0,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 0,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 0,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 0,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 0,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 5,
+      "row_class": 0,
+      "phase": 1,
+      "format": 17,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 5,
+      "row_class": 0,
+      "phase": 1,
+      "format": 17,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 5,
+      "row_class": 0,
+      "phase": 1,
+      "format": 17,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 5,
+      "row_class": 0,
+      "phase": 1,
+      "format": 17,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 5,
+      "row_class": 0,
+      "phase": 1,
+      "format": 17,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 5,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 5,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 5,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 5,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 5,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 5,
+      "row_class": 2,
+      "phase": 1,
+      "format": 17,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 5,
+      "row_class": 2,
+      "phase": 1,
+      "format": 17,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 5,
+      "row_class": 2,
+      "phase": 1,
+      "format": 17,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 5,
+      "row_class": 2,
+      "phase": 1,
+      "format": 17,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 5,
+      "row_class": 2,
+      "phase": 1,
+      "format": 17,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 5,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 5,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 5,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 5,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 5,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 35,
+      "row_class": 2,
+      "phase": 1,
+      "format": 18,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 35,
+      "row_class": 2,
+      "phase": 1,
+      "format": 18,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 35,
+      "row_class": 2,
+      "phase": 1,
+      "format": 18,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 35,
+      "row_class": 2,
+      "phase": 1,
+      "format": 18,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 35,
+      "row_class": 2,
+      "phase": 1,
+      "format": 18,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 35,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 35,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 35,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 35,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 35,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 36,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 36,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 36,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 36,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 36,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 36,
+      "row_class": 2,
+      "phase": 1,
+      "format": 18,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 36,
+      "row_class": 2,
+      "phase": 1,
+      "format": 18,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 36,
+      "row_class": 2,
+      "phase": 1,
+      "format": 18,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 36,
+      "row_class": 2,
+      "phase": 1,
+      "format": 18,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 36,
+      "row_class": 2,
+      "phase": 1,
+      "format": 18,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 36,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 36,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 36,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 36,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 36,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 28,
+      "row_class": 2,
+      "phase": 1,
+      "format": 21,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 28,
+      "row_class": 2,
+      "phase": 1,
+      "format": 21,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 28,
+      "row_class": 2,
+      "phase": 1,
+      "format": 21,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 28,
+      "row_class": 2,
+      "phase": 1,
+      "format": 21,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 28,
+      "row_class": 2,
+      "phase": 1,
+      "format": 21,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 28,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 28,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 28,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 28,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 28,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 8,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 8,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 8,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 8,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 8,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 8,
+      "row_class": 2,
+      "phase": 1,
+      "format": 21,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 8,
+      "row_class": 2,
+      "phase": 1,
+      "format": 21,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 8,
+      "row_class": 2,
+      "phase": 1,
+      "format": 21,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 8,
+      "row_class": 2,
+      "phase": 1,
+      "format": 21,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 8,
+      "row_class": 2,
+      "phase": 1,
+      "format": 21,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 8,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 8,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 8,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 8,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 8,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 29,
+      "row_class": 0,
+      "phase": 1,
+      "format": 22,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 29,
+      "row_class": 0,
+      "phase": 1,
+      "format": 22,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 29,
+      "row_class": 0,
+      "phase": 1,
+      "format": 22,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 29,
+      "row_class": 0,
+      "phase": 1,
+      "format": 22,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 29,
+      "row_class": 0,
+      "phase": 1,
+      "format": 22,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 29,
+      "row_class": 2,
+      "phase": 1,
+      "format": 22,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 29,
+      "row_class": 2,
+      "phase": 1,
+      "format": 22,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 29,
+      "row_class": 2,
+      "phase": 1,
+      "format": 22,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 29,
+      "row_class": 2,
+      "phase": 1,
+      "format": 22,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 29,
+      "row_class": 2,
+      "phase": 1,
+      "format": 22,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 29,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 29,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 29,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 29,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 29,
+      "row_class": 2,
+      "phase": 2,
+      "format": 20,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 12,
+      "row_class": 0,
+      "phase": 1,
+      "format": 22,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 12,
+      "row_class": 0,
+      "phase": 1,
+      "format": 22,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 12,
+      "row_class": 0,
+      "phase": 1,
+      "format": 22,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 12,
+      "row_class": 0,
+      "phase": 1,
+      "format": 22,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 12,
+      "row_class": 0,
+      "phase": 1,
+      "format": 22,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 12,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 12,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 12,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 12,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 12,
+      "row_class": 0,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 12,
+      "row_class": 2,
+      "phase": 1,
+      "format": 22,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 12,
+      "row_class": 2,
+      "phase": 1,
+      "format": 22,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 12,
+      "row_class": 2,
+      "phase": 1,
+      "format": 22,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 12,
+      "row_class": 2,
+      "phase": 1,
+      "format": 22,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 12,
+      "row_class": 2,
+      "phase": 1,
+      "format": 22,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 12,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 12,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 12,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 12,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    },
+    {
+      "path": "local/benchmarks/expert-20261011T161207Z/micro/mode5-independent",
+      "layer": 12,
+      "row_class": 2,
+      "phase": 2,
+      "format": 42,
+      "requested_mode": 5
+    }
+  ],
+  "ratios": [
+    {
+      "format": 16,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 5,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9392421150201122,
+      "pairs": 10
+    },
+    {
+      "format": 20,
+      "phase": 2,
+      "row_class": 0,
+      "mode": 5,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9386493324086045,
+      "pairs": 25
+    },
+    {
+      "format": 18,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 5,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.913455893070936,
+      "pairs": 10
+    },
+    {
+      "format": 21,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 5,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.921160346014474,
+      "pairs": 10
+    }
+  ],
+  "combined_ratio_by_mode": {
+    "5": 0.9853129624665969
+  },
+  "dispatch_table": [
+    {
+      "format": 16,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 5,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9392421150201122,
+      "pairs": 10,
+      "reason": "fastest qualifying mode; ties within 1% prefer simpler mode"
+    },
+    {
+      "format": 16,
+      "phase": 1,
+      "row_class": 1,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 16,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 17,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 17,
+      "phase": 1,
+      "row_class": 1,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 17,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 18,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 5,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.913455893070936,
+      "pairs": 10,
+      "reason": "fastest qualifying mode; ties within 1% prefer simpler mode"
+    },
+    {
+      "format": 18,
+      "phase": 1,
+      "row_class": 1,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 18,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 21,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 5,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.921160346014474,
+      "pairs": 10,
+      "reason": "fastest qualifying mode; ties within 1% prefer simpler mode"
+    },
+    {
+      "format": 21,
+      "phase": 1,
+      "row_class": 1,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 21,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 22,
+      "phase": 1,
+      "row_class": 0,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 22,
+      "phase": 1,
+      "row_class": 1,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 22,
+      "phase": 1,
+      "row_class": 2,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 20,
+      "phase": 2,
+      "row_class": 0,
+      "mode": 5,
+      "base": null,
+      "prefetch_base": null,
+      "paired_geomean_ratio": 0.9386493324086045,
+      "pairs": 25,
+      "reason": "fastest qualifying mode; ties within 1% prefer simpler mode"
+    },
+    {
+      "format": 20,
+      "phase": 2,
+      "row_class": 1,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 20,
+      "phase": 2,
+      "row_class": 2,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 42,
+      "phase": 2,
+      "row_class": 0,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 42,
+      "phase": 2,
+      "row_class": 1,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    },
+    {
+      "format": 42,
+      "phase": 2,
+      "row_class": 2,
+      "mode": 0,
+      "base": null,
+      "prefetch_base": null,
+      "reason": "no measured >=5% improvement"
+    }
+  ],
+  "microbenchmark_only": true,
+  "unobserved_classes_keep_control": true
+}

@@ -1,0 +1,41 @@
+{
+  "model_auxiliary_files": {
+    "/home/USER/opt/UnbiasedStrata/local/pack-iq3_xxs/dense.bin": {
+      "size": 1538035200,
+      "mtime_ns": 1790732762085797199
+    },
+    "/home/USER/opt/UnbiasedStrata/local/pack-iq3_xxs/index.txt": {
+      "size": 93687,
+      "mtime_ns": 1790732762087376798
+    },
+    "/home/USER/opt/UnbiasedStrata/local/pack-iq3_xxs/native_experts.txt": {
+      "size": 3296,
+      "mtime_ns": 1790732762583787687
+    },
+    "/home/USER/opt/UnbiasedStrata/local/pack-iq3_xxs/expert-profile.bin": {
+      "size": 196632,
+      "mtime_ns": 1790730507816722177
+    },
+    "/home/USER/opt/Strata-data/mtp/rt/experts.bin": {
+      "size": 707788800,
+      "mtime_ns": 1790733103018566074
+    },
+    "/home/USER/opt/Strata-data/mtp/rt/dense.bin": {
+      "size": 116099072,
+      "mtime_ns": 1790733103414559100
+    },
+    "/home/USER/opt/Strata-data/mtp/rt/dense.txt": {
+      "size": 1851,
+      "mtime_ns": 1790733103415559082
+    },
+    "/home/USER/opt/Strata-data/mtp/rt/draft_vocab.bin": {
+      "size": 425196,
+      "mtime_ns": 1790733103430862662
+    }
+  },
+  "flash_source_commit": "d0a44ea7e757c59fa35a78b4b98d0c4bb44ce2cf",
+  "llama_submodule_commit": "3cf03257f219afbe7334045ff7c6a06ac68c627d",
+  "flash_source_dirty": true,
+  "source_patch_sha256": "e480e1b618038d7b898e76a72751f86938d1b6ab106145c95ba6189172ab88b6",
+  "note": "Source checkout metadata is provenance, not proof that the executable was built from this checkout. Campaign manifests retain actual executable SHA256."
+}

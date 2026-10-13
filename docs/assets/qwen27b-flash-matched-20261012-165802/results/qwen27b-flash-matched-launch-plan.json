@@ -1,0 +1,86 @@
+{
+  "suite_version": "contract-v2",
+  "packs": [
+    "deepswe2"
+  ],
+  "reasoning": "medium",
+  "include_fixtures": true,
+  "qwen_command": [
+    "/usr/bin/llama-server",
+    "-m",
+    "/home/USER/Models/Swift-Qwen3.8-27B-Q5_K_M.gguf",
+    "-c",
+    "131072",
+    "-fa",
+    "on",
+    "-ctk",
+    "q4_0",
+    "-ctv",
+    "q4_0",
+    "-fit",
+    "off",
+    "-dev",
+    "Vulkan1,Vulkan2",
+    "-sm",
+    "layer",
+    "-ts",
+    "16,11",
+    "-np",
+    "1",
+    "--metrics",
+    "--spec-type",
+    "draft-mtp",
+    "--spec-draft-n-max",
+    "2",
+    "-ctkd",
+    "q4_0",
+    "-ctvd",
+    "q4_0",
+    "--alias",
+    "matched-qwen38-27b-q5",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "18080"
+  ],
+  "qwen_environment": {
+    "GGML_VK_VISIBLE_DEVICES": null
+  },
+  "flash_config": {
+    "model": "/home/USER/opt/Strata-data/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf",
+    "pack": "/home/USER/opt/UnbiasedStrata/local/pack-iq3_xxs",
+    "mtp": "/home/USER/opt/Strata-data/mtp/rt",
+    "port": 18081,
+    "context": 196608,
+    "threads": 12,
+    "ple_io": "direct",
+    "spec": 4,
+    "kv": "int8",
+    "kv_resident": 32768,
+    "environment": {
+      "CUDA_VISIBLE_DEVICES": "0",
+      "STRATA_RESIDENT_HEADROOM_GIB": "8",
+      "OMP_NUM_THREADS": "1",
+      "STRATA_PF_FUSED": "1",
+      "STRATA_PREFILL_AUTO_MAX": "16384",
+      "STRATA_PREFILL_RING": "512"
+    }
+  },
+  "runs_per_model": 3,
+  "temporary_stop": "llama-ornith.service",
+  "restore_on_exit": false,
+  "status": "authorized; six sequential matched campaigns",
+  "paired_seeds": [
+    40,
+    41,
+    42
+  ],
+  "order": [
+    "qwen27b-40",
+    "flash-40",
+    "flash-41",
+    "qwen27b-41",
+    "qwen27b-42",
+    "flash-42"
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "paired_repetitions": 5,
+  "declared_treatment_fields": [
+    "environment",
+    "amd_helper",
+    "amd_device",
+    "amd_vram_mib",
+    "amd_decode_only"
+  ],
+  "wall_time_improvement_percent": 16.58044952052049,
+  "paired_95_ci_ratio": [
+    0.8336635206943339,
+    0.8347278283692481
+  ],
+  "bucket_ratios": {
+    "fresh-80000": 0.7703869701445599,
+    "fresh-128000": 0.7898704976273287,
+    "fresh-180000": 0.7968855266438912,
+    "growing-80000": 0.8792816580198575,
+    "growing-128000": 0.8858965876839674,
+    "growing-180000": 0.8921446349559573
+  },
+  "eligible_to_enable": true,
+  "candidate_baseline_geomean_ratio": 0.8341955047947951,
+  "eligible_3060": true,
+  "candidate": {
+    "model": "/home/USER/opt/Strata-data/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf",
+    "pack": "/home/USER/opt/UnbiasedStrata/local/pack-iq3_xxs",
+    "mtp": "/home/USER/opt/Strata-data/mtp/rt",
+    "port": 18081,
+    "context": 196608,
+    "threads": 12,
+    "ple_io": "direct",
+    "spec": 4,
+    "kv": "int8",
+    "kv_resident": 32768,
+    "environment": {
+      "CUDA_VISIBLE_DEVICES": "0",
+      "STRATA_RESIDENT_HEADROOM_GIB": "8",
+      "OMP_NUM_THREADS": "1",
+      "STRATA_PF_FUSED": "1",
+      "STRATA_PREFILL_AUTO_MAX": "16384",
+      "STRATA_PREFILL_RING": "512"
+    }
+  }
+}

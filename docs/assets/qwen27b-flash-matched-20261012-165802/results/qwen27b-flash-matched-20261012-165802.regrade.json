@@ -1,0 +1,1154 @@
+[
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e1-bounded-queue-close",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e2-lru-eviction",
+    "ok": 0,
+    "total": 1,
+    "detail": "check-fail: SyntaxError: invalid syntax",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e3-retry-idempotent",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e4-session-store-split",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e5-validate-pipeline",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e6-index-rebuild",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e7-money-rounding",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e8-event-sourcing",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e9-parallel-dedup",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e10-csv-dialect",
+    "ok": 0,
+    "total": 1,
+    "detail": "check-fail: ValueError: I/O operation on closed file.",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e11-scheduler-priority",
+    "ok": 0,
+    "total": 1,
+    "detail": "check-fail: AssertionError: [{'ok': True, 'result': 4}, {'ok': True, 'result': 6}, {'ok': True, 'result': 10}, {'ok': True, 'result': 8}]",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e12-schema-migration",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e13-stream-window",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e14-parser-precedence",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e15-backpressure-queue",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e16-trie-autocomplete",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e17-batch-chunking",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e18-ttl-cache",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e19-idempotent-http",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e20-iter-drain",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e21-index-invalidation",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e22-multiprocess-shard",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e23-config-layers",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e24-fsm-parallel",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e1-bounded-queue-close",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e2-lru-eviction",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e3-retry-idempotent",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e4-session-store-split",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e5-validate-pipeline",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e6-index-rebuild",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e7-money-rounding",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e8-event-sourcing",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e9-parallel-dedup",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e10-csv-dialect",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e11-scheduler-priority",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e12-schema-migration",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e13-stream-window",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e14-parser-precedence",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e15-backpressure-queue",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e16-trie-autocomplete",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e17-batch-chunking",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e18-ttl-cache",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e19-idempotent-http",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e20-iter-drain",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e21-index-invalidation",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e22-multiprocess-shard",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e23-config-layers",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e24-fsm-parallel",
+    "ok": 0,
+    "total": 1,
+    "detail": "check-fail: AssertionError: history must be a copy",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e1-bounded-queue-close",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e2-lru-eviction",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e3-retry-idempotent",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e4-session-store-split",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e5-validate-pipeline",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e6-index-rebuild",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e7-money-rounding",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e8-event-sourcing",
+    "ok": 0,
+    "total": 1,
+    "detail": "check-fail: evt.aggregate.InvalidEvent: missing seq",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e9-parallel-dedup",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e10-csv-dialect",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e11-scheduler-priority",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e12-schema-migration",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e13-stream-window",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e14-parser-precedence",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e15-backpressure-queue",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e16-trie-autocomplete",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e17-batch-chunking",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e18-ttl-cache",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e19-idempotent-http",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e20-iter-drain",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e21-index-invalidation",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e22-multiprocess-shard",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e23-config-layers",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e24-fsm-parallel",
+    "ok": 0,
+    "total": 1,
+    "detail": "check-fail: AssertionError: history must be a copy",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e1-bounded-queue-close",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e2-lru-eviction",
+    "ok": 0,
+    "total": 1,
+    "detail": "check-fail: SyntaxError: invalid syntax",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e3-retry-idempotent",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e4-session-store-split",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e5-validate-pipeline",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e6-index-rebuild",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e7-money-rounding",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e8-event-sourcing",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e9-parallel-dedup",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e10-csv-dialect",
+    "ok": 0,
+    "total": 1,
+    "detail": "check-fail: ValueError: I/O operation on closed file.",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e11-scheduler-priority",
+    "ok": 0,
+    "total": 1,
+    "detail": "check-fail: AssertionError: [{'ok': True, 'result': 4}, {'ok': True, 'result': 6}, {'ok': True, 'result': 10}, {'ok': True, 'result': 8}]",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e12-schema-migration",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e13-stream-window",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e14-parser-precedence",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e15-backpressure-queue",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e16-trie-autocomplete",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e17-batch-chunking",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e18-ttl-cache",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e19-idempotent-http",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e20-iter-drain",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e21-index-invalidation",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e22-multiprocess-shard",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e23-config-layers",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e24-fsm-parallel",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e1-bounded-queue-close",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e2-lru-eviction",
+    "ok": 0,
+    "total": 1,
+    "detail": "check-fail: SyntaxError: invalid syntax",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e3-retry-idempotent",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e4-session-store-split",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e5-validate-pipeline",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e6-index-rebuild",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e7-money-rounding",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e8-event-sourcing",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e9-parallel-dedup",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e10-csv-dialect",
+    "ok": 0,
+    "total": 1,
+    "detail": "check-fail: ValueError: I/O operation on closed file.",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e11-scheduler-priority",
+    "ok": 0,
+    "total": 1,
+    "detail": "check-fail: AssertionError: [{'ok': True, 'result': 4}, {'ok': True, 'result': 6}, {'ok': True, 'result': 10}, {'ok': True, 'result': 8}]",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e12-schema-migration",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e13-stream-window",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e14-parser-precedence",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e15-backpressure-queue",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e16-trie-autocomplete",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e17-batch-chunking",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e18-ttl-cache",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e19-idempotent-http",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e20-iter-drain",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e21-index-invalidation",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e22-multiprocess-shard",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e23-config-layers",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e24-fsm-parallel",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e1-bounded-queue-close",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e2-lru-eviction",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e3-retry-idempotent",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e4-session-store-split",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e5-validate-pipeline",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e6-index-rebuild",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e7-money-rounding",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e8-event-sourcing",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e9-parallel-dedup",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e10-csv-dialect",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e11-scheduler-priority",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e12-schema-migration",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e13-stream-window",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e14-parser-precedence",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e15-backpressure-queue",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e16-trie-autocomplete",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e17-batch-chunking",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e18-ttl-cache",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e19-idempotent-http",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e20-iter-drain",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e21-index-invalidation",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e22-multiprocess-shard",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e23-config-layers",
+    "ok": 1,
+    "total": 1,
+    "detail": "ok",
+    "agrees": true
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e24-fsm-parallel",
+    "ok": 0,
+    "total": 1,
+    "detail": "check-fail: AssertionError: history must be a copy",
+    "agrees": true
+  }
+]

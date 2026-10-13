@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "gpu_workloads": 0,
+  "default_screen_fusion": "0",
+  "explicit_baseline_fusion": "1",
+  "diagnostic_none_removals_preserved": true,
+  "default_first_pair_feasibility_stop_preserved": true,
+  "complete_pairs_runs_five_alternating_pairs": true,
+  "ambient_prefill_timing_explicitly_removed_from_both_acceptance_profiles": true
+}

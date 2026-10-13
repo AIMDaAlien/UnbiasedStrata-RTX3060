@@ -1,0 +1,73 @@
+{
+  "start_utc": "2026-10-11T02:29:28Z",
+  "deadline_utc": "2026-10-11T04:29:28Z",
+  "production_sha256": {
+    "/home/USER/.config/unbiasedstrata/config.json": "a7cb58ecaa8726f0c9e7a0163bbd94d30af76bc64c42413ef45ab7a3b410d835",
+    "/home/USER/opt/UnbiasedStrata/build/unbiased-strata": "9e7e8c27be4218bebda4035a5ed588ed9b325dd5857c55e7d6059ea92eb01764",
+    "/home/USER/.config/systemd/user/unbiasedstrata.service": "dcf743a34600ed3fdf66bd7133708284addcbe480024895224aa53f6c0676e78"
+  },
+  "production_config": {
+    "model": "/home/USER/opt/Strata-data/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf",
+    "pack": "/home/USER/opt/UnbiasedStrata/local/pack-iq3_xxs",
+    "mtp": "/home/USER/opt/Strata-data/mtp/rt",
+    "port": 8081,
+    "context": 196608,
+    "threads": 12,
+    "ple_io": "direct",
+    "spec": 4,
+    "kv": "int8",
+    "kv_resident": 32768,
+    "environment": {
+      "CUDA_VISIBLE_DEVICES": "0",
+      "STRATA_RESIDENT_HEADROOM_GIB": "8",
+      "OMP_NUM_THREADS": "1",
+      "STRATA_PF_FUSED": "1",
+      "STRATA_PREFILL_AUTO_MAX": "16384",
+      "STRATA_PREFILL_RING": "512"
+    }
+  },
+  "can_hibernate": {
+    "exit_code": 0,
+    "stdout": "s \"yes\"\n",
+    "stderr": ""
+  },
+  "swap": {
+    "exit_code": 0,
+    "stdout": "NAME           TYPE             SIZE       USED PRIO\n/swap/swapfile file      33350946816          0    0\n/dev/zram0     partition 66506977280 3349045248  100\n",
+    "stderr": ""
+  },
+  "production_active": {
+    "exit_code": 3,
+    "stdout": "inactive\n",
+    "stderr": ""
+  },
+  "memory": {
+    "exit_code": 0,
+    "stdout": "               total        used        free      shared  buff/cache   available\nMem:     66507251712  9921085440 50866745344   211693568  8985698304 56586166272\nSwap:    99857924096  3349045248 96508878848\n",
+    "stderr": ""
+  },
+  "inhibitors": {
+    "exit_code": 0,
+    "stdout": "WHO            UID  USER PID  COMM            WHAT  WHY                                       MODE\nNetworkManager 0    root 1366 NetworkManager  sleep NetworkManager needs to turn off networks delay\nUPower         0    root 1945 upowerd         sleep Pause device polling                      delay\nOmarchy        1000 aim  1981 systemd-inhibit sleep Lock screen before suspend                delay\n\n3 inhibitors listed.\n",
+    "stderr": ""
+  },
+  "/proc/cmdline": "cryptdevice=PARTUUID=5db8469a-da76-4b21-9fc5-d27ed0c24602:root root=/dev/mapper/root zswap.enabled=0 rootflags=subvol=@ rw rootfstype=btrfs  resume=/dev/mapper/root resume_offset=1966814 initramfs_async=0 quiet splash loglevel=0 systemd.show_status=false rd.udev.log_level=0 vt.global_cursor_default=0",
+  "/sys/power/state": "freeze mem disk",
+  "/sys/power/disk": "[platform] shutdown reboot suspend test_resume",
+  "/sys/power/mem_sleep": "s2idle [deep]",
+  "/sys/power/resume": "253:0",
+  "/sys/power/resume_offset": "1966814",
+  "/sys/power/image_size": "26435571712",
+  "swapfile_physical_offset_verification": "Cannot independently map swapfile without root: sudo -n requires password. Existing kernel resume offset 1966814 is active; CanHibernate=yes. No boot or swap configuration changed.",
+  "existing_bench_campaign": {
+    "pending_entries": 0,
+    "wake_system": "no",
+    "timer_modified": false
+  },
+  "hibernate_background_authority": {
+    "checked_from_transient_user_service": true,
+    "CanHibernate": "yes",
+    "exit_code": 0,
+    "service_collected": true
+  }
+}

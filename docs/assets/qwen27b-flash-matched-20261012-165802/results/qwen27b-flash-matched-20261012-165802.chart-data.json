@@ -1,0 +1,96 @@
+{
+  "prefix": "qwen27b-flash-matched-20261012-165802",
+  "runs": [
+    {
+      "lane": "qwen27b",
+      "seed": 40,
+      "passes": 21,
+      "hard_passes": 12,
+      "latency": 81.15,
+      "decode": 28.9,
+      "runtime": 2173.9
+    },
+    {
+      "lane": "flash",
+      "seed": 40,
+      "passes": 23,
+      "hard_passes": 13,
+      "latency": 68.4,
+      "decode": 42.7,
+      "runtime": 1837.4
+    },
+    {
+      "lane": "flash",
+      "seed": 41,
+      "passes": 22,
+      "hard_passes": 12,
+      "latency": 67.3,
+      "decode": 42.650000000000006,
+      "runtime": 1925.4
+    },
+    {
+      "lane": "qwen27b",
+      "seed": 41,
+      "passes": 21,
+      "hard_passes": 12,
+      "latency": 80.75,
+      "decode": 29.1,
+      "runtime": 2161.5
+    },
+    {
+      "lane": "qwen27b",
+      "seed": 42,
+      "passes": 21,
+      "hard_passes": 12,
+      "latency": 81.15,
+      "decode": 28.95,
+      "runtime": 2172.4
+    },
+    {
+      "lane": "flash",
+      "seed": 42,
+      "passes": 23,
+      "hard_passes": 13,
+      "latency": 66.35,
+      "decode": 42.5,
+      "runtime": 1905.8
+    }
+  ],
+  "mean_complete": {
+    "qwen27b": 21,
+    "flash": 22.666666666666668
+  },
+  "flash_minus_qwen": 1.6666666666666667,
+  "task_bootstrap_95": [
+    -2.333333333333333,
+    5.666666666666667
+  ],
+  "task_deltas": {
+    "e1-bounded-queue-close": 0,
+    "e10-csv-dialect": 1,
+    "e11-scheduler-priority": 1,
+    "e12-schema-migration": 0,
+    "e13-stream-window": 0,
+    "e14-parser-precedence": 0,
+    "e15-backpressure-queue": 0,
+    "e16-trie-autocomplete": 0,
+    "e17-batch-chunking": 0,
+    "e18-ttl-cache": 0,
+    "e19-idempotent-http": 0,
+    "e2-lru-eviction": 1,
+    "e20-iter-drain": 0,
+    "e21-index-invalidation": 0,
+    "e22-multiprocess-shard": 0,
+    "e23-config-layers": 0,
+    "e24-fsm-parallel": -1,
+    "e3-retry-idempotent": 0,
+    "e4-session-store-split": 0,
+    "e5-validate-pipeline": 0,
+    "e6-index-rebuild": 0,
+    "e7-money-rounding": 0,
+    "e8-event-sourcing": -0.3333333333333333,
+    "e9-parallel-dedup": 0
+  },
+  "distinct_tasks": 24,
+  "repeats_per_model": 3
+}

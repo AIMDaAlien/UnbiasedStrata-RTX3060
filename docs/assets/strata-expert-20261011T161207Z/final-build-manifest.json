@@ -1,0 +1,20 @@
+{
+  "source_sha256": {
+    "CMakeLists.txt": "7b54c7937ae71ac72d1bb2494f6f7b2be84339680649299627739aafe4038d7e",
+    "src/prefill/moe_fused_iq.cu": "271fc25eecc5e793781677269e7ddfd917df9d34e01d4d9696bacb8b356e084f",
+    "src/prefill/prefill.cpp": "6e8b03fe738d9cf98bc00327a5a96bcd2e4ea003a3c1b466d73a851d9e96db4c",
+    "src/kernels/native_expert_lab.cpp": "d1086c7af2818087ea11759a2a9771a73d91e0e13e7e9a69016ca3da327ee304",
+    "include/strata/prefill/moe_fused_iq_lab.hpp": "ee0d481af7abba6b42ebb0476879a1702d3c948407897941424ed4a7518f9141",
+    "include/strata/prefill/moe_fused_iq_dispatch.hpp": "4f618147447d59a46fa0f0981c5a58d69cd3b08487f8a36ad40e71c2ebc48adc",
+    "local/expert_campaign.py": "0bcb0e87b55f679195f899724cdd5ba4a7d9764a19ac51970d3f052aedd5c72d",
+    "local/expert_select.py": "448c571a448f85c931391b9246edd3a8f89a9ec2961aaac22bcbe9dad9d36c57"
+  },
+  "executable_sha256": {
+    "unbiased-strata": "dbc526021a5c0103a8e3ff2f0aaf45bacfd19cbb6a1d2ea2343ba0656286ab04",
+    "native_expert_lab": "6f2ec34730451b8c965d1fe8dc090a9fb69ffa5b0ff86c5884de32dfda974aa3"
+  },
+  "dispatch_sha256": "4f618147447d59a46fa0f0981c5a58d69cd3b08487f8a36ad40e71c2ebc48adc",
+  "baseline_profile_sha256": "4279c3d26fbc2b6d2411db0b0d57684978e353dc7ddb4243df4d029011dce4d8",
+  "candidate_profile_sha256": "d031bb31695d84ba79946f6279da3d0dd4aff6afd5af8784948f589253585203",
+  "production_changed": false
+}

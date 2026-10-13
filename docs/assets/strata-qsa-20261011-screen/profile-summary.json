@@ -1,0 +1,184 @@
+{
+  "control": {
+    "status": "passed",
+    "requests": [
+      {
+        "target_tokens": 128000,
+        "checks": {
+          "completed": true,
+          "retrieval": true,
+          "code": true,
+          "token_count": true,
+          "no_swap": true,
+          "fresh_state": true
+        },
+        "total_response_seconds": 153.6907635420066,
+        "prefill_seconds": 150.20579999999998,
+        "decode_seconds": 3.3537,
+        "qsa_selection_ms": 11262.0,
+        "qsa_attention_ms": 13963.0,
+        "expert_compute_ms": 35364.0,
+        "expert_compute_note": "Fused experts charge gate/up and down together to gemm gate/up; unfused adds gemm down.",
+        "kv_staging_ms": 6771.0,
+        "gpu_timeline_ms": 149258.0,
+        "phases_ms": {
+          "embed+steps": 2315.0,
+          "hc read": 14408.0,
+          "gdn": 19287.0,
+          "qsa proj": 10209.0,
+          "qsa indexer": 5.0,
+          "qsa select": 11262.0,
+          "qsa attn": 13963.0,
+          "router+shared": 4368.0,
+          "gather": 284.0,
+          "wait copy": 3377.0,
+          "gemm gate/up": 35364.0,
+          "combine": 6604.0,
+          "ple": 586.0,
+          "kv stage": 6771.0,
+          "gdn conv+gates": 1715.0,
+          "gdn recurrence": 9013.0,
+          "gdn out proj": 9727.0
+        },
+        "selection_share_of_profiled_prefill": 0.07497713137575247,
+        "selection_share_of_gpu_timeline": 0.07545324203727774
+      },
+      {
+        "target_tokens": 180000,
+        "checks": {
+          "completed": true,
+          "retrieval": true,
+          "code": true,
+          "token_count": true,
+          "no_swap": true,
+          "fresh_state": true
+        },
+        "total_response_seconds": 223.66517343199666,
+        "prefill_seconds": 217.5899,
+        "decode_seconds": 5.8886,
+        "qsa_selection_ms": 22339.0,
+        "qsa_attention_ms": 19882.0,
+        "expert_compute_ms": 49838.0,
+        "expert_compute_note": "Fused experts charge gate/up and down together to gemm gate/up; unfused adds gemm down.",
+        "kv_staging_ms": 10088.0,
+        "gpu_timeline_ms": 216616.0,
+        "phases_ms": {
+          "embed+steps": 3229.0,
+          "hc read": 20304.0,
+          "gdn": 27242.0,
+          "qsa proj": 14383.0,
+          "qsa indexer": 7.0,
+          "qsa select": 22339.0,
+          "qsa attn": 19882.0,
+          "router+shared": 6190.0,
+          "gather": 399.0,
+          "wait copy": 3627.0,
+          "gemm gate/up": 49838.0,
+          "combine": 9251.0,
+          "ple": 828.0,
+          "kv stage": 10088.0,
+          "gdn conv+gates": 2413.0,
+          "gdn recurrence": 12804.0,
+          "gdn out proj": 13792.0
+        },
+        "selection_share_of_profiled_prefill": 0.10266561085785691,
+        "selection_share_of_gpu_timeline": 0.10312719282047494
+      }
+    ],
+    "dispatch": [
+      "strata topk dispatch: counted=0 reach=49154 capacity_blocks=49154 active_blocks=4609 kernel=wide"
+    ]
+  },
+  "treatment": {
+    "status": "passed",
+    "requests": [
+      {
+        "target_tokens": 128000,
+        "checks": {
+          "completed": true,
+          "retrieval": true,
+          "code": true,
+          "token_count": true,
+          "no_swap": true,
+          "fresh_state": true
+        },
+        "total_response_seconds": 153.97149475100014,
+        "prefill_seconds": 150.4725,
+        "decode_seconds": 3.3651,
+        "qsa_selection_ms": 11119.0,
+        "qsa_attention_ms": 13995.0,
+        "expert_compute_ms": 35464.0,
+        "expert_compute_note": "Fused experts charge gate/up and down together to gemm gate/up; unfused adds gemm down.",
+        "kv_staging_ms": 6779.0,
+        "gpu_timeline_ms": 149522.0,
+        "phases_ms": {
+          "embed+steps": 2384.0,
+          "hc read": 14443.0,
+          "gdn": 19343.0,
+          "qsa proj": 10251.0,
+          "qsa indexer": 5.0,
+          "qsa select": 11119.0,
+          "qsa attn": 13995.0,
+          "router+shared": 4383.0,
+          "gather": 284.0,
+          "wait copy": 3381.0,
+          "gemm gate/up": 35464.0,
+          "combine": 6604.0,
+          "ple": 587.0,
+          "kv stage": 6779.0,
+          "gdn conv+gates": 1716.0,
+          "gdn recurrence": 9043.0,
+          "gdn out proj": 9739.0
+        },
+        "selection_share_of_profiled_prefill": 0.07389390087889813,
+        "selection_share_of_gpu_timeline": 0.07436363879562874
+      },
+      {
+        "target_tokens": 180000,
+        "checks": {
+          "completed": true,
+          "retrieval": true,
+          "code": true,
+          "token_count": true,
+          "no_swap": true,
+          "fresh_state": true
+        },
+        "total_response_seconds": 223.97524958400027,
+        "prefill_seconds": 217.8878,
+        "decode_seconds": 5.899100000000001,
+        "qsa_selection_ms": 22232.0,
+        "qsa_attention_ms": 19924.0,
+        "expert_compute_ms": 49938.0,
+        "expert_compute_note": "Fused experts charge gate/up and down together to gemm gate/up; unfused adds gemm down.",
+        "kv_staging_ms": 10076.0,
+        "gpu_timeline_ms": 216904.0,
+        "phases_ms": {
+          "embed+steps": 3286.0,
+          "hc read": 20332.0,
+          "gdn": 27302.0,
+          "qsa proj": 14419.0,
+          "qsa indexer": 7.0,
+          "qsa select": 22232.0,
+          "qsa attn": 19924.0,
+          "router+shared": 6203.0,
+          "gather": 399.0,
+          "wait copy": 3635.0,
+          "gemm gate/up": 49938.0,
+          "combine": 9252.0,
+          "ple": 831.0,
+          "kv stage": 10076.0,
+          "gdn conv+gates": 2413.0,
+          "gdn recurrence": 12826.0,
+          "gdn out proj": 13828.0
+        },
+        "selection_share_of_profiled_prefill": 0.10203416620847978,
+        "selection_share_of_gpu_timeline": 0.10249695717921292
+      }
+    ],
+    "dispatch": [
+      "strata topk dispatch: counted=1 reach=65 capacity_blocks=49154 active_blocks=65 kernel=register",
+      "strata topk dispatch: counted=0 reach=49154 capacity_blocks=49154 active_blocks=-1 kernel=wide",
+      "strata topk dispatch: counted=1 reach=33793 capacity_blocks=49154 active_blocks=33793 kernel=wide"
+    ]
+  }
+}

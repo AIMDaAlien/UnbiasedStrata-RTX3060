@@ -1,0 +1,13 @@
+{
+  "control": {
+    "exit_code": 0,
+    "selected_ids_sha256": "2aac896314fea01cda6de528b3ba9c34d83f9cc43d11ea934e413b9a3dcc44fb",
+    "capacities_selected_ids_identical": true
+  },
+  "treatment": {
+    "exit_code": 0,
+    "selected_ids_sha256": "2aac896314fea01cda6de528b3ba9c34d83f9cc43d11ea934e413b9a3dcc44fb",
+    "capacities_selected_ids_identical": true
+  },
+  "status": "passed"
+}

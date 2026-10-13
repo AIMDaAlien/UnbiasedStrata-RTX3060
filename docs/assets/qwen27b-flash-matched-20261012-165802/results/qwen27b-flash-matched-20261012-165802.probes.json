@@ -1,0 +1,1154 @@
+[
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e1-bounded-queue-close",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from wpool.queue import Queue,Closed\nq=Queue(2);q.put('alpha');q.put('beta')\nassert q.get()=='alpha' and q.get()=='beta' and q.unfinished==2\nq.task_done();q.task_done();q.join(timeout=.1);q.close();assert q.get() is None\ntry:q.put('gamma');assert False\nexcept Closed:pass\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e2-lru-eviction",
+    "raw_status": "fail",
+    "probe_ok": false,
+    "detail": "SyntaxError: invalid syntax",
+    "probe": "from cachebox.lru import LRU\nc=LRU(2);c.put('red',11);c.put('blue',22);assert c.get('red')==11\nc.put('green',33);assert c.get('blue') is None and c.keys()==['green','red']\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e3-retry-idempotent",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from apiwrap.client import Client,Transient\ncalls=[]\ndef transport(*args):\n calls.append(args)\n if len(calls)<2:raise Transient('again')\n return (201,91)\nc=Client(transport,backoff=0);assert c.call('POST','/x',idempotency_key='stable')==(201,91)\nassert len(calls)==2 and all(x[3]['Idempotency-Key']=='stable' for x in calls)\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e4-session-store-split",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from sess import SessionStore,MemoryStore,UnknownSession\nnow=[100.0];b=MemoryStore(ttl=3,clock=lambda:now[0]);s=SessionStore(ttl=3,backend=b,clock=lambda:now[0]);s.set('x',{'v':8});assert b.get('x')=={'v':8}\nnow[0]=103.0\ntry:s.get('x');assert False\nexcept UnknownSession:pass\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e5-validate-pipeline",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from vp import RequestQueue,BadType\nq=RequestQueue({'id':{'type':int,'required':True}})\ntry:q.submit({'id':'bad'});assert False\nexcept BadType:pass\nassert q.pending()==0\nq.submit({'id':7});assert q.drain()==[{'id':7}] and q.pending()==0\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e6-index-rebuild",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from tindex import Index,build,merge\nx=Index();x.rebuild([('a','red red'),('b','blue red')]);assert x.lookup('red')==['a','b']\nx.rebuild([('z','green')]);assert x.lookup('red')==[] and x.lookup('green')==['z']\nb={'x':{'a':[2,0]}};assert merge(b,[('x','a',[2,1])]) is b and b['x']['a']==[0,1,2]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e7-money-rounding",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from ledger import Money\nassert Money('1.005').cents==101 and Money('-1.005').cents==-101\nparts=Money('.07').allocate([('a',1),('b',2)]);assert sum(x.cents for x in parts.values())==7\nassert parts['b'].cents==5 and Money('-1.00').format()=='-$1.00'\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e8-event-sourcing",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from evt.aggregate import Aggregate,InvalidEvent\nx=Aggregate();x.apply({'name':'added','amount':9,'seq':71});before=(x.snapshot(),x.version,list(x.pending))\nfor event in [{'name':'added','amount':1,'seq':71},{'name':'unknown'}]:\n try:x.apply(event);assert False\n except InvalidEvent:pass\n assert (x.snapshot(),x.version,x.pending)==before\ny=Aggregate().rehydrate([{'name':'added','amount':2},{'name':'added','amount':3}]);assert y.state=={'count':2,'total':5} and y.version==2\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e9-parallel-dedup",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from pdedup import Store\nfrom concurrent.futures import ThreadPoolExecutor\ns=Store()\nwith ThreadPoolExecutor(8) as pool:r=list(pool.map(lambda v:s.put_if_absent('same',v),range(40)))\nassert sum(r)==1 and len(s)==1\nassert s.process([('z',9),('z',10)],chunk=1)=={'stored':1,'duplicates':1}\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e10-csv-dialect",
+    "raw_status": "fail",
+    "probe_ok": false,
+    "detail": "ValueError: I/O operation on closed file.",
+    "probe": "from imp import Reader\nr=Reader(' a | b \\n\"v|w\"|\"line1\\nline2\"\\nonly\\n',dialect='pipe')\nassert r.fieldnames==['a','b'] and list(r.rows())==[{'a':'v|w','b':'line1\\nline2'},{'a':'only','b':None}]\nassert isinstance(Reader.read('x,y\\n3,4\\n'),Reader)\nimport tempfile,os\nwith tempfile.TemporaryDirectory() as d:\n path=os.path.join(d,'sample.csv')\n with open(path,'w') as f:f.write('x,y\\n3,4\\n')\n loaded=Reader.read(path);assert loaded.fieldnames==['x','y'] and list(loaded.rows())==[{'x':'3','y':'4'}]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e11-scheduler-priority",
+    "raw_status": "fail",
+    "probe_ok": false,
+    "detail": "AssertionError",
+    "probe": "from sched import Runner\nr=Runner(max_per_tenant=1)\nfor tenant,value,priority in [('a',1,9),('a',2,9),('b',3,0)]:r.submit(tenant,lambda v=value:v,priority=priority)\nassert r.run()==[1,3,2] and r.pending()==0\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e12-schema-migration",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from mig import plan,migrate,applied\nfrom types import SimpleNamespace\nlog=[];db=SimpleNamespace(applied_migrations=['old']);db.record=lambda n:db.applied_migrations.append(n)\ndef boom(c):raise RuntimeError('boom')\nm=[{'name':'a','up':lambda c:log.append('up-a'),'down':lambda c:log.append('down-a'),'deps':[]},{'name':'b','up':boom,'down':lambda c:None,'deps':['a']}]\nassert migrate(None,m,db,dry_run=True)==['a','b'] and log==[]\ntry:migrate(None,m,db);assert False\nexcept RuntimeError as e:assert str(e)=='boom'\nassert log==['up-a','down-a'] and applied(db)=={'old'}\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e13-stream-window",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from swin import summarise\npairs=[('a',1),('b',10),('a',2),('b',20),('a',3)]\nassert summarise(pairs,2,sum,key=lambda pair:pair[0])==[('a',3),('b',30)]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e14-parser-precedence",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from expr.parser import parse\nassert parse('2 + 3 * 4')==14 and parse('2 ** 3 ** 2')==512 and parse('(2 + 3) * 4')==20\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e15-backpressure-queue",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from bpq import BoundedQueue,Closed\nq=BoundedQueue(2);q.put(1);q.put(2);assert q.drop_oldest()==1;q.close()\nassert q.get()==2 and q.get() is None\nassert q.put(3) is False\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e16-trie-autocomplete",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from ac import Trie\nx=Trie();x.insert('Apple',2);x.insert('apricot',5);x.insert('app',5)\nassert x.complete('AP')==['app','apricot','apple'] and x.longest_prefix_of('application')=='app'\nx.remove('app');assert 'APP' not in x\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e17-batch-chunking",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from batch import chunked,run_batches\npulled=[]\ndef source():\n for i in range(5):pulled.append(i);yield i\nit=chunked(source(),2);assert next(it)==[0,1] and pulled==[0,1]\nerrors=[]\ndef fn(xs):\n if 2 in xs:raise ValueError('bad')\n return sum(xs)\nr,s=run_batches(range(5),fn,2,on_error=lambda xs,e:errors.append(list(xs)))\nassert r==[1,None,4] and (s.processed,s.failed)==(2,1) and errors==[[2,3]]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e18-ttl-cache",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from ttlcache import Cache\nclock=[10];c=Cache(default_ttl=3,get_clock=lambda:clock[0]);c.put('a',7);clock[0]=13\nassert c.get('a') is None and 'a' not in c and len(c)==0\nassert c.get_or_set('a',lambda:9)==9 and c.get('a')==9\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e19-idempotent-http",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from webhook import Processor\np=Processor();calls=[]\ndef bad(e):calls.append(e);raise ValueError('retry')\ntry:p.process('x',bad);assert False\nexcept ValueError:pass\nassert not p.seen('x');assert p.process('x',lambda e:17)=={'ok':True,'duplicate':False}\nassert p.process('x',bad)=={'ok':True,'duplicate':True} and calls==['x'] and p.result('x')==17\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e20-iter-drain",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from drain import drain\nclass Source:\n def __init__(self):self.closed=False;self.n=0\n def __iter__(self):yield 1;yield 2\n def close(self):self.closed=True\ns=Source();g=drain(s);assert next(g)==1;g.close();assert s.closed\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e21-index-invalidation",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from depgraph import Graph\nx=Graph();x.add_module('a',provides=['sym']);x.add_module('b',requires=['sym'],provides=['mid']);x.add_module('c',requires=['mid']);x.add_module('d')\nassert x.invalidate('sym')=={'a','b','c'} and set(x.to_json())=={'d'}\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e22-multiprocess-shard",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from shard import Worker\nimport tempfile,os\nclass Model:\n def __init__(self):self.calls=[]\n def infer(self,text):self.calls.append(text);return 'value:'+text\nwith tempfile.TemporaryDirectory() as d:\n m=Model();Worker(m,['red','blue'],d,checkpoint_every=1).run();assert m.calls==['red','blue']\n os.unlink(os.path.join(d,'blue.txt'));n=Model();w=Worker(n,['red','blue'],d);w.run();assert n.calls==['blue'] and w.total_inferred==1\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e23-config-layers",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from cfgx import merge,DROP,freeze\nbase={'x':{'a':1,'b':2},'items':[1,2]};layer={'x.a':DROP,'items':[2,3]}\nr=merge(base,layer,lists='unique');assert r=={'x':{'b':2},'items':[1,2,3]} and base['x']['a']==1 and layer['x.a'] is DROP\nf=freeze(r)\ntry:f['x']['b']=4;assert False\nexcept TypeError:pass\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+    "task": "e24-fsm-parallel",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from pfsm import Machine,GuardFailed\ns={'a':[{'to':'b','guard':lambda **kw:kw.get('ok',False)}],'b':[]};x=Machine('a',s)\ntry:x.go('b');assert False\nexcept GuardFailed:pass\nassert x.state=='a' and x.history==['a'];assert x.go('b',ok=True)=='b'\nh=x.history;h.append('bad');assert x.history==['a','b']\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e1-bounded-queue-close",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from wpool.queue import Queue,Closed\nq=Queue(2);q.put('alpha');q.put('beta')\nassert q.get()=='alpha' and q.get()=='beta' and q.unfinished==2\nq.task_done();q.task_done();q.join(timeout=.1);q.close();assert q.get() is None\ntry:q.put('gamma');assert False\nexcept Closed:pass\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e2-lru-eviction",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from cachebox.lru import LRU\nc=LRU(2);c.put('red',11);c.put('blue',22);assert c.get('red')==11\nc.put('green',33);assert c.get('blue') is None and c.keys()==['green','red']\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e3-retry-idempotent",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from apiwrap.client import Client,Transient\ncalls=[]\ndef transport(*args):\n calls.append(args)\n if len(calls)<2:raise Transient('again')\n return (201,91)\nc=Client(transport,backoff=0);assert c.call('POST','/x',idempotency_key='stable')==(201,91)\nassert len(calls)==2 and all(x[3]['Idempotency-Key']=='stable' for x in calls)\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e4-session-store-split",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from sess import SessionStore,MemoryStore,UnknownSession\nnow=[100.0];b=MemoryStore(ttl=3,clock=lambda:now[0]);s=SessionStore(ttl=3,backend=b,clock=lambda:now[0]);s.set('x',{'v':8});assert b.get('x')=={'v':8}\nnow[0]=103.0\ntry:s.get('x');assert False\nexcept UnknownSession:pass\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e5-validate-pipeline",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from vp import RequestQueue,BadType\nq=RequestQueue({'id':{'type':int,'required':True}})\ntry:q.submit({'id':'bad'});assert False\nexcept BadType:pass\nassert q.pending()==0\nq.submit({'id':7});assert q.drain()==[{'id':7}] and q.pending()==0\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e6-index-rebuild",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from tindex import Index,build,merge\nx=Index();x.rebuild([('a','red red'),('b','blue red')]);assert x.lookup('red')==['a','b']\nx.rebuild([('z','green')]);assert x.lookup('red')==[] and x.lookup('green')==['z']\nb={'x':{'a':[2,0]}};assert merge(b,[('x','a',[2,1])]) is b and b['x']['a']==[0,1,2]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e7-money-rounding",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from ledger import Money\nassert Money('1.005').cents==101 and Money('-1.005').cents==-101\nparts=Money('.07').allocate([('a',1),('b',2)]);assert sum(x.cents for x in parts.values())==7\nassert parts['b'].cents==5 and Money('-1.00').format()=='-$1.00'\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e8-event-sourcing",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from evt.aggregate import Aggregate,InvalidEvent\nx=Aggregate();x.apply({'name':'added','amount':9,'seq':71});before=(x.snapshot(),x.version,list(x.pending))\nfor event in [{'name':'added','amount':1,'seq':71},{'name':'unknown'}]:\n try:x.apply(event);assert False\n except InvalidEvent:pass\n assert (x.snapshot(),x.version,x.pending)==before\ny=Aggregate().rehydrate([{'name':'added','amount':2},{'name':'added','amount':3}]);assert y.state=={'count':2,'total':5} and y.version==2\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e9-parallel-dedup",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from pdedup import Store\nfrom concurrent.futures import ThreadPoolExecutor\ns=Store()\nwith ThreadPoolExecutor(8) as pool:r=list(pool.map(lambda v:s.put_if_absent('same',v),range(40)))\nassert sum(r)==1 and len(s)==1\nassert s.process([('z',9),('z',10)],chunk=1)=={'stored':1,'duplicates':1}\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e10-csv-dialect",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from imp import Reader\nr=Reader(' a | b \\n\"v|w\"|\"line1\\nline2\"\\nonly\\n',dialect='pipe')\nassert r.fieldnames==['a','b'] and list(r.rows())==[{'a':'v|w','b':'line1\\nline2'},{'a':'only','b':None}]\nassert isinstance(Reader.read('x,y\\n3,4\\n'),Reader)\nimport tempfile,os\nwith tempfile.TemporaryDirectory() as d:\n path=os.path.join(d,'sample.csv')\n with open(path,'w') as f:f.write('x,y\\n3,4\\n')\n loaded=Reader.read(path);assert loaded.fieldnames==['x','y'] and list(loaded.rows())==[{'x':'3','y':'4'}]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e11-scheduler-priority",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from sched import Runner\nr=Runner(max_per_tenant=1)\nfor tenant,value,priority in [('a',1,9),('a',2,9),('b',3,0)]:r.submit(tenant,lambda v=value:v,priority=priority)\nassert r.run()==[1,3,2] and r.pending()==0\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e12-schema-migration",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from mig import plan,migrate,applied\nfrom types import SimpleNamespace\nlog=[];db=SimpleNamespace(applied_migrations=['old']);db.record=lambda n:db.applied_migrations.append(n)\ndef boom(c):raise RuntimeError('boom')\nm=[{'name':'a','up':lambda c:log.append('up-a'),'down':lambda c:log.append('down-a'),'deps':[]},{'name':'b','up':boom,'down':lambda c:None,'deps':['a']}]\nassert migrate(None,m,db,dry_run=True)==['a','b'] and log==[]\ntry:migrate(None,m,db);assert False\nexcept RuntimeError as e:assert str(e)=='boom'\nassert log==['up-a','down-a'] and applied(db)=={'old'}\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e13-stream-window",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from swin import summarise\npairs=[('a',1),('b',10),('a',2),('b',20),('a',3)]\nassert summarise(pairs,2,sum,key=lambda pair:pair[0])==[('a',3),('b',30)]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e14-parser-precedence",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from expr.parser import parse\nassert parse('2 + 3 * 4')==14 and parse('2 ** 3 ** 2')==512 and parse('(2 + 3) * 4')==20\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e15-backpressure-queue",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from bpq import BoundedQueue,Closed\nq=BoundedQueue(2);q.put(1);q.put(2);assert q.drop_oldest()==1;q.close()\nassert q.get()==2 and q.get() is None\nassert q.put(3) is False\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e16-trie-autocomplete",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from ac import Trie\nx=Trie();x.insert('Apple',2);x.insert('apricot',5);x.insert('app',5)\nassert x.complete('AP')==['app','apricot','apple'] and x.longest_prefix_of('application')=='app'\nx.remove('app');assert 'APP' not in x\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e17-batch-chunking",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from batch import chunked,run_batches\npulled=[]\ndef source():\n for i in range(5):pulled.append(i);yield i\nit=chunked(source(),2);assert next(it)==[0,1] and pulled==[0,1]\nerrors=[]\ndef fn(xs):\n if 2 in xs:raise ValueError('bad')\n return sum(xs)\nr,s=run_batches(range(5),fn,2,on_error=lambda xs,e:errors.append(list(xs)))\nassert r==[1,None,4] and (s.processed,s.failed)==(2,1) and errors==[[2,3]]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e18-ttl-cache",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from ttlcache import Cache\nclock=[10];c=Cache(default_ttl=3,get_clock=lambda:clock[0]);c.put('a',7);clock[0]=13\nassert c.get('a') is None and 'a' not in c and len(c)==0\nassert c.get_or_set('a',lambda:9)==9 and c.get('a')==9\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e19-idempotent-http",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from webhook import Processor\np=Processor();calls=[]\ndef bad(e):calls.append(e);raise ValueError('retry')\ntry:p.process('x',bad);assert False\nexcept ValueError:pass\nassert not p.seen('x');assert p.process('x',lambda e:17)=={'ok':True,'duplicate':False}\nassert p.process('x',bad)=={'ok':True,'duplicate':True} and calls==['x'] and p.result('x')==17\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e20-iter-drain",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from drain import drain\nclass Source:\n def __init__(self):self.closed=False;self.n=0\n def __iter__(self):yield 1;yield 2\n def close(self):self.closed=True\ns=Source();g=drain(s);assert next(g)==1;g.close();assert s.closed\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e21-index-invalidation",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from depgraph import Graph\nx=Graph();x.add_module('a',provides=['sym']);x.add_module('b',requires=['sym'],provides=['mid']);x.add_module('c',requires=['mid']);x.add_module('d')\nassert x.invalidate('sym')=={'a','b','c'} and set(x.to_json())=={'d'}\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e22-multiprocess-shard",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from shard import Worker\nimport tempfile,os\nclass Model:\n def __init__(self):self.calls=[]\n def infer(self,text):self.calls.append(text);return 'value:'+text\nwith tempfile.TemporaryDirectory() as d:\n m=Model();Worker(m,['red','blue'],d,checkpoint_every=1).run();assert m.calls==['red','blue']\n os.unlink(os.path.join(d,'blue.txt'));n=Model();w=Worker(n,['red','blue'],d);w.run();assert n.calls==['blue'] and w.total_inferred==1\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e23-config-layers",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from cfgx import merge,DROP,freeze\nbase={'x':{'a':1,'b':2},'items':[1,2]};layer={'x.a':DROP,'items':[2,3]}\nr=merge(base,layer,lists='unique');assert r=={'x':{'b':2},'items':[1,2,3]} and base['x']['a']==1 and layer['x.a'] is DROP\nf=freeze(r)\ntry:f['x']['b']=4;assert False\nexcept TypeError:pass\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-40",
+    "task": "e24-fsm-parallel",
+    "raw_status": "fail",
+    "probe_ok": false,
+    "detail": "AssertionError",
+    "probe": "from pfsm import Machine,GuardFailed\ns={'a':[{'to':'b','guard':lambda **kw:kw.get('ok',False)}],'b':[]};x=Machine('a',s)\ntry:x.go('b');assert False\nexcept GuardFailed:pass\nassert x.state=='a' and x.history==['a'];assert x.go('b',ok=True)=='b'\nh=x.history;h.append('bad');assert x.history==['a','b']\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e1-bounded-queue-close",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from wpool.queue import Queue,Closed\nq=Queue(2);q.put('alpha');q.put('beta')\nassert q.get()=='alpha' and q.get()=='beta' and q.unfinished==2\nq.task_done();q.task_done();q.join(timeout=.1);q.close();assert q.get() is None\ntry:q.put('gamma');assert False\nexcept Closed:pass\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e2-lru-eviction",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from cachebox.lru import LRU\nc=LRU(2);c.put('red',11);c.put('blue',22);assert c.get('red')==11\nc.put('green',33);assert c.get('blue') is None and c.keys()==['green','red']\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e3-retry-idempotent",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from apiwrap.client import Client,Transient\ncalls=[]\ndef transport(*args):\n calls.append(args)\n if len(calls)<2:raise Transient('again')\n return (201,91)\nc=Client(transport,backoff=0);assert c.call('POST','/x',idempotency_key='stable')==(201,91)\nassert len(calls)==2 and all(x[3]['Idempotency-Key']=='stable' for x in calls)\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e4-session-store-split",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from sess import SessionStore,MemoryStore,UnknownSession\nnow=[100.0];b=MemoryStore(ttl=3,clock=lambda:now[0]);s=SessionStore(ttl=3,backend=b,clock=lambda:now[0]);s.set('x',{'v':8});assert b.get('x')=={'v':8}\nnow[0]=103.0\ntry:s.get('x');assert False\nexcept UnknownSession:pass\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e5-validate-pipeline",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from vp import RequestQueue,BadType\nq=RequestQueue({'id':{'type':int,'required':True}})\ntry:q.submit({'id':'bad'});assert False\nexcept BadType:pass\nassert q.pending()==0\nq.submit({'id':7});assert q.drain()==[{'id':7}] and q.pending()==0\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e6-index-rebuild",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from tindex import Index,build,merge\nx=Index();x.rebuild([('a','red red'),('b','blue red')]);assert x.lookup('red')==['a','b']\nx.rebuild([('z','green')]);assert x.lookup('red')==[] and x.lookup('green')==['z']\nb={'x':{'a':[2,0]}};assert merge(b,[('x','a',[2,1])]) is b and b['x']['a']==[0,1,2]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e7-money-rounding",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from ledger import Money\nassert Money('1.005').cents==101 and Money('-1.005').cents==-101\nparts=Money('.07').allocate([('a',1),('b',2)]);assert sum(x.cents for x in parts.values())==7\nassert parts['b'].cents==5 and Money('-1.00').format()=='-$1.00'\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e8-event-sourcing",
+    "raw_status": "fail",
+    "probe_ok": false,
+    "detail": "evt.aggregate.InvalidEvent: missing seq",
+    "probe": "from evt.aggregate import Aggregate,InvalidEvent\nx=Aggregate();x.apply({'name':'added','amount':9,'seq':71});before=(x.snapshot(),x.version,list(x.pending))\nfor event in [{'name':'added','amount':1,'seq':71},{'name':'unknown'}]:\n try:x.apply(event);assert False\n except InvalidEvent:pass\n assert (x.snapshot(),x.version,x.pending)==before\ny=Aggregate().rehydrate([{'name':'added','amount':2},{'name':'added','amount':3}]);assert y.state=={'count':2,'total':5} and y.version==2\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e9-parallel-dedup",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from pdedup import Store\nfrom concurrent.futures import ThreadPoolExecutor\ns=Store()\nwith ThreadPoolExecutor(8) as pool:r=list(pool.map(lambda v:s.put_if_absent('same',v),range(40)))\nassert sum(r)==1 and len(s)==1\nassert s.process([('z',9),('z',10)],chunk=1)=={'stored':1,'duplicates':1}\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e10-csv-dialect",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from imp import Reader\nr=Reader(' a | b \\n\"v|w\"|\"line1\\nline2\"\\nonly\\n',dialect='pipe')\nassert r.fieldnames==['a','b'] and list(r.rows())==[{'a':'v|w','b':'line1\\nline2'},{'a':'only','b':None}]\nassert isinstance(Reader.read('x,y\\n3,4\\n'),Reader)\nimport tempfile,os\nwith tempfile.TemporaryDirectory() as d:\n path=os.path.join(d,'sample.csv')\n with open(path,'w') as f:f.write('x,y\\n3,4\\n')\n loaded=Reader.read(path);assert loaded.fieldnames==['x','y'] and list(loaded.rows())==[{'x':'3','y':'4'}]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e11-scheduler-priority",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from sched import Runner\nr=Runner(max_per_tenant=1)\nfor tenant,value,priority in [('a',1,9),('a',2,9),('b',3,0)]:r.submit(tenant,lambda v=value:v,priority=priority)\nassert r.run()==[1,3,2] and r.pending()==0\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e12-schema-migration",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from mig import plan,migrate,applied\nfrom types import SimpleNamespace\nlog=[];db=SimpleNamespace(applied_migrations=['old']);db.record=lambda n:db.applied_migrations.append(n)\ndef boom(c):raise RuntimeError('boom')\nm=[{'name':'a','up':lambda c:log.append('up-a'),'down':lambda c:log.append('down-a'),'deps':[]},{'name':'b','up':boom,'down':lambda c:None,'deps':['a']}]\nassert migrate(None,m,db,dry_run=True)==['a','b'] and log==[]\ntry:migrate(None,m,db);assert False\nexcept RuntimeError as e:assert str(e)=='boom'\nassert log==['up-a','down-a'] and applied(db)=={'old'}\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e13-stream-window",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from swin import summarise\npairs=[('a',1),('b',10),('a',2),('b',20),('a',3)]\nassert summarise(pairs,2,sum,key=lambda pair:pair[0])==[('a',3),('b',30)]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e14-parser-precedence",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from expr.parser import parse\nassert parse('2 + 3 * 4')==14 and parse('2 ** 3 ** 2')==512 and parse('(2 + 3) * 4')==20\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e15-backpressure-queue",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from bpq import BoundedQueue,Closed\nq=BoundedQueue(2);q.put(1);q.put(2);assert q.drop_oldest()==1;q.close()\nassert q.get()==2 and q.get() is None\nassert q.put(3) is False\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e16-trie-autocomplete",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from ac import Trie\nx=Trie();x.insert('Apple',2);x.insert('apricot',5);x.insert('app',5)\nassert x.complete('AP')==['app','apricot','apple'] and x.longest_prefix_of('application')=='app'\nx.remove('app');assert 'APP' not in x\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e17-batch-chunking",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from batch import chunked,run_batches\npulled=[]\ndef source():\n for i in range(5):pulled.append(i);yield i\nit=chunked(source(),2);assert next(it)==[0,1] and pulled==[0,1]\nerrors=[]\ndef fn(xs):\n if 2 in xs:raise ValueError('bad')\n return sum(xs)\nr,s=run_batches(range(5),fn,2,on_error=lambda xs,e:errors.append(list(xs)))\nassert r==[1,None,4] and (s.processed,s.failed)==(2,1) and errors==[[2,3]]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e18-ttl-cache",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from ttlcache import Cache\nclock=[10];c=Cache(default_ttl=3,get_clock=lambda:clock[0]);c.put('a',7);clock[0]=13\nassert c.get('a') is None and 'a' not in c and len(c)==0\nassert c.get_or_set('a',lambda:9)==9 and c.get('a')==9\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e19-idempotent-http",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from webhook import Processor\np=Processor();calls=[]\ndef bad(e):calls.append(e);raise ValueError('retry')\ntry:p.process('x',bad);assert False\nexcept ValueError:pass\nassert not p.seen('x');assert p.process('x',lambda e:17)=={'ok':True,'duplicate':False}\nassert p.process('x',bad)=={'ok':True,'duplicate':True} and calls==['x'] and p.result('x')==17\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e20-iter-drain",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from drain import drain\nclass Source:\n def __init__(self):self.closed=False;self.n=0\n def __iter__(self):yield 1;yield 2\n def close(self):self.closed=True\ns=Source();g=drain(s);assert next(g)==1;g.close();assert s.closed\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e21-index-invalidation",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from depgraph import Graph\nx=Graph();x.add_module('a',provides=['sym']);x.add_module('b',requires=['sym'],provides=['mid']);x.add_module('c',requires=['mid']);x.add_module('d')\nassert x.invalidate('sym')=={'a','b','c'} and set(x.to_json())=={'d'}\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e22-multiprocess-shard",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from shard import Worker\nimport tempfile,os\nclass Model:\n def __init__(self):self.calls=[]\n def infer(self,text):self.calls.append(text);return 'value:'+text\nwith tempfile.TemporaryDirectory() as d:\n m=Model();Worker(m,['red','blue'],d,checkpoint_every=1).run();assert m.calls==['red','blue']\n os.unlink(os.path.join(d,'blue.txt'));n=Model();w=Worker(n,['red','blue'],d);w.run();assert n.calls==['blue'] and w.total_inferred==1\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e23-config-layers",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from cfgx import merge,DROP,freeze\nbase={'x':{'a':1,'b':2},'items':[1,2]};layer={'x.a':DROP,'items':[2,3]}\nr=merge(base,layer,lists='unique');assert r=={'x':{'b':2},'items':[1,2,3]} and base['x']['a']==1 and layer['x.a'] is DROP\nf=freeze(r)\ntry:f['x']['b']=4;assert False\nexcept TypeError:pass\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-41",
+    "task": "e24-fsm-parallel",
+    "raw_status": "fail",
+    "probe_ok": false,
+    "detail": "AssertionError",
+    "probe": "from pfsm import Machine,GuardFailed\ns={'a':[{'to':'b','guard':lambda **kw:kw.get('ok',False)}],'b':[]};x=Machine('a',s)\ntry:x.go('b');assert False\nexcept GuardFailed:pass\nassert x.state=='a' and x.history==['a'];assert x.go('b',ok=True)=='b'\nh=x.history;h.append('bad');assert x.history==['a','b']\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e1-bounded-queue-close",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from wpool.queue import Queue,Closed\nq=Queue(2);q.put('alpha');q.put('beta')\nassert q.get()=='alpha' and q.get()=='beta' and q.unfinished==2\nq.task_done();q.task_done();q.join(timeout=.1);q.close();assert q.get() is None\ntry:q.put('gamma');assert False\nexcept Closed:pass\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e2-lru-eviction",
+    "raw_status": "fail",
+    "probe_ok": false,
+    "detail": "SyntaxError: invalid syntax",
+    "probe": "from cachebox.lru import LRU\nc=LRU(2);c.put('red',11);c.put('blue',22);assert c.get('red')==11\nc.put('green',33);assert c.get('blue') is None and c.keys()==['green','red']\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e3-retry-idempotent",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from apiwrap.client import Client,Transient\ncalls=[]\ndef transport(*args):\n calls.append(args)\n if len(calls)<2:raise Transient('again')\n return (201,91)\nc=Client(transport,backoff=0);assert c.call('POST','/x',idempotency_key='stable')==(201,91)\nassert len(calls)==2 and all(x[3]['Idempotency-Key']=='stable' for x in calls)\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e4-session-store-split",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from sess import SessionStore,MemoryStore,UnknownSession\nnow=[100.0];b=MemoryStore(ttl=3,clock=lambda:now[0]);s=SessionStore(ttl=3,backend=b,clock=lambda:now[0]);s.set('x',{'v':8});assert b.get('x')=={'v':8}\nnow[0]=103.0\ntry:s.get('x');assert False\nexcept UnknownSession:pass\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e5-validate-pipeline",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from vp import RequestQueue,BadType\nq=RequestQueue({'id':{'type':int,'required':True}})\ntry:q.submit({'id':'bad'});assert False\nexcept BadType:pass\nassert q.pending()==0\nq.submit({'id':7});assert q.drain()==[{'id':7}] and q.pending()==0\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e6-index-rebuild",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from tindex import Index,build,merge\nx=Index();x.rebuild([('a','red red'),('b','blue red')]);assert x.lookup('red')==['a','b']\nx.rebuild([('z','green')]);assert x.lookup('red')==[] and x.lookup('green')==['z']\nb={'x':{'a':[2,0]}};assert merge(b,[('x','a',[2,1])]) is b and b['x']['a']==[0,1,2]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e7-money-rounding",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from ledger import Money\nassert Money('1.005').cents==101 and Money('-1.005').cents==-101\nparts=Money('.07').allocate([('a',1),('b',2)]);assert sum(x.cents for x in parts.values())==7\nassert parts['b'].cents==5 and Money('-1.00').format()=='-$1.00'\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e8-event-sourcing",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from evt.aggregate import Aggregate,InvalidEvent\nx=Aggregate();x.apply({'name':'added','amount':9,'seq':71});before=(x.snapshot(),x.version,list(x.pending))\nfor event in [{'name':'added','amount':1,'seq':71},{'name':'unknown'}]:\n try:x.apply(event);assert False\n except InvalidEvent:pass\n assert (x.snapshot(),x.version,x.pending)==before\ny=Aggregate().rehydrate([{'name':'added','amount':2},{'name':'added','amount':3}]);assert y.state=={'count':2,'total':5} and y.version==2\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e9-parallel-dedup",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from pdedup import Store\nfrom concurrent.futures import ThreadPoolExecutor\ns=Store()\nwith ThreadPoolExecutor(8) as pool:r=list(pool.map(lambda v:s.put_if_absent('same',v),range(40)))\nassert sum(r)==1 and len(s)==1\nassert s.process([('z',9),('z',10)],chunk=1)=={'stored':1,'duplicates':1}\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e10-csv-dialect",
+    "raw_status": "fail",
+    "probe_ok": false,
+    "detail": "ValueError: I/O operation on closed file.",
+    "probe": "from imp import Reader\nr=Reader(' a | b \\n\"v|w\"|\"line1\\nline2\"\\nonly\\n',dialect='pipe')\nassert r.fieldnames==['a','b'] and list(r.rows())==[{'a':'v|w','b':'line1\\nline2'},{'a':'only','b':None}]\nassert isinstance(Reader.read('x,y\\n3,4\\n'),Reader)\nimport tempfile,os\nwith tempfile.TemporaryDirectory() as d:\n path=os.path.join(d,'sample.csv')\n with open(path,'w') as f:f.write('x,y\\n3,4\\n')\n loaded=Reader.read(path);assert loaded.fieldnames==['x','y'] and list(loaded.rows())==[{'x':'3','y':'4'}]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e11-scheduler-priority",
+    "raw_status": "fail",
+    "probe_ok": false,
+    "detail": "AssertionError",
+    "probe": "from sched import Runner\nr=Runner(max_per_tenant=1)\nfor tenant,value,priority in [('a',1,9),('a',2,9),('b',3,0)]:r.submit(tenant,lambda v=value:v,priority=priority)\nassert r.run()==[1,3,2] and r.pending()==0\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e12-schema-migration",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from mig import plan,migrate,applied\nfrom types import SimpleNamespace\nlog=[];db=SimpleNamespace(applied_migrations=['old']);db.record=lambda n:db.applied_migrations.append(n)\ndef boom(c):raise RuntimeError('boom')\nm=[{'name':'a','up':lambda c:log.append('up-a'),'down':lambda c:log.append('down-a'),'deps':[]},{'name':'b','up':boom,'down':lambda c:None,'deps':['a']}]\nassert migrate(None,m,db,dry_run=True)==['a','b'] and log==[]\ntry:migrate(None,m,db);assert False\nexcept RuntimeError as e:assert str(e)=='boom'\nassert log==['up-a','down-a'] and applied(db)=={'old'}\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e13-stream-window",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from swin import summarise\npairs=[('a',1),('b',10),('a',2),('b',20),('a',3)]\nassert summarise(pairs,2,sum,key=lambda pair:pair[0])==[('a',3),('b',30)]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e14-parser-precedence",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from expr.parser import parse\nassert parse('2 + 3 * 4')==14 and parse('2 ** 3 ** 2')==512 and parse('(2 + 3) * 4')==20\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e15-backpressure-queue",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from bpq import BoundedQueue,Closed\nq=BoundedQueue(2);q.put(1);q.put(2);assert q.drop_oldest()==1;q.close()\nassert q.get()==2 and q.get() is None\nassert q.put(3) is False\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e16-trie-autocomplete",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from ac import Trie\nx=Trie();x.insert('Apple',2);x.insert('apricot',5);x.insert('app',5)\nassert x.complete('AP')==['app','apricot','apple'] and x.longest_prefix_of('application')=='app'\nx.remove('app');assert 'APP' not in x\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e17-batch-chunking",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from batch import chunked,run_batches\npulled=[]\ndef source():\n for i in range(5):pulled.append(i);yield i\nit=chunked(source(),2);assert next(it)==[0,1] and pulled==[0,1]\nerrors=[]\ndef fn(xs):\n if 2 in xs:raise ValueError('bad')\n return sum(xs)\nr,s=run_batches(range(5),fn,2,on_error=lambda xs,e:errors.append(list(xs)))\nassert r==[1,None,4] and (s.processed,s.failed)==(2,1) and errors==[[2,3]]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e18-ttl-cache",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from ttlcache import Cache\nclock=[10];c=Cache(default_ttl=3,get_clock=lambda:clock[0]);c.put('a',7);clock[0]=13\nassert c.get('a') is None and 'a' not in c and len(c)==0\nassert c.get_or_set('a',lambda:9)==9 and c.get('a')==9\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e19-idempotent-http",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from webhook import Processor\np=Processor();calls=[]\ndef bad(e):calls.append(e);raise ValueError('retry')\ntry:p.process('x',bad);assert False\nexcept ValueError:pass\nassert not p.seen('x');assert p.process('x',lambda e:17)=={'ok':True,'duplicate':False}\nassert p.process('x',bad)=={'ok':True,'duplicate':True} and calls==['x'] and p.result('x')==17\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e20-iter-drain",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from drain import drain\nclass Source:\n def __init__(self):self.closed=False;self.n=0\n def __iter__(self):yield 1;yield 2\n def close(self):self.closed=True\ns=Source();g=drain(s);assert next(g)==1;g.close();assert s.closed\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e21-index-invalidation",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from depgraph import Graph\nx=Graph();x.add_module('a',provides=['sym']);x.add_module('b',requires=['sym'],provides=['mid']);x.add_module('c',requires=['mid']);x.add_module('d')\nassert x.invalidate('sym')=={'a','b','c'} and set(x.to_json())=={'d'}\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e22-multiprocess-shard",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from shard import Worker\nimport tempfile,os\nclass Model:\n def __init__(self):self.calls=[]\n def infer(self,text):self.calls.append(text);return 'value:'+text\nwith tempfile.TemporaryDirectory() as d:\n m=Model();Worker(m,['red','blue'],d,checkpoint_every=1).run();assert m.calls==['red','blue']\n os.unlink(os.path.join(d,'blue.txt'));n=Model();w=Worker(n,['red','blue'],d);w.run();assert n.calls==['blue'] and w.total_inferred==1\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e23-config-layers",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from cfgx import merge,DROP,freeze\nbase={'x':{'a':1,'b':2},'items':[1,2]};layer={'x.a':DROP,'items':[2,3]}\nr=merge(base,layer,lists='unique');assert r=={'x':{'b':2},'items':[1,2,3]} and base['x']['a']==1 and layer['x.a'] is DROP\nf=freeze(r)\ntry:f['x']['b']=4;assert False\nexcept TypeError:pass\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+    "task": "e24-fsm-parallel",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from pfsm import Machine,GuardFailed\ns={'a':[{'to':'b','guard':lambda **kw:kw.get('ok',False)}],'b':[]};x=Machine('a',s)\ntry:x.go('b');assert False\nexcept GuardFailed:pass\nassert x.state=='a' and x.history==['a'];assert x.go('b',ok=True)=='b'\nh=x.history;h.append('bad');assert x.history==['a','b']\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e1-bounded-queue-close",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from wpool.queue import Queue,Closed\nq=Queue(2);q.put('alpha');q.put('beta')\nassert q.get()=='alpha' and q.get()=='beta' and q.unfinished==2\nq.task_done();q.task_done();q.join(timeout=.1);q.close();assert q.get() is None\ntry:q.put('gamma');assert False\nexcept Closed:pass\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e2-lru-eviction",
+    "raw_status": "fail",
+    "probe_ok": false,
+    "detail": "SyntaxError: invalid syntax",
+    "probe": "from cachebox.lru import LRU\nc=LRU(2);c.put('red',11);c.put('blue',22);assert c.get('red')==11\nc.put('green',33);assert c.get('blue') is None and c.keys()==['green','red']\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e3-retry-idempotent",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from apiwrap.client import Client,Transient\ncalls=[]\ndef transport(*args):\n calls.append(args)\n if len(calls)<2:raise Transient('again')\n return (201,91)\nc=Client(transport,backoff=0);assert c.call('POST','/x',idempotency_key='stable')==(201,91)\nassert len(calls)==2 and all(x[3]['Idempotency-Key']=='stable' for x in calls)\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e4-session-store-split",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from sess import SessionStore,MemoryStore,UnknownSession\nnow=[100.0];b=MemoryStore(ttl=3,clock=lambda:now[0]);s=SessionStore(ttl=3,backend=b,clock=lambda:now[0]);s.set('x',{'v':8});assert b.get('x')=={'v':8}\nnow[0]=103.0\ntry:s.get('x');assert False\nexcept UnknownSession:pass\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e5-validate-pipeline",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from vp import RequestQueue,BadType\nq=RequestQueue({'id':{'type':int,'required':True}})\ntry:q.submit({'id':'bad'});assert False\nexcept BadType:pass\nassert q.pending()==0\nq.submit({'id':7});assert q.drain()==[{'id':7}] and q.pending()==0\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e6-index-rebuild",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from tindex import Index,build,merge\nx=Index();x.rebuild([('a','red red'),('b','blue red')]);assert x.lookup('red')==['a','b']\nx.rebuild([('z','green')]);assert x.lookup('red')==[] and x.lookup('green')==['z']\nb={'x':{'a':[2,0]}};assert merge(b,[('x','a',[2,1])]) is b and b['x']['a']==[0,1,2]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e7-money-rounding",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from ledger import Money\nassert Money('1.005').cents==101 and Money('-1.005').cents==-101\nparts=Money('.07').allocate([('a',1),('b',2)]);assert sum(x.cents for x in parts.values())==7\nassert parts['b'].cents==5 and Money('-1.00').format()=='-$1.00'\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e8-event-sourcing",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from evt.aggregate import Aggregate,InvalidEvent\nx=Aggregate();x.apply({'name':'added','amount':9,'seq':71});before=(x.snapshot(),x.version,list(x.pending))\nfor event in [{'name':'added','amount':1,'seq':71},{'name':'unknown'}]:\n try:x.apply(event);assert False\n except InvalidEvent:pass\n assert (x.snapshot(),x.version,x.pending)==before\ny=Aggregate().rehydrate([{'name':'added','amount':2},{'name':'added','amount':3}]);assert y.state=={'count':2,'total':5} and y.version==2\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e9-parallel-dedup",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from pdedup import Store\nfrom concurrent.futures import ThreadPoolExecutor\ns=Store()\nwith ThreadPoolExecutor(8) as pool:r=list(pool.map(lambda v:s.put_if_absent('same',v),range(40)))\nassert sum(r)==1 and len(s)==1\nassert s.process([('z',9),('z',10)],chunk=1)=={'stored':1,'duplicates':1}\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e10-csv-dialect",
+    "raw_status": "fail",
+    "probe_ok": false,
+    "detail": "ValueError: I/O operation on closed file.",
+    "probe": "from imp import Reader\nr=Reader(' a | b \\n\"v|w\"|\"line1\\nline2\"\\nonly\\n',dialect='pipe')\nassert r.fieldnames==['a','b'] and list(r.rows())==[{'a':'v|w','b':'line1\\nline2'},{'a':'only','b':None}]\nassert isinstance(Reader.read('x,y\\n3,4\\n'),Reader)\nimport tempfile,os\nwith tempfile.TemporaryDirectory() as d:\n path=os.path.join(d,'sample.csv')\n with open(path,'w') as f:f.write('x,y\\n3,4\\n')\n loaded=Reader.read(path);assert loaded.fieldnames==['x','y'] and list(loaded.rows())==[{'x':'3','y':'4'}]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e11-scheduler-priority",
+    "raw_status": "fail",
+    "probe_ok": false,
+    "detail": "AssertionError",
+    "probe": "from sched import Runner\nr=Runner(max_per_tenant=1)\nfor tenant,value,priority in [('a',1,9),('a',2,9),('b',3,0)]:r.submit(tenant,lambda v=value:v,priority=priority)\nassert r.run()==[1,3,2] and r.pending()==0\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e12-schema-migration",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from mig import plan,migrate,applied\nfrom types import SimpleNamespace\nlog=[];db=SimpleNamespace(applied_migrations=['old']);db.record=lambda n:db.applied_migrations.append(n)\ndef boom(c):raise RuntimeError('boom')\nm=[{'name':'a','up':lambda c:log.append('up-a'),'down':lambda c:log.append('down-a'),'deps':[]},{'name':'b','up':boom,'down':lambda c:None,'deps':['a']}]\nassert migrate(None,m,db,dry_run=True)==['a','b'] and log==[]\ntry:migrate(None,m,db);assert False\nexcept RuntimeError as e:assert str(e)=='boom'\nassert log==['up-a','down-a'] and applied(db)=={'old'}\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e13-stream-window",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from swin import summarise\npairs=[('a',1),('b',10),('a',2),('b',20),('a',3)]\nassert summarise(pairs,2,sum,key=lambda pair:pair[0])==[('a',3),('b',30)]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e14-parser-precedence",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from expr.parser import parse\nassert parse('2 + 3 * 4')==14 and parse('2 ** 3 ** 2')==512 and parse('(2 + 3) * 4')==20\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e15-backpressure-queue",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from bpq import BoundedQueue,Closed\nq=BoundedQueue(2);q.put(1);q.put(2);assert q.drop_oldest()==1;q.close()\nassert q.get()==2 and q.get() is None\nassert q.put(3) is False\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e16-trie-autocomplete",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from ac import Trie\nx=Trie();x.insert('Apple',2);x.insert('apricot',5);x.insert('app',5)\nassert x.complete('AP')==['app','apricot','apple'] and x.longest_prefix_of('application')=='app'\nx.remove('app');assert 'APP' not in x\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e17-batch-chunking",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from batch import chunked,run_batches\npulled=[]\ndef source():\n for i in range(5):pulled.append(i);yield i\nit=chunked(source(),2);assert next(it)==[0,1] and pulled==[0,1]\nerrors=[]\ndef fn(xs):\n if 2 in xs:raise ValueError('bad')\n return sum(xs)\nr,s=run_batches(range(5),fn,2,on_error=lambda xs,e:errors.append(list(xs)))\nassert r==[1,None,4] and (s.processed,s.failed)==(2,1) and errors==[[2,3]]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e18-ttl-cache",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from ttlcache import Cache\nclock=[10];c=Cache(default_ttl=3,get_clock=lambda:clock[0]);c.put('a',7);clock[0]=13\nassert c.get('a') is None and 'a' not in c and len(c)==0\nassert c.get_or_set('a',lambda:9)==9 and c.get('a')==9\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e19-idempotent-http",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from webhook import Processor\np=Processor();calls=[]\ndef bad(e):calls.append(e);raise ValueError('retry')\ntry:p.process('x',bad);assert False\nexcept ValueError:pass\nassert not p.seen('x');assert p.process('x',lambda e:17)=={'ok':True,'duplicate':False}\nassert p.process('x',bad)=={'ok':True,'duplicate':True} and calls==['x'] and p.result('x')==17\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e20-iter-drain",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from drain import drain\nclass Source:\n def __init__(self):self.closed=False;self.n=0\n def __iter__(self):yield 1;yield 2\n def close(self):self.closed=True\ns=Source();g=drain(s);assert next(g)==1;g.close();assert s.closed\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e21-index-invalidation",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from depgraph import Graph\nx=Graph();x.add_module('a',provides=['sym']);x.add_module('b',requires=['sym'],provides=['mid']);x.add_module('c',requires=['mid']);x.add_module('d')\nassert x.invalidate('sym')=={'a','b','c'} and set(x.to_json())=={'d'}\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e22-multiprocess-shard",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from shard import Worker\nimport tempfile,os\nclass Model:\n def __init__(self):self.calls=[]\n def infer(self,text):self.calls.append(text);return 'value:'+text\nwith tempfile.TemporaryDirectory() as d:\n m=Model();Worker(m,['red','blue'],d,checkpoint_every=1).run();assert m.calls==['red','blue']\n os.unlink(os.path.join(d,'blue.txt'));n=Model();w=Worker(n,['red','blue'],d);w.run();assert n.calls==['blue'] and w.total_inferred==1\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e23-config-layers",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from cfgx import merge,DROP,freeze\nbase={'x':{'a':1,'b':2},'items':[1,2]};layer={'x.a':DROP,'items':[2,3]}\nr=merge(base,layer,lists='unique');assert r=={'x':{'b':2},'items':[1,2,3]} and base['x']['a']==1 and layer['x.a'] is DROP\nf=freeze(r)\ntry:f['x']['b']=4;assert False\nexcept TypeError:pass\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+    "task": "e24-fsm-parallel",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from pfsm import Machine,GuardFailed\ns={'a':[{'to':'b','guard':lambda **kw:kw.get('ok',False)}],'b':[]};x=Machine('a',s)\ntry:x.go('b');assert False\nexcept GuardFailed:pass\nassert x.state=='a' and x.history==['a'];assert x.go('b',ok=True)=='b'\nh=x.history;h.append('bad');assert x.history==['a','b']\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e1-bounded-queue-close",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from wpool.queue import Queue,Closed\nq=Queue(2);q.put('alpha');q.put('beta')\nassert q.get()=='alpha' and q.get()=='beta' and q.unfinished==2\nq.task_done();q.task_done();q.join(timeout=.1);q.close();assert q.get() is None\ntry:q.put('gamma');assert False\nexcept Closed:pass\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e2-lru-eviction",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from cachebox.lru import LRU\nc=LRU(2);c.put('red',11);c.put('blue',22);assert c.get('red')==11\nc.put('green',33);assert c.get('blue') is None and c.keys()==['green','red']\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e3-retry-idempotent",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from apiwrap.client import Client,Transient\ncalls=[]\ndef transport(*args):\n calls.append(args)\n if len(calls)<2:raise Transient('again')\n return (201,91)\nc=Client(transport,backoff=0);assert c.call('POST','/x',idempotency_key='stable')==(201,91)\nassert len(calls)==2 and all(x[3]['Idempotency-Key']=='stable' for x in calls)\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e4-session-store-split",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from sess import SessionStore,MemoryStore,UnknownSession\nnow=[100.0];b=MemoryStore(ttl=3,clock=lambda:now[0]);s=SessionStore(ttl=3,backend=b,clock=lambda:now[0]);s.set('x',{'v':8});assert b.get('x')=={'v':8}\nnow[0]=103.0\ntry:s.get('x');assert False\nexcept UnknownSession:pass\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e5-validate-pipeline",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from vp import RequestQueue,BadType\nq=RequestQueue({'id':{'type':int,'required':True}})\ntry:q.submit({'id':'bad'});assert False\nexcept BadType:pass\nassert q.pending()==0\nq.submit({'id':7});assert q.drain()==[{'id':7}] and q.pending()==0\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e6-index-rebuild",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from tindex import Index,build,merge\nx=Index();x.rebuild([('a','red red'),('b','blue red')]);assert x.lookup('red')==['a','b']\nx.rebuild([('z','green')]);assert x.lookup('red')==[] and x.lookup('green')==['z']\nb={'x':{'a':[2,0]}};assert merge(b,[('x','a',[2,1])]) is b and b['x']['a']==[0,1,2]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e7-money-rounding",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from ledger import Money\nassert Money('1.005').cents==101 and Money('-1.005').cents==-101\nparts=Money('.07').allocate([('a',1),('b',2)]);assert sum(x.cents for x in parts.values())==7\nassert parts['b'].cents==5 and Money('-1.00').format()=='-$1.00'\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e8-event-sourcing",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from evt.aggregate import Aggregate,InvalidEvent\nx=Aggregate();x.apply({'name':'added','amount':9,'seq':71});before=(x.snapshot(),x.version,list(x.pending))\nfor event in [{'name':'added','amount':1,'seq':71},{'name':'unknown'}]:\n try:x.apply(event);assert False\n except InvalidEvent:pass\n assert (x.snapshot(),x.version,x.pending)==before\ny=Aggregate().rehydrate([{'name':'added','amount':2},{'name':'added','amount':3}]);assert y.state=={'count':2,'total':5} and y.version==2\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e9-parallel-dedup",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from pdedup import Store\nfrom concurrent.futures import ThreadPoolExecutor\ns=Store()\nwith ThreadPoolExecutor(8) as pool:r=list(pool.map(lambda v:s.put_if_absent('same',v),range(40)))\nassert sum(r)==1 and len(s)==1\nassert s.process([('z',9),('z',10)],chunk=1)=={'stored':1,'duplicates':1}\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e10-csv-dialect",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from imp import Reader\nr=Reader(' a | b \\n\"v|w\"|\"line1\\nline2\"\\nonly\\n',dialect='pipe')\nassert r.fieldnames==['a','b'] and list(r.rows())==[{'a':'v|w','b':'line1\\nline2'},{'a':'only','b':None}]\nassert isinstance(Reader.read('x,y\\n3,4\\n'),Reader)\nimport tempfile,os\nwith tempfile.TemporaryDirectory() as d:\n path=os.path.join(d,'sample.csv')\n with open(path,'w') as f:f.write('x,y\\n3,4\\n')\n loaded=Reader.read(path);assert loaded.fieldnames==['x','y'] and list(loaded.rows())==[{'x':'3','y':'4'}]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e11-scheduler-priority",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from sched import Runner\nr=Runner(max_per_tenant=1)\nfor tenant,value,priority in [('a',1,9),('a',2,9),('b',3,0)]:r.submit(tenant,lambda v=value:v,priority=priority)\nassert r.run()==[1,3,2] and r.pending()==0\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e12-schema-migration",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from mig import plan,migrate,applied\nfrom types import SimpleNamespace\nlog=[];db=SimpleNamespace(applied_migrations=['old']);db.record=lambda n:db.applied_migrations.append(n)\ndef boom(c):raise RuntimeError('boom')\nm=[{'name':'a','up':lambda c:log.append('up-a'),'down':lambda c:log.append('down-a'),'deps':[]},{'name':'b','up':boom,'down':lambda c:None,'deps':['a']}]\nassert migrate(None,m,db,dry_run=True)==['a','b'] and log==[]\ntry:migrate(None,m,db);assert False\nexcept RuntimeError as e:assert str(e)=='boom'\nassert log==['up-a','down-a'] and applied(db)=={'old'}\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e13-stream-window",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from swin import summarise\npairs=[('a',1),('b',10),('a',2),('b',20),('a',3)]\nassert summarise(pairs,2,sum,key=lambda pair:pair[0])==[('a',3),('b',30)]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e14-parser-precedence",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from expr.parser import parse\nassert parse('2 + 3 * 4')==14 and parse('2 ** 3 ** 2')==512 and parse('(2 + 3) * 4')==20\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e15-backpressure-queue",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from bpq import BoundedQueue,Closed\nq=BoundedQueue(2);q.put(1);q.put(2);assert q.drop_oldest()==1;q.close()\nassert q.get()==2 and q.get() is None\nassert q.put(3) is False\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e16-trie-autocomplete",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from ac import Trie\nx=Trie();x.insert('Apple',2);x.insert('apricot',5);x.insert('app',5)\nassert x.complete('AP')==['app','apricot','apple'] and x.longest_prefix_of('application')=='app'\nx.remove('app');assert 'APP' not in x\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e17-batch-chunking",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from batch import chunked,run_batches\npulled=[]\ndef source():\n for i in range(5):pulled.append(i);yield i\nit=chunked(source(),2);assert next(it)==[0,1] and pulled==[0,1]\nerrors=[]\ndef fn(xs):\n if 2 in xs:raise ValueError('bad')\n return sum(xs)\nr,s=run_batches(range(5),fn,2,on_error=lambda xs,e:errors.append(list(xs)))\nassert r==[1,None,4] and (s.processed,s.failed)==(2,1) and errors==[[2,3]]\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e18-ttl-cache",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from ttlcache import Cache\nclock=[10];c=Cache(default_ttl=3,get_clock=lambda:clock[0]);c.put('a',7);clock[0]=13\nassert c.get('a') is None and 'a' not in c and len(c)==0\nassert c.get_or_set('a',lambda:9)==9 and c.get('a')==9\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e19-idempotent-http",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from webhook import Processor\np=Processor();calls=[]\ndef bad(e):calls.append(e);raise ValueError('retry')\ntry:p.process('x',bad);assert False\nexcept ValueError:pass\nassert not p.seen('x');assert p.process('x',lambda e:17)=={'ok':True,'duplicate':False}\nassert p.process('x',bad)=={'ok':True,'duplicate':True} and calls==['x'] and p.result('x')==17\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e20-iter-drain",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from drain import drain\nclass Source:\n def __init__(self):self.closed=False;self.n=0\n def __iter__(self):yield 1;yield 2\n def close(self):self.closed=True\ns=Source();g=drain(s);assert next(g)==1;g.close();assert s.closed\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e21-index-invalidation",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from depgraph import Graph\nx=Graph();x.add_module('a',provides=['sym']);x.add_module('b',requires=['sym'],provides=['mid']);x.add_module('c',requires=['mid']);x.add_module('d')\nassert x.invalidate('sym')=={'a','b','c'} and set(x.to_json())=={'d'}\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e22-multiprocess-shard",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from shard import Worker\nimport tempfile,os\nclass Model:\n def __init__(self):self.calls=[]\n def infer(self,text):self.calls.append(text);return 'value:'+text\nwith tempfile.TemporaryDirectory() as d:\n m=Model();Worker(m,['red','blue'],d,checkpoint_every=1).run();assert m.calls==['red','blue']\n os.unlink(os.path.join(d,'blue.txt'));n=Model();w=Worker(n,['red','blue'],d);w.run();assert n.calls==['blue'] and w.total_inferred==1\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e23-config-layers",
+    "raw_status": "pass",
+    "probe_ok": true,
+    "detail": "ok",
+    "probe": "from cfgx import merge,DROP,freeze\nbase={'x':{'a':1,'b':2},'items':[1,2]};layer={'x.a':DROP,'items':[2,3]}\nr=merge(base,layer,lists='unique');assert r=={'x':{'b':2},'items':[1,2,3]} and base['x']['a']==1 and layer['x.a'] is DROP\nf=freeze(r)\ntry:f['x']['b']=4;assert False\nexcept TypeError:pass\n"
+  },
+  {
+    "campaign": "qwen27b-flash-matched-20261012-165802-flash-42",
+    "task": "e24-fsm-parallel",
+    "raw_status": "fail",
+    "probe_ok": false,
+    "detail": "AssertionError",
+    "probe": "from pfsm import Machine,GuardFailed\ns={'a':[{'to':'b','guard':lambda **kw:kw.get('ok',False)}],'b':[]};x=Machine('a',s)\ntry:x.go('b');assert False\nexcept GuardFailed:pass\nassert x.state=='a' and x.history==['a'];assert x.go('b',ok=True)=='b'\nh=x.history;h.append('bad');assert x.history==['a','b']\n"
+  }
+]

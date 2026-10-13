@@ -1,0 +1,4 @@
+evidence_type,workload,control_seconds,candidate_seconds,candidate_control_ratio,change_percent,interpretation
+independent microbenchmark,sampled combined expert kernels,,,0.9853129624665969,-1.4687037533403058,kernel-only reduction; not response time
+instrumented final profile,fresh-128K,154.85664897900006,155.04541973300002,1.0012190032216541,0.12190032216541358,slower; profiling gate failed; excluded from acceptance statistics
+instrumented final profile,fresh-180K,225.02696278500025,225.4312496069997,1.0017966150233548,0.17966150233548195,slower; profiling gate failed; excluded from acceptance statistics

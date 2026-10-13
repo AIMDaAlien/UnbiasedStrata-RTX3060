@@ -1,0 +1,78 @@
+{
+  "control": [
+    {
+      "gate_up_epilogue_seconds": 25.069892155000005,
+      "down_seconds": 10.209263840000007,
+      "combined_seconds": 35.27915599500001,
+      "existing_prefill_timing": "strata prefill timing: 127993 tokens, GPU timeline 150258 ms, wall 150400 ms, host staging 139117 ms: embed+steps 3593 (2.4%) hc read 14353 (9.6%) gdn 19168 (12.8%) qsa proj 10179 (6.8%) qsa indexer 5 (0.0%) qsa select 11222 (7.5%) qsa attn 13925 (9.3%) router+shared 4354 (2.9%) gather 284 (0.2%) wait copy 3361 (2.2%) gemm gate/up 35405 (23.6%) combine 6611 (4.4%) ple 586 (0.4%) kv stage 6817 (4.5%) gdn conv+gates 1721 (1.1%) gdn recurrence 8970 (6.0%) gdn out proj 9704 (6.5%)",
+      "target_tokens": 128000,
+      "total_response_seconds": 154.85664897900006,
+      "prefill_seconds": 151.3524,
+      "decode_seconds": 3.37,
+      "checks": {
+        "completed": true,
+        "retrieval": true,
+        "code": true,
+        "token_count": true,
+        "no_swap": true,
+        "fresh_state": true
+      }
+    },
+    {
+      "gate_up_epilogue_seconds": 35.30376595100004,
+      "down_seconds": 14.372201119999989,
+      "combined_seconds": 49.67596707100003,
+      "existing_prefill_timing": "strata prefill timing: 179993 tokens, GPU timeline 217911 ms, wall 218009 ms, host staging 341149 ms: embed+steps 5013 (2.3%) hc read 20219 (9.3%) gdn 27068 (12.4%) qsa proj 14315 (6.6%) qsa indexer 7 (0.0%) qsa select 22252 (10.2%) qsa attn 19807 (9.1%) router+shared 6166 (2.8%) gather 399 (0.2%) wait copy 3613 (1.7%) gemm gate/up 49849 (22.9%) combine 9263 (4.3%) ple 825 (0.4%) kv stage 10173 (4.7%) gdn conv+gates 2421 (1.1%) gdn recurrence 12753 (5.9%) gdn out proj 13769 (6.3%)",
+      "target_tokens": 180000,
+      "total_response_seconds": 225.02696278500025,
+      "prefill_seconds": 218.95729999999998,
+      "decode_seconds": 5.8851,
+      "checks": {
+        "completed": true,
+        "retrieval": true,
+        "code": true,
+        "token_count": true,
+        "no_swap": true,
+        "fresh_state": true
+      }
+    }
+  ],
+  "candidate": [
+    {
+      "gate_up_epilogue_seconds": 25.067491201999964,
+      "down_seconds": 10.205859839999995,
+      "combined_seconds": 35.27335104199996,
+      "existing_prefill_timing": "strata prefill timing: 127993 tokens, GPU timeline 150496 ms, wall 150603 ms, host staging 139261 ms: embed+steps 3616 (2.4%) hc read 14398 (9.6%) gdn 19241 (12.8%) qsa proj 10197 (6.8%) qsa indexer 5 (0.0%) qsa select 11242 (7.5%) qsa attn 13948 (9.3%) router+shared 4360 (2.9%) gather 284 (0.2%) wait copy 3389 (2.3%) gemm gate/up 35399 (23.5%) combine 6609 (4.4%) ple 587 (0.4%) kv stage 6801 (4.5%) gdn conv+gates 1720 (1.1%) gdn recurrence 8994 (6.0%) gdn out proj 9706 (6.4%)",
+      "target_tokens": 128000,
+      "total_response_seconds": 155.04541973300002,
+      "prefill_seconds": 151.5384,
+      "decode_seconds": 3.3712,
+      "checks": {
+        "completed": true,
+        "retrieval": true,
+        "code": true,
+        "token_count": true,
+        "no_swap": true,
+        "fresh_state": true
+      }
+    },
+    {
+      "gate_up_epilogue_seconds": 35.332261955000035,
+      "down_seconds": 14.391190528000052,
+      "combined_seconds": 49.72345248300009,
+      "existing_prefill_timing": "strata prefill timing: 179993 tokens, GPU timeline 218133 ms, wall 218241 ms, host staging 341489 ms: embed+steps 5041 (2.3%) hc read 20233 (9.3%) gdn 27116 (12.4%) qsa proj 14330 (6.6%) qsa indexer 7 (0.0%) qsa select 22267 (10.2%) qsa attn 19846 (9.1%) router+shared 6171 (2.8%) gather 398 (0.2%) wait copy 3645 (1.7%) gemm gate/up 49897 (22.9%) combine 9257 (4.2%) ple 827 (0.4%) kv stage 10124 (4.6%) gdn conv+gates 2420 (1.1%) gdn recurrence 12762 (5.9%) gdn out proj 13792 (6.3%)",
+      "target_tokens": 180000,
+      "total_response_seconds": 225.4312496069997,
+      "prefill_seconds": 219.1987,
+      "decode_seconds": 6.0489,
+      "checks": {
+        "completed": true,
+        "retrieval": true,
+        "code": true,
+        "token_count": true,
+        "no_swap": true,
+        "fresh_state": true
+      }
+    }
+  ]
+}

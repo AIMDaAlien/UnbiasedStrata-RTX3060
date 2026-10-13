@@ -1,0 +1,134 @@
+{
+  "date": "2026-10-12",
+  "health": {
+    "status": "ok"
+  },
+  "models": {
+    "object": "list",
+    "data": [
+      {
+        "id": "qwen3.8-flash-next-iq3_xxs",
+        "object": "model",
+        "owned_by": "local",
+        "context_length": 196608
+      }
+    ]
+  },
+  "checks": {
+    "readiness": true,
+    "medium_reasoning": true,
+    "final_content": true,
+    "token_count": true,
+    "tool_calls": true
+  },
+  "medium_response": {
+    "id": "chatcmpl-e5621bdccb1ff1e2",
+    "object": "chat.completion",
+    "created": 1791858346,
+    "model": "qwen3.8-flash-next-iq3_xxs",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "42",
+          "reasoning_content": "The user wants me to compute 6 \u00d7 7 and respond with just the number.\n\n6 \u00d7 7 = 42\n"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 22,
+      "completion_tokens": 33,
+      "total_tokens": 55
+    },
+    "timings": {
+      "prompt_n": 22,
+      "prompt_cached_n": 0,
+      "prompt_ms": 491.1,
+      "prompt_per_second": 44.797393606190184,
+      "predicted_n": 33,
+      "predicted_ms": 700.4,
+      "predicted_per_second": 47.115933752141636,
+      "draft_n": 24,
+      "draft_n_accepted": 24
+    }
+  },
+  "tokenize_count": 22,
+  "tool_response": {
+    "id": "chatcmpl-7000fd36126b0f13",
+    "object": "chat.completion",
+    "created": 1791858347,
+    "model": "qwen3.8-flash-next-iq3_xxs",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "The user wants me to call the lookup_weather tool for Boston. This is straightforward - I need to use the tool rather than guessing.\n",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "lookup_weather",
+                "arguments": "{\"city\":\"Boston\"}"
+              },
+              "id": "call_9fff342d93c455b1"
+            }
+          ]
+        },
+        "finish_reason": "tool_calls"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 285,
+      "completion_tokens": 57,
+      "total_tokens": 342
+    },
+    "timings": {
+      "prompt_n": 285,
+      "prompt_cached_n": 0,
+      "prompt_ms": 4833.5,
+      "prompt_per_second": 58.96348401779249,
+      "predicted_n": 57,
+      "predicted_ms": 1479.6,
+      "predicted_per_second": 38.52392538523926,
+      "draft_n": 52,
+      "draft_n_accepted": 39
+    }
+  },
+  "tool_followup": {
+    "id": "chatcmpl-8f9898e0c6b1582a",
+    "object": "chat.completion",
+    "created": 1791858353,
+    "model": "qwen3.8-flash-next-iq3_xxs",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Here's the current weather for Boston:\n\n- **Temperature:** 18\u00b0C\n- **Condition:** Clear",
+          "reasoning_content": "The tool returned the weather for Boston: 18\u00b0C and clear conditions.\n"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 368,
+      "completion_tokens": 43,
+      "total_tokens": 411
+    },
+    "timings": {
+      "prompt_n": 368,
+      "prompt_cached_n": 341,
+      "prompt_ms": 496.3,
+      "prompt_per_second": 741.4870038283296,
+      "predicted_n": 43,
+      "predicted_ms": 1096.8,
+      "predicted_per_second": 39.204959883296866,
+      "draft_n": 39,
+      "draft_n_accepted": 28
+    }
+  }
+}

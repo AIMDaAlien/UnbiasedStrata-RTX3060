@@ -1,0 +1,15 @@
+{
+  "status": "rejected",
+  "profiled_total_response_ratios": {
+    "128000": 1.0012190032216541,
+    "180000": 1.0017966150233548
+  },
+  "minimum_required_improvement_percent": 5,
+  "both_lengths_required": true,
+  "same_binary_sha256": "dbc526021a5c0103a8e3ff2f0aaf45bacfd19cbb6a1d2ea2343ba0656286ab04",
+  "all_fresh_quality_checks_passed": true,
+  "profiling_excluded_from_acceptance_statistics": true,
+  "earlier_disconnected_runs_used_only_for_selection": true,
+  "production_changed": false,
+  "next_action": "stop this bounded kernel campaign; no screening or acceptance warranted"
+}

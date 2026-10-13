@@ -1,0 +1,31 @@
+{
+  "applied_at_utc": "20261011-010616",
+  "configuration": "/home/USER/.config/unbiasedstrata/config.json",
+  "rollback_configuration": "/home/USER/.config/unbiasedstrata/config.json.before-prefill-20261011-010616",
+  "rollback_binary": "/home/USER/opt/UnbiasedStrata/build/unbiased-strata.before-prefill-tuning",
+  "validated_binary_sha256": "9e7e8c27be4218bebda4035a5ed588ed9b325dd5857c55e7d6059ea92eb01764",
+  "profile": {
+    "model": "/home/USER/opt/Strata-data/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf",
+    "pack": "/home/USER/opt/UnbiasedStrata/local/pack-iq3_xxs",
+    "mtp": "/home/USER/opt/Strata-data/mtp/rt",
+    "port": 8081,
+    "context": 196608,
+    "threads": 12,
+    "ple_io": "direct",
+    "spec": 4,
+    "kv": "int8",
+    "kv_resident": 32768,
+    "environment": {
+      "CUDA_VISIBLE_DEVICES": "0",
+      "STRATA_RESIDENT_HEADROOM_GIB": "8",
+      "OMP_NUM_THREADS": "1",
+      "STRATA_PF_FUSED": "1",
+      "STRATA_PREFILL_AUTO_MAX": "16384",
+      "STRATA_PREFILL_RING": "512"
+    }
+  },
+  "amd_enabled": false,
+  "production_service_started": false,
+  "amd_decision": "Disabled: one-pair feasibility ratio 1.00986, below required 10% gain; all six buckets slower. No five-pair AMD acceptance warranted.",
+  "final_review": "Passed all NVIDIA five-pair and AMD feasibility integrity/quality checks; validated binary retained, service inactive."
+}

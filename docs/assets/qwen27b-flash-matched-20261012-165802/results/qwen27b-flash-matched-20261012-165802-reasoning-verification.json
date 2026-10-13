@@ -1,0 +1,11 @@
+{
+  "low": {
+    "prompt": "<|im_start|>system\nReasoning effort is set to low. Keep your thinking brief and focused, moving directly to the conclusion without unnecessary elaboration.<|im_end|>\n<|im_start|>user\nReply ready<|im_end|>\n<|im_start|>assistant\n<think>\n"
+  },
+  "medium": {
+    "prompt": "<|im_start|>user\nReply ready<|im_end|>\n<|im_start|>assistant\n<think>\n"
+  },
+  "xhigh": {
+    "prompt": "<|im_start|>system\nReasoning effort is set to xhigh. Please think carefully through the task, validate key assumptions, consider plausible alternatives, and prioritize correctness, consistency, and clarity in the final answer.<|im_end|>\n<|im_start|>user\nReply ready<|im_end|>\n<|im_start|>assistant\n<think>\n"
+  }
+}

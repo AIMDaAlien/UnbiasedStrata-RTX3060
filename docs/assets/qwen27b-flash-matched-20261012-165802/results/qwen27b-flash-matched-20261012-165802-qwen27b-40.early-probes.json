@@ -1,0 +1,47 @@
+[
+  {
+    "task": "e1-bounded-queue-close",
+    "probe_ok": false,
+    "detail": "AssertionError"
+  },
+  {
+    "task": "e2-lru-eviction",
+    "probe_ok": false,
+    "detail": "SyntaxError: invalid syntax"
+  },
+  {
+    "task": "e3-retry-idempotent",
+    "probe_ok": true,
+    "detail": "ok"
+  },
+  {
+    "task": "e4-session-store-split",
+    "probe_ok": true,
+    "detail": "ok"
+  },
+  {
+    "task": "e5-validate-pipeline",
+    "probe_ok": true,
+    "detail": "ok"
+  },
+  {
+    "task": "e6-index-rebuild",
+    "probe_ok": true,
+    "detail": "ok"
+  },
+  {
+    "task": "e7-money-rounding",
+    "probe_ok": true,
+    "detail": "ok"
+  },
+  {
+    "task": "e8-event-sourcing",
+    "probe_ok": false,
+    "detail": "AssertionError"
+  },
+  {
+    "task": "e9-parallel-dedup",
+    "probe_ok": true,
+    "detail": "ok"
+  }
+]

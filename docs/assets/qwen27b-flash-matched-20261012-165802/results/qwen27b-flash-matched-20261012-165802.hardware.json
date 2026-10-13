@@ -1,0 +1,7 @@
+{
+  "cpu": "AMD Ryzen 9 7950X 16-Core Processor",
+  "mem_total": "64948480 kB",
+  "kernel": "7.2.5-3-omarchy",
+  "python": "3.14.7",
+  "nvidia": "name, driver_version, memory.total [MiB]\nNVIDIA GeForce RTX 3060, 610.57.04, 12288 MiB\n"
+}

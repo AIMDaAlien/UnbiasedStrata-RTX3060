@@ -1,0 +1,22 @@
+{
+  "status": "completed",
+  "preliminary": true,
+  "production_changed": false,
+  "deadline_utc": "2026-10-11T04:29:28+00:00",
+  "completed": [
+    "104 parity cases each with actual control=0 and treatment=1; identical selected IDs",
+    "control fresh128K/180K profiled and quality passed; dispatch verified",
+    "treatment fresh128K/180K profiled and quality passed; dispatch verified",
+    "control six-bucket uninstrumented run, including intermediate turns and tools",
+    "treatment six-bucket uninstrumented run, including intermediate turns and tools"
+  ],
+  "exclusions": [],
+  "morning_next_step": "Await explicit continue, then assess streaming top-k port PR743 applicability against the retained tuned control; require exact selected-ID parity before timing any port. Active-bound setting rejected; no five-pair acceptance for it.",
+  "screening_decision": "rejected for rollout",
+  "fixtures_unchanged": true,
+  "production_profile_unchanged": true,
+  "ended_utc": "2026-10-11T03:18:25.349142+00:00",
+  "reporting_recomputed_from_raw_evidence": true,
+  "acceptance_pairs_run": 0,
+  "streaming_port_work_performed": false
+}

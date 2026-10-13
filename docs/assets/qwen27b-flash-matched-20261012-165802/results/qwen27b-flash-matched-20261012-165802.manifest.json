@@ -1,0 +1,757 @@
+{
+  "suite_version": "contract-v2",
+  "packs": [
+    "deepswe2"
+  ],
+  "reasoning": "medium",
+  "include_fixtures": true,
+  "qwen_command": [
+    "/usr/bin/llama-server",
+    "-m",
+    "/home/USER/Models/Swift-Qwen3.8-27B-Q5_K_M.gguf",
+    "-c",
+    "131072",
+    "-fa",
+    "on",
+    "-ctk",
+    "q4_0",
+    "-ctv",
+    "q4_0",
+    "-fit",
+    "off",
+    "-dev",
+    "Vulkan1,Vulkan2",
+    "-sm",
+    "layer",
+    "-ts",
+    "16,11",
+    "-np",
+    "1",
+    "--metrics",
+    "--spec-type",
+    "draft-mtp",
+    "--spec-draft-n-max",
+    "2",
+    "-ctkd",
+    "q4_0",
+    "-ctvd",
+    "q4_0",
+    "--alias",
+    "matched-qwen38-27b-q5",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "18080"
+  ],
+  "flash_config": {
+    "model": "/home/USER/opt/Strata-data/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf",
+    "pack": "/home/USER/opt/UnbiasedStrata/local/pack-iq3_xxs",
+    "mtp": "/home/USER/opt/Strata-data/mtp/rt",
+    "port": 18081,
+    "context": 196608,
+    "threads": 12,
+    "ple_io": "direct",
+    "spec": 4,
+    "kv": "int8",
+    "kv_resident": 32768,
+    "environment": {
+      "CUDA_VISIBLE_DEVICES": "0",
+      "STRATA_RESIDENT_HEADROOM_GIB": "8",
+      "OMP_NUM_THREADS": "1",
+      "STRATA_PF_FUSED": "1",
+      "STRATA_PREFILL_AUTO_MAX": "16384",
+      "STRATA_PREFILL_RING": "512"
+    }
+  },
+  "runs_per_model": 3,
+  "temporary_stop": "llama-ornith.service",
+  "restore_on_exit": false,
+  "status": "complete",
+  "prefix": "qwen27b-flash-matched-20261012-165802",
+  "created": "2026-10-12T20:58:02.429921+00:00",
+  "originally_active": false,
+  "tasks": {
+    "e1-bounded-queue-close": {
+      "task_sha256": "38923cfc175fa61d461b28270d17882d650cfbd81926d19efeb99ddafa768510",
+      "message_sha256": "8806f703b8ca7606c57f0e16287bd39f0d657052afcd4d33ac59bf7b48912707",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e2-lru-eviction": {
+      "task_sha256": "a37d85e1a534dd9b1ba65645c4ab7553b8ee749395ea99ab26a2d9ea8458d23e",
+      "message_sha256": "d48e698cbef609e49511026a2144e1fe785d6b5d033ff2eda692866d9133e4e0",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e3-retry-idempotent": {
+      "task_sha256": "a7b59441f56c02d373bdea2c8bce1f416eb3103c351ef95e09ffd4878737ca01",
+      "message_sha256": "b4da734eb0633e780104b49c64bb85344f8cc083abac5d3b3aece6e61927b954",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e4-session-store-split": {
+      "task_sha256": "11f0c613ce29adc27070b46f806100dc29985d17cc8068270e9cddc3f9a45cea",
+      "message_sha256": "62b73f9ae9d67a481a03ebb6a203002534ce5fe46fd3392bb3db32534f4b0bb0",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e5-validate-pipeline": {
+      "task_sha256": "8db0ab9acd1b0400de1b124a6c5dd789ef0f860d969b8bc9e1dd8c254152ee71",
+      "message_sha256": "59606bad17bb0007bea9916d25c4af029af5246efac276b973f1970c76ecce1f",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e6-index-rebuild": {
+      "task_sha256": "6ad0febf182762db5a68122afb61b0703a093942092c383321cac8f3b9c192ad",
+      "message_sha256": "bcc4eb60d155001dc3dc88e7ab9ff42cab87e6ab2240995d1ab9b1cc4e9254e7",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e7-money-rounding": {
+      "task_sha256": "fa8436c36d18745fe9660b52f415772b75871dd4d8e61d6325e37d4cb011220f",
+      "message_sha256": "f641e06feb085b2b80549a41c6f5bc10621164a3e43443b42b6f331c01e625fa",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e8-event-sourcing": {
+      "task_sha256": "c443def8b6d4bf75b565fd7da428bf201d4e600640bdf83f147748653f538f83",
+      "message_sha256": "d967b445f69f6b2fe96db42f28b376d5abaa52769e1faec132eeab4d16a55cf2",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e9-parallel-dedup": {
+      "task_sha256": "6be3439b52be35cdcad0046a94ae76a4119079d53afb3ce023224e4815df300a",
+      "message_sha256": "50a6af356cc120e88cdebe0a97d9ffcc1441aa1a4a7e5650416d64eb5196f288",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e10-csv-dialect": {
+      "task_sha256": "ebf1ccf6aaf991ff123caaec524c8f0f88dda4e25da4979f5bbd026f2ddaac22",
+      "message_sha256": "7bf30bf4b15420cc9ae93a528601027ed75fafd05779c93e21b9ee758f014d9d",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e11-scheduler-priority": {
+      "task_sha256": "f4e15f8105b83c9c2b11206fdf7308b75c1a3dbc03bc37ec0264e5f6be99659f",
+      "message_sha256": "47c767cf1f1b6500a0471df3cfd3dd156d32b2b6c51b76f41e576c0d1e09b15e",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e12-schema-migration": {
+      "task_sha256": "4522b24f7564ef9977555bf4349402d4db9068f736e2ad57fd95dbc2be47ce44",
+      "message_sha256": "e37e1fc14f28dd38099a6470dea9fbbb71059ae838448f033f0f71b74673e84c",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e13-stream-window": {
+      "task_sha256": "a5d89b801ef4c9d358623ea66e46c9f90a9a6346eeb52c5871f8b13c19304d11",
+      "message_sha256": "dadef1127cc2370d45b8460eeaf68ee56938976bfc5b82b8f790895a8bd378d2",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e14-parser-precedence": {
+      "task_sha256": "8a43654e4e32a3ac2ab3e971f5ed329fbb12b2595110c676ea273b3e9abcec59",
+      "message_sha256": "112a07cb70c02e435ae73aa944d9cea69d860869a6a15c41e0b1e1c165610286",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e15-backpressure-queue": {
+      "task_sha256": "b882cf3329a9ff7f898860fc9dc332c40a290dc78b29226d0f84121bec91926b",
+      "message_sha256": "4b89e135b14f199cfa8b72399f306844665168cfc73b58ff086b5dc1282e7e9e",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e16-trie-autocomplete": {
+      "task_sha256": "f8833df953c77f6516e90dab0dade8574c4dc8f4af4c61423eb32be726ea0790",
+      "message_sha256": "6467908c1fe42f8790b2e79f3c58bc433974b878d06b25121b8e51ec570fbab3",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e17-batch-chunking": {
+      "task_sha256": "82e7a0342b82f2e4373c8843725161171706ab6c113f2be49cf086fd0968ed01",
+      "message_sha256": "6c3bf7b7c541d4df3783235e1744f7731599ac134c9d32b9c1a5410351a8d6b1",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e18-ttl-cache": {
+      "task_sha256": "5394928a2339957f3e9a42dcd640823aa39dd64ec1d64e5d2a82052368ad919c",
+      "message_sha256": "9792fa966c075db266acbe464d60d2e2070ebf4dab106b4909f3c5aa85bdeee1",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e19-idempotent-http": {
+      "task_sha256": "54dfdaef03f0b3d5997761d0aad1b57ddbc9ced87208805561f276e0aaa4d26c",
+      "message_sha256": "3ae408a6663b3701c39b42aba109bc0ea61d5587316e551e4d9e14ee2b86349d",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e20-iter-drain": {
+      "task_sha256": "7bd11d6fa3608ea815cca71a2459bfa4048591f33fd646e0acf1839e3d31d143",
+      "message_sha256": "5bcccd012f47fcaef67f6590da677d2ad2bc599685512c3fbfb9a9ec962e575e",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e21-index-invalidation": {
+      "task_sha256": "47a5d84df71170b883fd28cc05c84411fcf89fa8bc33eceabad6319c1a8b58e5",
+      "message_sha256": "12c351982293be7c52f8aedda1cf82feb1eda0ead44299d277f8cf5ec0cfd9e7",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e22-multiprocess-shard": {
+      "task_sha256": "bb6dfbcc459983fdebc8b1c26bfb8e79617e781870db9bb0609fdf2af776f82d",
+      "message_sha256": "7c2d2955a7e6d8377440de50512adb2eecfe9ad9d929fad181199a24840d4eb7",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e23-config-layers": {
+      "task_sha256": "7dd0c8a13358e93cb2294f9977981279755c05e4d6083e83bbd539e4a884d0b1",
+      "message_sha256": "93584ce1de6b47676bb17538ae5b65117b0dce5a57ba6299197e291af2003833",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    },
+    "e24-fsm-parallel": {
+      "task_sha256": "84ddad3ce4b96566badced3061d70af7cdf3002be1ccb7310efa37943470180a",
+      "message_sha256": "f70c330dc099152c110a40ba58154a27ae8357ddaf030ef275195be71fe964a1",
+      "initial_cap": 16384,
+      "escalate": [
+        24576,
+        49152,
+        98304
+      ]
+    }
+  },
+  "file_sha256": {
+    "bench-run.py": "56de09eb9416babcfabf87e6050ce0f63b4145f1f9c97b480ed9c000574398f9",
+    "bench_lib.py": "d1b7d73331afa83982b73861a49596aa7c56b7f7f97214fc435264a1b9962f71",
+    "tools/bench_contract_v2.py": "84e886d92914cac2feedf52608b164ff14cae18ecbd99e5d92dd1e2ea992c41a",
+    "tools/bench_corrected_suite.py": "2f1628b6b4ebbffeb8b1102f5ff9813414ce01fd7e697101a25983bf64923343"
+  },
+  "model_files": {
+    "/home/USER/Models/Swift-Qwen3.8-27B-Q5_K_M.gguf": {
+      "size": 20199745696,
+      "mtime_ns": 1789497808542635837
+    },
+    "/home/USER/opt/Strata-data/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf": {
+      "size": 47039860096,
+      "mtime_ns": 1790731973897310934
+    },
+    "/home/USER/opt/Strata-data/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf": {
+      "size": 28800138432,
+      "mtime_ns": 1790732760508827330
+    }
+  },
+  "engine_version": "WARNING: radv is not a conformant Vulkan implementation, testing use only.\nversion: 0.4.0-dev (build 10809, commit 5266f24da7)\nbuilt with GNU 16.2.1 for Linux x86_64\n",
+  "campaigns": [
+    {
+      "lane": "qwen27b",
+      "target": "matched-qwen27b-medium",
+      "tag": "qwen27b-flash-matched-20261012-165802-qwen27b-40",
+      "served_model": "matched-qwen38-27b-q5",
+      "command": [
+        "/usr/bin/llama-server",
+        "-m",
+        "/home/USER/Models/Swift-Qwen3.8-27B-Q5_K_M.gguf",
+        "-c",
+        "131072",
+        "-fa",
+        "on",
+        "-ctk",
+        "q4_0",
+        "-ctv",
+        "q4_0",
+        "-fit",
+        "off",
+        "-dev",
+        "Vulkan1,Vulkan2",
+        "-sm",
+        "layer",
+        "-ts",
+        "16,11",
+        "-np",
+        "1",
+        "--metrics",
+        "--spec-type",
+        "draft-mtp",
+        "--spec-draft-n-max",
+        "2",
+        "-ctkd",
+        "q4_0",
+        "-ctvd",
+        "q4_0",
+        "--alias",
+        "matched-qwen38-27b-q5",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "18080"
+      ],
+      "seed": 40,
+      "actual_argv": [
+        "/usr/bin/llama-server",
+        "-m",
+        "/home/USER/Models/Swift-Qwen3.8-27B-Q5_K_M.gguf",
+        "-c",
+        "131072",
+        "-fa",
+        "on",
+        "-ctk",
+        "q4_0",
+        "-ctv",
+        "q4_0",
+        "-fit",
+        "off",
+        "-dev",
+        "Vulkan1,Vulkan2",
+        "-sm",
+        "layer",
+        "-ts",
+        "16,11",
+        "-np",
+        "1",
+        "--metrics",
+        "--spec-type",
+        "draft-mtp",
+        "--spec-draft-n-max",
+        "2",
+        "-ctkd",
+        "q4_0",
+        "-ctvd",
+        "q4_0",
+        "--alias",
+        "matched-qwen38-27b-q5",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "18080"
+      ],
+      "engine": "/usr/bin/llama-server",
+      "engine_sha256": "0f401589a34aabc75a2371cb39d92d717212e27d9a0c6e2bf30a8d643bf77d85",
+      "rows": 24,
+      "passes": 21,
+      "hard_passes": 12,
+      "median_latency_s": 81.15,
+      "median_decode_ts": 28.9,
+      "wall_s": 2173.9
+    },
+    {
+      "lane": "flash",
+      "target": "matched-strata-iq3-medium",
+      "tag": "qwen27b-flash-matched-20261012-165802-flash-40",
+      "served_model": "qwen3.8-flash-next-iq3_xxs",
+      "command": [
+        "/usr/bin/python3",
+        "/home/USER/opt/UnbiasedStrata/local/launch.py",
+        "--config",
+        "/home/USER/bench/results/qwen27b-flash-matched-strata-config.json"
+      ],
+      "seed": 40,
+      "actual_argv": [
+        "/home/USER/opt/UnbiasedStrata/build/unbiased-strata",
+        "--model",
+        "/home/USER/opt/Strata-data/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf",
+        "--pack",
+        "/home/USER/opt/UnbiasedStrata/local/pack-iq3_xxs",
+        "--mtp",
+        "/home/USER/opt/Strata-data/mtp/rt",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "18081",
+        "--ctx",
+        "196608",
+        "--threads",
+        "12",
+        "--",
+        "--ple-io",
+        "direct",
+        "--resident-experts",
+        "--kv",
+        "int8",
+        "--spec",
+        "4",
+        "--kv-resident",
+        "32768"
+      ],
+      "engine": "/home/USER/opt/UnbiasedStrata/build/unbiased-strata",
+      "engine_sha256": "9e7e8c27be4218bebda4035a5ed588ed9b325dd5857c55e7d6059ea92eb01764",
+      "rows": 24,
+      "passes": 23,
+      "hard_passes": 13,
+      "median_latency_s": 68.4,
+      "median_decode_ts": 42.7,
+      "wall_s": 1837.4
+    },
+    {
+      "lane": "flash",
+      "target": "matched-strata-iq3-medium",
+      "tag": "qwen27b-flash-matched-20261012-165802-flash-41",
+      "served_model": "qwen3.8-flash-next-iq3_xxs",
+      "command": [
+        "/usr/bin/python3",
+        "/home/USER/opt/UnbiasedStrata/local/launch.py",
+        "--config",
+        "/home/USER/bench/results/qwen27b-flash-matched-strata-config.json"
+      ],
+      "seed": 41,
+      "actual_argv": [
+        "/home/USER/opt/UnbiasedStrata/build/unbiased-strata",
+        "--model",
+        "/home/USER/opt/Strata-data/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf",
+        "--pack",
+        "/home/USER/opt/UnbiasedStrata/local/pack-iq3_xxs",
+        "--mtp",
+        "/home/USER/opt/Strata-data/mtp/rt",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "18081",
+        "--ctx",
+        "196608",
+        "--threads",
+        "12",
+        "--",
+        "--ple-io",
+        "direct",
+        "--resident-experts",
+        "--kv",
+        "int8",
+        "--spec",
+        "4",
+        "--kv-resident",
+        "32768"
+      ],
+      "engine": "/home/USER/opt/UnbiasedStrata/build/unbiased-strata",
+      "engine_sha256": "9e7e8c27be4218bebda4035a5ed588ed9b325dd5857c55e7d6059ea92eb01764",
+      "rows": 24,
+      "passes": 22,
+      "hard_passes": 12,
+      "median_latency_s": 67.3,
+      "median_decode_ts": 42.650000000000006,
+      "wall_s": 1925.4
+    },
+    {
+      "lane": "qwen27b",
+      "target": "matched-qwen27b-medium",
+      "tag": "qwen27b-flash-matched-20261012-165802-qwen27b-41",
+      "served_model": "matched-qwen38-27b-q5",
+      "command": [
+        "/usr/bin/llama-server",
+        "-m",
+        "/home/USER/Models/Swift-Qwen3.8-27B-Q5_K_M.gguf",
+        "-c",
+        "131072",
+        "-fa",
+        "on",
+        "-ctk",
+        "q4_0",
+        "-ctv",
+        "q4_0",
+        "-fit",
+        "off",
+        "-dev",
+        "Vulkan1,Vulkan2",
+        "-sm",
+        "layer",
+        "-ts",
+        "16,11",
+        "-np",
+        "1",
+        "--metrics",
+        "--spec-type",
+        "draft-mtp",
+        "--spec-draft-n-max",
+        "2",
+        "-ctkd",
+        "q4_0",
+        "-ctvd",
+        "q4_0",
+        "--alias",
+        "matched-qwen38-27b-q5",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "18080"
+      ],
+      "seed": 41,
+      "actual_argv": [
+        "/usr/bin/llama-server",
+        "-m",
+        "/home/USER/Models/Swift-Qwen3.8-27B-Q5_K_M.gguf",
+        "-c",
+        "131072",
+        "-fa",
+        "on",
+        "-ctk",
+        "q4_0",
+        "-ctv",
+        "q4_0",
+        "-fit",
+        "off",
+        "-dev",
+        "Vulkan1,Vulkan2",
+        "-sm",
+        "layer",
+        "-ts",
+        "16,11",
+        "-np",
+        "1",
+        "--metrics",
+        "--spec-type",
+        "draft-mtp",
+        "--spec-draft-n-max",
+        "2",
+        "-ctkd",
+        "q4_0",
+        "-ctvd",
+        "q4_0",
+        "--alias",
+        "matched-qwen38-27b-q5",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "18080"
+      ],
+      "engine": "/usr/bin/llama-server",
+      "engine_sha256": "0f401589a34aabc75a2371cb39d92d717212e27d9a0c6e2bf30a8d643bf77d85",
+      "rows": 24,
+      "passes": 21,
+      "hard_passes": 12,
+      "median_latency_s": 80.75,
+      "median_decode_ts": 29.1,
+      "wall_s": 2161.5
+    },
+    {
+      "lane": "qwen27b",
+      "target": "matched-qwen27b-medium",
+      "tag": "qwen27b-flash-matched-20261012-165802-qwen27b-42",
+      "served_model": "matched-qwen38-27b-q5",
+      "command": [
+        "/usr/bin/llama-server",
+        "-m",
+        "/home/USER/Models/Swift-Qwen3.8-27B-Q5_K_M.gguf",
+        "-c",
+        "131072",
+        "-fa",
+        "on",
+        "-ctk",
+        "q4_0",
+        "-ctv",
+        "q4_0",
+        "-fit",
+        "off",
+        "-dev",
+        "Vulkan1,Vulkan2",
+        "-sm",
+        "layer",
+        "-ts",
+        "16,11",
+        "-np",
+        "1",
+        "--metrics",
+        "--spec-type",
+        "draft-mtp",
+        "--spec-draft-n-max",
+        "2",
+        "-ctkd",
+        "q4_0",
+        "-ctvd",
+        "q4_0",
+        "--alias",
+        "matched-qwen38-27b-q5",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "18080"
+      ],
+      "seed": 42,
+      "actual_argv": [
+        "/usr/bin/llama-server",
+        "-m",
+        "/home/USER/Models/Swift-Qwen3.8-27B-Q5_K_M.gguf",
+        "-c",
+        "131072",
+        "-fa",
+        "on",
+        "-ctk",
+        "q4_0",
+        "-ctv",
+        "q4_0",
+        "-fit",
+        "off",
+        "-dev",
+        "Vulkan1,Vulkan2",
+        "-sm",
+        "layer",
+        "-ts",
+        "16,11",
+        "-np",
+        "1",
+        "--metrics",
+        "--spec-type",
+        "draft-mtp",
+        "--spec-draft-n-max",
+        "2",
+        "-ctkd",
+        "q4_0",
+        "-ctvd",
+        "q4_0",
+        "--alias",
+        "matched-qwen38-27b-q5",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "18080"
+      ],
+      "engine": "/usr/bin/llama-server",
+      "engine_sha256": "0f401589a34aabc75a2371cb39d92d717212e27d9a0c6e2bf30a8d643bf77d85",
+      "rows": 24,
+      "passes": 21,
+      "hard_passes": 12,
+      "median_latency_s": 81.15,
+      "median_decode_ts": 28.95,
+      "wall_s": 2172.4
+    },
+    {
+      "lane": "flash",
+      "target": "matched-strata-iq3-medium",
+      "tag": "qwen27b-flash-matched-20261012-165802-flash-42",
+      "served_model": "qwen3.8-flash-next-iq3_xxs",
+      "command": [
+        "/usr/bin/python3",
+        "/home/USER/opt/UnbiasedStrata/local/launch.py",
+        "--config",
+        "/home/USER/bench/results/qwen27b-flash-matched-strata-config.json"
+      ],
+      "seed": 42,
+      "actual_argv": [
+        "/home/USER/opt/UnbiasedStrata/build/unbiased-strata",
+        "--model",
+        "/home/USER/opt/Strata-data/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf",
+        "--pack",
+        "/home/USER/opt/UnbiasedStrata/local/pack-iq3_xxs",
+        "--mtp",
+        "/home/USER/opt/Strata-data/mtp/rt",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "18081",
+        "--ctx",
+        "196608",
+        "--threads",
+        "12",
+        "--",
+        "--ple-io",
+        "direct",
+        "--resident-experts",
+        "--kv",
+        "int8",
+        "--spec",
+        "4",
+        "--kv-resident",
+        "32768"
+      ],
+      "engine": "/home/USER/opt/UnbiasedStrata/build/unbiased-strata",
+      "engine_sha256": "9e7e8c27be4218bebda4035a5ed588ed9b325dd5857c55e7d6059ea92eb01764",
+      "rows": 24,
+      "passes": 23,
+      "hard_passes": 13,
+      "median_latency_s": 66.35,
+      "median_decode_ts": 42.5,
+      "wall_s": 1905.8
+    }
+  ],
+  "ornith_restart_requested": false,
+  "elapsed_s": 12494.5
+}
